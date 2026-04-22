@@ -1,29 +1,1466 @@
 [
   {
-    "fetched_at": "2026-04-22T10:40:14+08:00",
+    "fetched_at": "2026-04-21T13:14:48+08:00",
     "removed_previous_indexes": [],
     "removed": [],
-    "removed_details": [],
     "added_current_indexes": [],
     "added": [],
-    "added_details": [],
     "moved": [],
     "changed": false,
     "baseline": true,
-    "previous_waiting_count": 265,
-    "current_waiting_count": 265,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0
+  },
+  {
+    "fetched_at": "2026-04-21T13:14:48+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "added_current_indexes": [],
+    "added": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0
+  },
+  {
+    "fetched_at": "2026-04-21T13:33:28+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "added_current_indexes": [],
+    "added": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
     "net_waiting_count_change": 0,
-    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": []
+  },
+  {
+    "fetched_at": "2026-04-21T13:45:07+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "added_current_indexes": [],
+    "added": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
     "likely_withdrawn_previous_indexes": [],
     "likely_admitted_previous_indexes": [],
     "highlight_shift": null,
     "summary_lines": [
-      "首次建立基線快照"
+      "名單無變動"
     ],
-    "change_kind": "baseline"
+    "change_kind": "stable"
   },
   {
-    "fetched_at": "2026-04-22T10:42:59+08:00",
+    "fetched_at": "2026-04-21T13:53:15+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T14:05:51+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T14:06:27+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T14:09:33+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T14:22:52+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T14:33:15+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T14:52:04+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T15:02:20+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T15:05:19+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T15:07:12+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T15:08:32+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T15:16:29+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T15:21:35+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T15:25:14+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T15:41:48+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T17:31:25+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T17:32:12+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T17:34:09+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T17:45:50+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T17:49:12+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T17:55:01+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T17:58:58+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T18:00:13+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T18:02:22+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T18:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 266,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T19:03:03+08:00",
+    "removed_previous_indexes": [
+      185
+    ],
+    "removed": [
+      {
+        "name": "黃O辰",
+        "birthday": "2026-01-01",
+        "category": "一般市民",
+        "previous_index": 185
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "黃O辰",
+        "birthday": "2026-01-01",
+        "category": "一般市民",
+        "previous_index": 185
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "蔡O樂",
+        "birthday": "2025-11-15",
+        "category": "一般市民",
+        "previous_index": 186,
+        "current_index": 185,
+        "delta": -1
+      },
+      {
+        "name": "黃O羽",
+        "birthday": "2025-11-14",
+        "category": "一般市民",
+        "previous_index": 187,
+        "current_index": 186,
+        "delta": -1
+      },
+      {
+        "name": "莊O妤",
+        "birthday": "2025-07-15",
+        "category": "一般市民",
+        "previous_index": 188,
+        "current_index": 187,
+        "delta": -1
+      },
+      {
+        "name": "吳O筠",
+        "birthday": "2025-12-13",
+        "category": "一般市民",
+        "previous_index": 189,
+        "current_index": 188,
+        "delta": -1
+      },
+      {
+        "name": "江O晞",
+        "birthday": "2024-11-07",
+        "category": "一般市民",
+        "previous_index": 190,
+        "current_index": 189,
+        "delta": -1
+      },
+      {
+        "name": "林O妍",
+        "birthday": "2025-05-09",
+        "category": "一般市民",
+        "previous_index": 191,
+        "current_index": 190,
+        "delta": -1
+      },
+      {
+        "name": "曾O宇",
+        "birthday": "2024-11-21",
+        "category": "一般市民",
+        "previous_index": 192,
+        "current_index": 191,
+        "delta": -1
+      },
+      {
+        "name": "曾O程",
+        "birthday": "2024-04-24",
+        "category": "一般市民",
+        "previous_index": 193,
+        "current_index": 192,
+        "delta": -1
+      },
+      {
+        "name": "廖O榛",
+        "birthday": "2025-04-19",
+        "category": "一般市民",
+        "previous_index": 194,
+        "current_index": 193,
+        "delta": -1
+      },
+      {
+        "name": "李O恩",
+        "birthday": "2025-12-09",
+        "category": "一般市民",
+        "previous_index": 195,
+        "current_index": 194,
+        "delta": -1
+      },
+      {
+        "name": "林O然",
+        "birthday": "2025-02-12",
+        "category": "一般市民",
+        "previous_index": 196,
+        "current_index": 195,
+        "delta": -1
+      },
+      {
+        "name": "李O維",
+        "birthday": "2024-10-10",
+        "category": "一般市民",
+        "previous_index": 197,
+        "current_index": 196,
+        "delta": -1
+      },
+      {
+        "name": "石O達",
+        "birthday": "2025-10-28",
+        "category": "一般市民",
+        "previous_index": 198,
+        "current_index": 197,
+        "delta": -1
+      },
+      {
+        "name": "黃O宇",
+        "birthday": "2025-10-23",
+        "category": "一般市民",
+        "previous_index": 199,
+        "current_index": 198,
+        "delta": -1
+      },
+      {
+        "name": "陳O維",
+        "birthday": "2025-04-02",
+        "category": "一般市民",
+        "previous_index": 200,
+        "current_index": 199,
+        "delta": -1
+      },
+      {
+        "name": "王O恩",
+        "birthday": "2025-03-28",
+        "category": "一般市民",
+        "previous_index": 201,
+        "current_index": 200,
+        "delta": -1
+      },
+      {
+        "name": "謝O穎",
+        "birthday": "2025-06-30",
+        "category": "一般市民",
+        "previous_index": 202,
+        "current_index": 201,
+        "delta": -1
+      },
+      {
+        "name": "王O安",
+        "birthday": "2025-03-30",
+        "category": "一般市民",
+        "previous_index": 203,
+        "current_index": 202,
+        "delta": -1
+      },
+      {
+        "name": "盧O蘅",
+        "birthday": "2026-01-30",
+        "category": "一般市民",
+        "previous_index": 204,
+        "current_index": 203,
+        "delta": -1
+      },
+      {
+        "name": "陳O之",
+        "birthday": "2025-11-28",
+        "category": "一般市民",
+        "previous_index": 205,
+        "current_index": 204,
+        "delta": -1
+      },
+      {
+        "name": "林O潤",
+        "birthday": "2025-10-16",
+        "category": "一般市民",
+        "previous_index": 206,
+        "current_index": 205,
+        "delta": -1
+      },
+      {
+        "name": "陳O霏",
+        "birthday": "2025-01-04",
+        "category": "一般市民",
+        "previous_index": 207,
+        "current_index": 206,
+        "delta": -1
+      },
+      {
+        "name": "楊O穎",
+        "birthday": "2024-12-06",
+        "category": "一般市民",
+        "previous_index": 208,
+        "current_index": 207,
+        "delta": -1
+      },
+      {
+        "name": "楊O羽",
+        "birthday": "2024-12-06",
+        "category": "一般市民",
+        "previous_index": 209,
+        "current_index": 208,
+        "delta": -1
+      },
+      {
+        "name": "莊O淳",
+        "birthday": "2025-06-27",
+        "category": "一般市民",
+        "previous_index": 210,
+        "current_index": 209,
+        "delta": -1
+      },
+      {
+        "name": "林O芯",
+        "birthday": "2025-08-17",
+        "category": "一般市民",
+        "previous_index": 211,
+        "current_index": 210,
+        "delta": -1
+      },
+      {
+        "name": "張O熙",
+        "birthday": "2024-12-09",
+        "category": "一般市民",
+        "previous_index": 212,
+        "current_index": 211,
+        "delta": -1
+      },
+      {
+        "name": "林O融",
+        "birthday": "2025-03-27",
+        "category": "優先收托",
+        "previous_index": 213,
+        "current_index": 212,
+        "delta": -1
+      },
+      {
+        "name": "李O云",
+        "birthday": "2025-11-22",
+        "category": "一般市民",
+        "previous_index": 214,
+        "current_index": 213,
+        "delta": -1
+      },
+      {
+        "name": "高O辰",
+        "birthday": "2024-09-12",
+        "category": "優先收托",
+        "previous_index": 215,
+        "current_index": 214,
+        "delta": -1
+      },
+      {
+        "name": "萬O碩",
+        "birthday": "2025-07-01",
+        "category": "一般市民",
+        "previous_index": 216,
+        "current_index": 215,
+        "delta": -1
+      },
+      {
+        "name": "何O璇",
+        "birthday": "2025-08-08",
+        "category": "一般市民",
+        "previous_index": 217,
+        "current_index": 216,
+        "delta": -1
+      },
+      {
+        "name": "顧O汝",
+        "birthday": "2024-07-14",
+        "category": "優先收托",
+        "previous_index": 218,
+        "current_index": 217,
+        "delta": -1
+      },
+      {
+        "name": "林O潔",
+        "birthday": "2024-11-13",
+        "category": "一般市民",
+        "previous_index": 219,
+        "current_index": 218,
+        "delta": -1
+      },
+      {
+        "name": "蕭O榛",
+        "birthday": "2024-05-07",
+        "category": "一般市民",
+        "previous_index": 220,
+        "current_index": 219,
+        "delta": -1
+      },
+      {
+        "name": "洪O安",
+        "birthday": "2025-10-10",
+        "category": "一般市民",
+        "previous_index": 221,
+        "current_index": 220,
+        "delta": -1
+      },
+      {
+        "name": "林O恆",
+        "birthday": "2024-11-03",
+        "category": "一般市民",
+        "previous_index": 222,
+        "current_index": 221,
+        "delta": -1
+      },
+      {
+        "name": "吳O宸",
+        "birthday": "2025-11-17",
+        "category": "一般市民",
+        "previous_index": 223,
+        "current_index": 222,
+        "delta": -1
+      },
+      {
+        "name": "林O希",
+        "birthday": "2025-11-02",
+        "category": "一般市民",
+        "previous_index": 224,
+        "current_index": 223,
+        "delta": -1
+      },
+      {
+        "name": "黃O靖",
+        "birthday": "2025-08-07",
+        "category": "一般市民",
+        "previous_index": 225,
+        "current_index": 224,
+        "delta": -1
+      },
+      {
+        "name": "林O晞",
+        "birthday": "2026-01-17",
+        "category": "一般市民",
+        "previous_index": 226,
+        "current_index": 225,
+        "delta": -1
+      },
+      {
+        "name": "劉O潯",
+        "birthday": "2025-03-26",
+        "category": "一般市民",
+        "previous_index": 227,
+        "current_index": 226,
+        "delta": -1
+      },
+      {
+        "name": "劉O恒",
+        "birthday": "2025-05-06",
+        "category": "一般市民",
+        "previous_index": 228,
+        "current_index": 227,
+        "delta": -1
+      },
+      {
+        "name": "謝O辰",
+        "birthday": "2025-10-27",
+        "category": "一般市民",
+        "previous_index": 229,
+        "current_index": 228,
+        "delta": -1
+      },
+      {
+        "name": "吳O儒",
+        "birthday": "2025-03-10",
+        "category": "一般市民",
+        "previous_index": 230,
+        "current_index": 229,
+        "delta": -1
+      },
+      {
+        "name": "許O宸",
+        "birthday": "2025-06-02",
+        "category": "一般市民",
+        "previous_index": 231,
+        "current_index": 230,
+        "delta": -1
+      },
+      {
+        "name": "王O展",
+        "birthday": "2024-07-27",
+        "category": "一般市民",
+        "previous_index": 232,
+        "current_index": 231,
+        "delta": -1
+      },
+      {
+        "name": "蔡O鈞",
+        "birthday": "2025-07-24",
+        "category": "一般市民",
+        "previous_index": 233,
+        "current_index": 232,
+        "delta": -1
+      },
+      {
+        "name": "葉O允",
+        "birthday": "2025-10-16",
+        "category": "一般市民",
+        "previous_index": 234,
+        "current_index": 233,
+        "delta": -1
+      },
+      {
+        "name": "林O言",
+        "birthday": "2025-09-04",
+        "category": "一般市民",
+        "previous_index": 235,
+        "current_index": 234,
+        "delta": -1
+      },
+      {
+        "name": "賴O霆",
+        "birthday": "2025-10-03",
+        "category": "一般市民",
+        "previous_index": 236,
+        "current_index": 235,
+        "delta": -1
+      },
+      {
+        "name": "梁O墨",
+        "birthday": "2025-08-18",
+        "category": "一般市民",
+        "previous_index": 237,
+        "current_index": 236,
+        "delta": -1
+      },
+      {
+        "name": "塗O睎",
+        "birthday": "2025-10-24",
+        "category": "一般市民",
+        "previous_index": 238,
+        "current_index": 237,
+        "delta": -1
+      },
+      {
+        "name": "周O倪",
+        "birthday": "2025-09-30",
+        "category": "優先收托",
+        "previous_index": 239,
+        "current_index": 238,
+        "delta": -1
+      },
+      {
+        "name": "謝O霖",
+        "birthday": "2025-12-07",
+        "category": "一般市民",
+        "previous_index": 240,
+        "current_index": 239,
+        "delta": -1
+      },
+      {
+        "name": "周O安",
+        "birthday": "2025-09-11",
+        "category": "一般市民",
+        "previous_index": 241,
+        "current_index": 240,
+        "delta": -1
+      },
+      {
+        "name": "張O翔",
+        "birthday": "2025-09-25",
+        "category": "一般市民",
+        "previous_index": 242,
+        "current_index": 241,
+        "delta": -1
+      },
+      {
+        "name": "莊O恩",
+        "birthday": "2024-08-16",
+        "category": "優先收托",
+        "previous_index": 243,
+        "current_index": 242,
+        "delta": -1
+      },
+      {
+        "name": "吳O學",
+        "birthday": "2024-11-02",
+        "category": "一般市民",
+        "previous_index": 244,
+        "current_index": 243,
+        "delta": -1
+      },
+      {
+        "name": "陳O頊",
+        "birthday": "2026-02-15",
+        "category": "優先收托",
+        "previous_index": 245,
+        "current_index": 244,
+        "delta": -1
+      },
+      {
+        "name": "黃O蓉",
+        "birthday": "2026-02-18",
+        "category": "一般市民",
+        "previous_index": 246,
+        "current_index": 245,
+        "delta": -1
+      },
+      {
+        "name": "林O桐",
+        "birthday": "2025-06-24",
+        "category": "一般市民",
+        "previous_index": 247,
+        "current_index": 246,
+        "delta": -1
+      },
+      {
+        "name": "王O升",
+        "birthday": "2026-02-20",
+        "category": "一般市民",
+        "previous_index": 248,
+        "current_index": 247,
+        "delta": -1
+      },
+      {
+        "name": "陳O仁",
+        "birthday": "2026-01-28",
+        "category": "一般市民",
+        "previous_index": 249,
+        "current_index": 248,
+        "delta": -1
+      },
+      {
+        "name": "林O睿",
+        "birthday": "2026-01-24",
+        "category": "一般市民",
+        "previous_index": 250,
+        "current_index": 249,
+        "delta": -1
+      },
+      {
+        "name": "嚴O吟",
+        "birthday": "2024-11-08",
+        "category": "一般市民",
+        "previous_index": 251,
+        "current_index": 250,
+        "delta": -1
+      },
+      {
+        "name": "蘇O然",
+        "birthday": "2026-03-03",
+        "category": "一般市民",
+        "previous_index": 252,
+        "current_index": 251,
+        "delta": -1
+      },
+      {
+        "name": "陳O琁",
+        "birthday": "2026-02-16",
+        "category": "一般市民",
+        "previous_index": 253,
+        "current_index": 252,
+        "delta": -1
+      },
+      {
+        "name": "陳O庭",
+        "birthday": "2026-02-16",
+        "category": "一般市民",
+        "previous_index": 254,
+        "current_index": 253,
+        "delta": -1
+      },
+      {
+        "name": "林O安",
+        "birthday": "2025-05-07",
+        "category": "一般市民",
+        "previous_index": 255,
+        "current_index": 254,
+        "delta": -1
+      },
+      {
+        "name": "林O森",
+        "birthday": "2026-03-13",
+        "category": "一般市民",
+        "previous_index": 256,
+        "current_index": 255,
+        "delta": -1
+      },
+      {
+        "name": "周O芯",
+        "birthday": "2026-01-10",
+        "category": "一般市民",
+        "previous_index": 257,
+        "current_index": 256,
+        "delta": -1
+      },
+      {
+        "name": "徐O宸",
+        "birthday": "2026-03-02",
+        "category": "一般市民",
+        "previous_index": 258,
+        "current_index": 257,
+        "delta": -1
+      },
+      {
+        "name": "翁O謙",
+        "birthday": "2025-07-16",
+        "category": "一般市民",
+        "previous_index": 259,
+        "current_index": 258,
+        "delta": -1
+      },
+      {
+        "name": "陳O織",
+        "birthday": "2026-03-11",
+        "category": "一般市民",
+        "previous_index": 260,
+        "current_index": 259,
+        "delta": -1
+      },
+      {
+        "name": "蘇O",
+        "birthday": "2026-03-30",
+        "category": "一般市民",
+        "previous_index": 261,
+        "current_index": 260,
+        "delta": -1
+      },
+      {
+        "name": "張O文",
+        "birthday": "2025-09-30",
+        "category": "一般市民",
+        "previous_index": 262,
+        "current_index": 261,
+        "delta": -1
+      },
+      {
+        "name": "陳O琋",
+        "birthday": "2025-09-13",
+        "category": "一般市民",
+        "previous_index": 263,
+        "current_index": 262,
+        "delta": -1
+      },
+      {
+        "name": "謝O桐",
+        "birthday": "2025-07-30",
+        "category": "一般市民",
+        "previous_index": 264,
+        "current_index": 263,
+        "delta": -1
+      },
+      {
+        "name": "陳O安",
+        "birthday": "2026-03-06",
+        "category": "一般市民",
+        "previous_index": 265,
+        "current_index": 264,
+        "delta": -1
+      },
+      {
+        "name": "張O昕",
+        "birthday": "2025-07-16",
+        "category": "一般市民",
+        "previous_index": 266,
+        "current_index": 265,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 266,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": -1,
+    "likely_withdrawn_previous_indexes": [
+      185
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 186,
+      "current_index": 185,
+      "name": "蔡O樂",
+      "delta": -1
+    },
+    "summary_lines": [
+      "185 號離開名單",
+      "186 → 185（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink"
+  },
+  {
+    "fetched_at": "2026-04-21T20:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T20:50:06+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T21:03:33+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T21:05:28+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T21:08:18+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T21:41:26+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T22:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-21T22:11:55+08:00",
     "removed_previous_indexes": [],
     "removed": [],
     "removed_details": [],
@@ -46,7 +1483,7 @@
     "change_kind": "stable"
   },
   {
-    "fetched_at": "2026-04-22T10:42:59+08:00",
+    "fetched_at": "2026-04-21T22:12:58+08:00",
     "removed_previous_indexes": [],
     "removed": [],
     "removed_details": [],
@@ -69,7 +1506,7 @@
     "change_kind": "stable"
   },
   {
-    "fetched_at": "2026-04-22T10:45:09+08:00",
+    "fetched_at": "2026-04-21T22:17:06+08:00",
     "removed_previous_indexes": [],
     "removed": [],
     "removed_details": [],
@@ -92,7 +1529,421 @@
     "change_kind": "stable"
   },
   {
-    "fetched_at": "2026-04-22T10:45:09+08:00",
+    "fetched_at": "2026-04-21T23:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T00:03:03+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T01:03:05+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T02:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T03:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T04:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T05:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T06:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T07:03:03+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T08:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T09:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T09:18:27+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T09:18:28+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T10:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T10:03:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T10:28:25+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T10:28:25+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T10:46:34+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 265,
+    "current_waiting_count": 265,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-22T10:46:35+08:00",
     "removed_previous_indexes": [],
     "removed": [],
     "removed_details": [],
