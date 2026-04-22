@@ -508,5 +508,48 @@
     "removed_details": [],
     "added_details": [],
     "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-22",
+    "fetched_at": "2026-04-22T17:15:21+08:00",
+    "waiting_count": 145,
+    "last_month_enrolled": 1,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "46 號離開名單",
+      "47 → 46（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 47,
+      "current_index": 46,
+      "name": "蘇O淏",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "劉O桔",
+        "birthday": "2025-06-25",
+        "category": "一般市民",
+        "previous_index": 46
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-22",
+    "fetched_at": "2026-04-22T17:16:59+08:00",
+    "waiting_count": 145,
+    "last_month_enrolled": 1,
+    "changed": false,
+    "change_kind": "stable",
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [],
+    "likely_age_out_previous_indexes": []
   }
 ]
