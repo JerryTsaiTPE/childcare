@@ -1,0 +1,12 @@
+[Tue 04/21/2026 17:52:19.23] Starting update 
+Traceback (most recent call last):
+  File "C:\Users\JerryPC\Desktop\childcare\scripts\update_dashboard.py", line 18, in <module>
+    from ntpc_childcare_dashboard.render import render_dashboard
+  File "C:\Users\JerryPC\Desktop\childcare\src\ntpc_childcare_dashboard\render.py", line 202
+    <script id="dashboard-data" type="application/json">""" + data_json + """</script>
+                                                                          ^
+SyntaxError: unterminated triple-quoted string literal (detected at line 255)
+        1 file(s) copied.
+[Tue 04/21/2026 17:52:19.59] Synced index.html to "Z:\childcare\index.html" 
+
+[Tue 04/21/2026 17:52:19.62] Finished with exit code 0 

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>板橋柏翠托育備取追蹤 Dashboard</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: #0d1b2a;
+      --card: #13253a;
+      --border: #284864;
+      --accent: #52d1ff;
+      --accent-2: #8ef7c2;
+      --text: #edf6ff;
+      --muted: #9bb2c8;
+      --danger: #ff7b7b;
+      --warn: #ffd166;
+      --ok: #8ef7c2;
+      --tab-bg: #0a1624;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, 'Noto Sans TC', sans-serif; background: linear-gradient(180deg, #06101b, #0b1626 30%, #09131f); color: var(--text); }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 24px; }
+    .hero { display: flex; justify-content: space-between; gap: 16px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 20px; }
+    .hero h1 { margin: 0 0 8px; font-size: 34px; }
+    .sub { color: var(--muted); line-height: 1.6; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 18px; overflow-x: auto; padding-bottom: 4px; }
+    .tab-btn { border: 1px solid var(--border); background: var(--tab-bg); color: var(--muted); border-radius: 999px; padding: 10px 16px; cursor: pointer; white-space: nowrap; flex: 0 0 auto; transition: 0.2s; }
+    .tab-btn.active { color: var(--text); background: #13314d; border-color: var(--accent); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .history-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .toggle { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px; }
+    .card, .panel { background: rgba(16, 30, 48, 0.88); border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 14px 30px rgba(0,0,0,0.22); }
+    .card { padding: 18px; }
+    .metric { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+    .value { font-size: 34px; font-weight: 700; }
+    .value.small { font-size: 24px; }
+    .delta-up { color: var(--ok); }
+    .delta-down { color: var(--danger); }
+    .delta-flat { color: var(--muted); }
+    .panels { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px; margin-bottom: 18px; }
+    .panel { padding: 20px; }
+    .panel h2 { margin: 0 0 14px; font-size: 20px; }
+    .chart-box { min-height: 320px; width: 100%; position: relative; }
+    .bar-row { display: grid; grid-template-columns: 80px 1fr 110px; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .bar-track { height: 12px; border-radius: 999px; background: #08121f; overflow: hidden; border: 1px solid #17324c; }
+    .bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    .pill { display: inline-flex; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border); background: #0a1624; color: var(--muted); font-size: 12px; }
+    .list { display: grid; gap: 12px; }
+    .list-block { padding: 14px; border-radius: 14px; background: #0a1624; border: 1px solid #16304a; }
+    .list-block h3 { margin: 0 0 8px; font-size: 16px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { padding: 7px 10px; border-radius: 999px; background: #13273d; border: 1px solid #214361; font-size: 13px; }
+    .timeline { display: grid; gap: 14px; }
+    .timeline-item { padding: 18px; border-radius: 16px; background: rgba(16, 30, 48, 0.88); border: 1px solid var(--border); }
+    .timeline-item.stable-hidden { display: none; }
+    .timeline-meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; color: var(--muted); }
+    .timeline-lines { margin: 0; padding-left: 20px; line-height: 1.8; }
+    .timeline-highlight { margin-top: 10px; color: var(--accent-2); }
+    .history-details { margin-top: 14px; overflow-x: auto; }
+    .section-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .control-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .control-group { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); }
+    .select-input { background: #0a1624; color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; cursor: pointer; }
+    .table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .panel-table { min-width: 520px; }
+    .all-list-table-wrap { margin-top: 10px; }
+    .history-table-wrap { margin-top: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid rgba(107, 139, 168, 0.18); }
+    th { color: var(--muted); font-weight: 600; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    
+    /* 屆齡幼兒紅字標示 */
+    .aging-out td { color: var(--danger); font-weight: 500; }
+    
+    .rule { white-space: pre-wrap; line-height: 1.7; color: #d9ebff; background: #091522; padding: 18px; border-radius: 14px; border: 1px solid #18324d; }
+    .related-section { padding: 12px 0; border-bottom: 1px solid rgba(107, 139, 168, 0.18); }
+    .related-section:last-child { border-bottom: none; }
+    .related-block-title { font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .related-list { margin: 0; padding-left: 20px; line-height: 1.8; }
+    .related-note { line-height: 1.8; color: #d9ebff; }
+    .rule-highlight { margin: 14px 0; padding: 14px 16px; border-radius: 12px; background: linear-gradient(90deg, rgba(82, 209, 255, 0.12), rgba(142, 247, 194, 0.10)); border: 1px solid rgba(82, 209, 255, 0.38); box-shadow: inset 0 0 0 1px rgba(142, 247, 194, 0.08); }
+    .rule-highlight strong { display: block; margin-bottom: 8px; color: var(--accent-2); font-size: 16px; }
+    .info-stack { display: grid; gap: 16px; }
+    .footer { color: var(--muted); font-size: 13px; margin-top: 16px; text-align: center; }
+    @media (max-width: 980px) { .panels { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) {
+      .wrap { padding: 14px; }
+      .hero { gap: 12px; margin-bottom: 16px; }
+      .hero h1 { font-size: 28px; }
+      .pill { width: 100%; border-radius: 14px; }
+      .tabs { overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+      .grid { grid-template-columns: 1fr; }
+      .card { padding: 16px; }
+      .panel { padding: 16px; }
+      .value { font-size: 30px; }
+      .value.small { font-size: 22px; }
+      .bar-row { grid-template-columns: 1fr; gap: 6px; }
+      .control-group { flex-wrap: wrap; width: 100%; }
+      .select-input { width: 100%; }
+      .panel-table { min-width: 480px; }
+      th, td { padding: 9px 6px; font-size: 13px; }
+      .rule { padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <h1>板橋柏翠托育備取追蹤 Dashboard</h1>
+        <div class="sub">追蹤來源：新北育兒資訊網公開備取 API（orgid=Z0130）<br>系統最後更新：<span id="updated-at"></span></div>
+      </div>
+      <div class="pill">板橋區／新北市政府委託社團法人台灣幼兒早期教育協會辦理板橋柏翠公共托育中心(托嬰中心)</div>
+    </section>
+
+    <section class="tabs">
+      <button class="tab-btn active" data-tab="overview">總覽</button>
+      <button class="tab-btn" data-tab="all-list">所有名單</button>
+      <button class="tab-btn" data-tab="hourly-detail">歷史走勢</button>
+      <button class="tab-btn" data-tab="history">歷史變動紀錄</button>
+    </section>
+
+    <section id="tab-overview" class="tab-panel active">
+      <section class="grid">
+        <div class="card"><div class="metric">目前備取總數</div><div class="value" id="waiting-count"></div></div>
+        <div class="card"><div class="metric">上月入托人數</div><div class="value" id="lastnum"></div></div>
+        <div class="card"><div class="metric">中心核定名額 / 已入托</div><div class="value small" id="capacity"></div></div>
+        
+        <div class="card"><div class="metric">最近離開名單序號</div><div class="value small" id="removed-count"></div><div class="sub" id="removed-summary"></div></div>
+        <div class="card"><div class="metric">推測遞補/入托</div><div class="value small" id="admitted-count"></div><div class="sub" id="admitted-summary"></div></div>
+        <div class="card"><div class="metric">推測屆齡取消</div><div class="value small" id="age-out-count"></div><div class="sub" id="age-out-summary"></div></div>
+        <div class="card"><div class="metric">推測家長取消候補</div><div class="value small" id="withdrawn-count"></div><div class="sub" id="withdrawn-summary"></div></div>
+      </section>
+
+      <section class="panels">
+        <div class="panel chart-box">
+          <h2>📈 每日備取總數走勢 <span class="sub" style="font-size:13px; font-weight:normal;">(顯示每日最終狀態)</span></h2>
+          <svg id="history-chart" width="100%" height="300" viewBox="0 0 760 300" preserveAspectRatio="none"></svg>
+        </div>
+        <div class="panel">
+          <h2>前 20 名備取身分</h2>
+          <div id="top20-bars"></div>
+        </div>
+      </section>
+
+      <section class="panels">
+        <div class="panel">
+          <h2>最新變動摘要 <span id="latest-change-time" style="font-size: 14px; font-weight: normal; color: var(--warn); margin-left: 8px;"></span></h2>
+          <div class="list">
+            <div class="list-block">
+              <h3>離開名單序號</h3>
+              <div class="chips" id="removed-chips"></div>
+            </div>
+            <div class="list-block">
+              <h3>推測為遞補/入托 (15號內)</h3>
+              <div class="chips" id="admitted-chips"></div>
+            </div>
+            <div class="list-block">
+              <h3>推測為屆齡取消 (滿兩歲或14天內)</h3>
+              <div class="chips" id="age-out-chips"></div>
+            </div>
+            <div class="list-block">
+              <h3>推測為自行取消 (15號外)</h3>
+              <div class="chips" id="withdrawn-chips"></div>
+            </div>
+            <div class="list-block">
+              <h3>名次推進明細</h3>
+              <div class="table-wrap">
+                <table class="panel-table">
+                  <thead><tr><th>姓名</th><th>原序號</th><th>新序號</th><th>變化</th></tr></thead>
+                  <tbody id="moved-table"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>前 20 名備取名單 <span class="sub" style="font-size:13px; font-weight:normal; margin-left:8px;">(紅色為已屆齡尚未被系統移除者)</span></h2>
+          <div class="table-wrap">
+            <table class="panel-table">
+              <thead><tr><th>序號</th><th>姓名</th><th>出生日期</th><th>目前歲數</th><th>身分別</th></tr></thead>
+              <tbody id="top20-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel info-stack">
+        <div>
+          <h2>名單有效期限</h2>
+          <div class="rule" id="validity-text"></div>
+        </div>
+        <div>
+          <h2>相關說明</h2>
+          <div class="rule" id="related-info-text"></div>
+        </div>
+      </section>
+    </section>
+
+    <section id="tab-hourly-detail" class="tab-panel">
+      <div class="panel chart-box">
+        <h2>🕒 每小時詳細變動</h2>
+        <div class="control-row" style="margin-bottom: 15px;">
+          <label>選擇日期查看當日趨勢：</label>
+          <select id="date-selector" class="select-input"></select>
+        </div>
+        <svg id="hourly-chart" width="100%" height="300" viewBox="0 0 760 300" preserveAspectRatio="none"></svg>
+      </div>
+    </section>
+
+    <section id="tab-all-list" class="tab-panel">
+      <div class="panel">
+        <h2>所有名單 <span class="sub" style="font-size:14px; font-weight:normal; margin-left:10px; color:var(--danger);">※ 紅色字體代表該幼兒已滿兩歲或距滿兩歲不到 14 天，即將被系統自動取消候補。</span></h2>
+        <div class="control-row" style="margin-bottom:15px;">
+          <div class="control-group">
+            <label>排序欄位</label>
+            <select id="all-list-sort-key" class="select-input">
+              <option value="index">序號</option>
+              <option value="encname">姓名</option>
+              <option value="cbirthday">出生日期</option>
+              <option value="age">目前歲數</option>
+              <option value="displaydesc">身分別</option>
+            </select>
+            <label>排序方向</label>
+            <select id="all-list-sort-direction" class="select-input">
+              <option value="asc">由小到大</option>
+              <option value="desc">由大到小</option>
+            </select>
+          </div>
+        </div>
+        <div class="all-list-table-wrap table-wrap">
+          <table class="panel-table">
+            <thead><tr><th>序號</th><th>姓名</th><th>出生日期</th><th>目前歲數</th><th>身分別</th></tr></thead>
+            <tbody id="all-list-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-history" class="tab-panel">
+      <div class="panel">
+        <h2>歷史紀錄</h2>
+        <div class="history-toolbar">
+          <div class="sub">只保留每次更新的重點變動；若整串名次都往前，僅顯示第一個代表性變動。</div>
+          <label class="toggle"><input id="toggle-stable" type="checkbox" /> 顯示無變動紀錄</label>
+        </div>
+        <div id="history-timeline" class="timeline"></div>
+      </div>
+    </section>
+
+    <div class="footer">NTPC Childcare Dashboard Auto-Update System &copy; 2026</div>
+  </div>
+
+  <script id="dashboard-data" type="application/json">{"snapshot": {"org": {"orgid": "Z0130", "orgname": "新北市政府委託社團法人台灣幼兒早期教育協會辦理板橋柏翠公共托育中心(托嬰中心)", "orgshort": "板橋柏翠", "distdesc": "板橋區", "distno": "01", "capnum": 40, "enroll_count": 42, "cmethod": "(02)2254-6038"}, "fetched_at": "2026-04-22T10:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "preshow": true, "entries": [{"index": 1, "encname": "蔡O妍", "cbirthday": "2025-01-22", "displaydesc": "一般市民"}, {"index": 2, "encname": "陳O芮", "cbirthday": "2025-07-23", "displaydesc": "一般市民"}, {"index": 3, "encname": "李O芮", "cbirthday": "2025-01-04", "displaydesc": "一般市民"}, {"index": 4, "encname": "廖O澄", "cbirthday": "2025-01-11", "displaydesc": "一般市民"}, {"index": 5, "encname": "楊O甯", "cbirthday": "2025-05-31", "displaydesc": "一般市民"}, {"index": 6, "encname": "郭O綾", "cbirthday": "2024-12-17", "displaydesc": "一般市民"}, {"index": 7, "encname": "陳O璿", "cbirthday": "2026-02-07", "displaydesc": "一般市民"}, {"index": 8, "encname": "楊O睿", "cbirthday": "2025-12-26", "displaydesc": "一般市民"}, {"index": 9, "encname": "楊O凜", "cbirthday": "2025-09-04", "displaydesc": "一般市民"}, {"index": 10, "encname": "劉O愷", "cbirthday": "2024-06-09", "displaydesc": "一般市民"}, {"index": 11, "encname": "周O妘", "cbirthday": "2024-09-08", "displaydesc": "一般市民"}, {"index": 12, "encname": "林O埁", "cbirthday": "2024-12-11", "displaydesc": "一般市民"}, {"index": 13, "encname": "康O睿", "cbirthday": "2025-01-18", "displaydesc": "一般市民"}, {"index": 14, "encname": "盧O甯", "cbirthday": "2025-04-19", "displaydesc": "一般市民"}, {"index": 15, "encname": "周O馨", "cbirthday": "2024-12-24", "displaydesc": "優先收托"}, {"index": 16, "encname": "鄭O星", "cbirthday": "2025-10-29", "displaydesc": "一般市民"}, {"index": 17, "encname": "葉O甯", "cbirthday": "2025-07-02", "displaydesc": "一般市民"}, {"index": 18, "encname": "謝O珈", "cbirthday": "2025-12-26", "displaydesc": "一般市民"}, {"index": 19, "encname": "張O辰", "cbirthday": "2024-05-19", "displaydesc": "一般市民"}, {"index": 20, "encname": "唐O勛", "cbirthday": "2025-05-06", "displaydesc": "優先收托"}, {"index": 21, "encname": "蔡O媞", "cbirthday": "2025-08-20", "displaydesc": "一般市民"}, {"index": 22, "encname": "林O", "cbirthday": "2024-09-17", "displaydesc": "一般市民"}, {"index": 23, "encname": "鍾O", "cbirthday": "2025-04-27", "displaydesc": "一般市民"}, {"index": 24, "encname": "賴O湲", "cbirthday": "2025-02-18", "displaydesc": "一般市民"}, {"index": 25, "encname": "郝O宗", "cbirthday": "2025-01-09", "displaydesc": "一般市民"}, {"index": 26, "encname": "洪O恩", "cbirthday": "2024-05-22", "displaydesc": "一般市民"}, {"index": 27, "encname": "蔡O恬", "cbirthday": "2025-02-17", "displaydesc": "一般市民"}, {"index": 28, "encname": "詹O熹", "cbirthday": "2026-02-07", "displaydesc": "一般市民"}, {"index": 29, "encname": "張O箖", "cbirthday": "2025-09-24", "displaydesc": "一般市民"}, {"index": 30, "encname": "劉O晴", "cbirthday": "2024-11-16", "displaydesc": "一般市民"}, {"index": 31, "encname": "陳O樂", "cbirthday": "2024-10-05", "displaydesc": "一般市民"}, {"index": 32, "encname": "顏O旭", "cbirthday": "2024-11-11", "displaydesc": "一般市民"}, {"index": 33, "encname": "劉O熹", "cbirthday": "2026-01-14", "displaydesc": "一般市民"}, {"index": 34, "encname": "祝O希", "cbirthday": "2025-08-07", "displaydesc": "一般市民"}, {"index": 35, "encname": "劉O歆", "cbirthday": "2025-05-06", "displaydesc": "一般市民"}, {"index": 36, "encname": "蔡O瑀", "cbirthday": "2025-12-24", "displaydesc": "一般市民"}, {"index": 37, "encname": "許O彤", "cbirthday": "2025-04-17", "displaydesc": "一般市民"}, {"index": 38, "encname": "詹O羽", "cbirthday": "2025-04-27", "displaydesc": "一般市民"}, {"index": 39, "encname": "陳O碩", "cbirthday": "2024-10-19", "displaydesc": "一般市民"}, {"index": 40, "encname": "盧O宇", "cbirthday": "2025-10-30", "displaydesc": "優先收托"}, {"index": 41, "encname": "謝O軒", "cbirthday": "2024-09-02", "displaydesc": "優先收托"}, {"index": 42, "encname": "陳O瀅", "cbirthday": "2025-01-04", "displaydesc": "一般市民"}, {"index": 43, "encname": "吳O宸", "cbirthday": "2025-02-11", "displaydesc": "一般市民"}, {"index": 44, "encname": "陳O甯", "cbirthday": "2025-07-10", "displaydesc": "一般市民"}, {"index": 45, "encname": "江O星", "cbirthday": "2024-09-24", "displaydesc": "一般市民"}, {"index": 46, "encname": "林O辰", "cbirthday": "2026-01-07", "displaydesc": "一般市民"}, {"index": 47, "encname": "彭O玥", "cbirthday": "2024-11-27", "displaydesc": "一般市民"}, {"index": 48, "encname": "謝O均", "cbirthday": "2025-10-29", "displaydesc": "一般市民"}, {"index": 49, "encname": "謝O浩", "cbirthday": "2025-09-11", "displaydesc": "一般市民"}, {"index": 50, "encname": "林O祐", "cbirthday": "2024-10-07", "displaydesc": "一般市民"}, {"index": 51, "encname": "曾O扉", "cbirthday": "2025-02-16", "displaydesc": "一般市民"}, {"index": 52, "encname": "李O宸", "cbirthday": "2025-10-26", "displaydesc": "一般市民"}, {"index": 53, "encname": "黃O宣", "cbirthday": "2025-11-20", "displaydesc": "一般市民"}, {"index": 54, "encname": "蒲O潔", "cbirthday": "2025-02-06", "displaydesc": "一般市民"}, {"index": 55, "encname": "吳O璇", "cbirthday": "2024-11-24", "displaydesc": "一般市民"}, {"index": 56, "encname": "楊O澄", "cbirthday": "2024-05-02", "displaydesc": "一般市民"}, {"index": 57, "encname": "謝O衡", "cbirthday": "2024-12-05", "displaydesc": "一般市民"}, {"index": 58, "encname": "陳O", "cbirthday": "2025-09-09", "displaydesc": "一般市民"}, {"index": 59, "encname": "王O謙", "cbirthday": "2025-03-27", "displaydesc": "一般市民"}, {"index": 60, "encname": "李O菲", "cbirthday": "2025-12-09", "displaydesc": "一般市民"}, {"index": 61, "encname": "蔡O澔", "cbirthday": "2026-01-07", "displaydesc": "一般市民"}, {"index": 62, "encname": "王O赫", "cbirthday": "2024-04-30", "displaydesc": "一般市民"}, {"index": 63, "encname": "高O辰", "cbirthday": "2025-09-25", "displaydesc": "一般市民"}, {"index": 64, "encname": "林O穎", "cbirthday": "2026-01-05", "displaydesc": "一般市民"}, {"index": 65, "encname": "潘O昇", "cbirthday": "2024-10-20", "displaydesc": "一般市民"}, {"index": 66, "encname": "邱O靜", "cbirthday": "2025-04-15", "displaydesc": "一般市民"}, {"index": 67, "encname": "王O宸", "cbirthday": "2024-07-11", "displaydesc": "一般市民"}, {"index": 68, "encname": "林O彤", "cbirthday": "2025-11-24", "displaydesc": "一般市民"}, {"index": 69, "encname": "陳O洛", "cbirthday": "2024-12-27", "displaydesc": "一般市民"}, {"index": 70, "encname": "柯O晴", "cbirthday": "2026-02-10", "displaydesc": "一般市民"}, {"index": 71, "encname": "余O安", "cbirthday": "2025-03-09", "displaydesc": "一般市民"}, {"index": 72, "encname": "謝O哲", "cbirthday": "2025-12-14", "displaydesc": "一般市民"}, {"index": 73, "encname": "許O", "cbirthday": "2025-09-29", "displaydesc": "一般市民"}, {"index": 74, "encname": "柯O玥", "cbirthday": "2024-07-01", "displaydesc": "一般市民"}, {"index": 75, "encname": "張O安", "cbirthday": "2025-09-09", "displaydesc": "一般市民"}, {"index": 76, "encname": "周O澐", "cbirthday": "2024-05-06", "displaydesc": "一般市民"}, {"index": 77, "encname": "陳O碩", "cbirthday": "2024-10-07", "displaydesc": "一般市民"}, {"index": 78, "encname": "劉O辰", "cbirthday": "2025-09-26", "displaydesc": "一般市民"}, {"index": 79, "encname": "王O謙", "cbirthday": "2025-07-27", "displaydesc": "一般市民"}, {"index": 80, "encname": "陳O睿", "cbirthday": "2025-10-02", "displaydesc": "一般市民"}, {"index": 81, "encname": "洪O淏", "cbirthday": "2024-11-23", "displaydesc": "一般市民"}, {"index": 82, "encname": "林O希", "cbirthday": "2024-07-06", "displaydesc": "優先收托"}, {"index": 83, "encname": "李O諮", "cbirthday": "2024-09-01", "displaydesc": "一般市民"}, {"index": 84, "encname": "王O人", "cbirthday": "2024-06-26", "displaydesc": "一般市民"}, {"index": 85, "encname": "朱O郡", "cbirthday": "2025-01-27", "displaydesc": "一般市民"}, {"index": 86, "encname": "葉O楷", "cbirthday": "2025-11-03", "displaydesc": "一般市民"}, {"index": 87, "encname": "謝O澔", "cbirthday": "2024-10-01", "displaydesc": "一般市民"}, {"index": 88, "encname": "王O宸", "cbirthday": "2026-01-05", "displaydesc": "一般市民"}, {"index": 89, "encname": "張O宸", "cbirthday": "2025-07-05", "displaydesc": "一般市民"}, {"index": 90, "encname": "陳O", "cbirthday": "2024-09-25", "displaydesc": "一般市民"}, {"index": 91, "encname": "吳O叡", "cbirthday": "2026-01-05", "displaydesc": "一般市民"}, {"index": 92, "encname": "蔡O庭", "cbirthday": "2024-07-24", "displaydesc": "一般市民"}, {"index": 93, "encname": "林O翔", "cbirthday": "2024-09-20", "displaydesc": "一般市民"}, {"index": 94, "encname": "陳O淳", "cbirthday": "2024-12-14", "displaydesc": "一般市民"}, {"index": 95, "encname": "林O朔", "cbirthday": "2025-01-18", "displaydesc": "一般市民"}, {"index": 96, "encname": "江O星", "cbirthday": "2025-07-18", "displaydesc": "一般市民"}, {"index": 97, "encname": "林O唯", "cbirthday": "2025-08-01", "displaydesc": "一般市民"}, {"index": 98, "encname": "王O凜", "cbirthday": "2025-03-15", "displaydesc": "一般市民"}, {"index": 99, "encname": "林O碩", "cbirthday": "2025-12-13", "displaydesc": "一般市民"}, {"index": 100, "encname": "林O緹", "cbirthday": "2025-12-13", "displaydesc": "一般市民"}, {"index": 101, "encname": "許O瑄", "cbirthday": "2025-02-08", "displaydesc": "一般市民"}, {"index": 102, "encname": "林O澈", "cbirthday": "2025-06-28", "displaydesc": "優先收托"}, {"index": 103, "encname": "郭O心", "cbirthday": "2024-12-04", "displaydesc": "優先收托"}, {"index": 104, "encname": "王O語", "cbirthday": "2025-12-30", "displaydesc": "一般市民"}, {"index": 105, "encname": "廖O晞", "cbirthday": "2025-10-19", "displaydesc": "一般市民"}, {"index": 106, "encname": "鄭O蕎", "cbirthday": "2025-11-23", "displaydesc": "一般市民"}, {"index": 107, "encname": "呂O岑", "cbirthday": "2026-01-06", "displaydesc": "一般市民"}, {"index": 108, "encname": "李O洋", "cbirthday": "2024-08-03", "displaydesc": "一般市民"}, {"index": 109, "encname": "周O宇", "cbirthday": "2026-01-12", "displaydesc": "一般市民"}, {"index": 110, "encname": "廖O毅", "cbirthday": "2025-08-23", "displaydesc": "一般市民"}, {"index": 111, "encname": "黃O涵", "cbirthday": "2025-01-12", "displaydesc": "一般市民"}, {"index": 112, "encname": "鄭O軒", "cbirthday": "2024-11-29", "displaydesc": "一般市民"}, {"index": 113, "encname": "鄧O宏", "cbirthday": "2025-04-15", "displaydesc": "一般市民"}, {"index": 114, "encname": "賴O亦", "cbirthday": "2024-06-16", "displaydesc": "一般市民"}, {"index": 115, "encname": "蘇O智", "cbirthday": "2025-12-24", "displaydesc": "一般市民"}, {"index": 116, "encname": "賴O玥", "cbirthday": "2025-12-30", "displaydesc": "一般市民"}, {"index": 117, "encname": "鄭O圻", "cbirthday": "2024-12-31", "displaydesc": "一般市民"}, {"index": 118, "encname": "朱O熠", "cbirthday": "2025-04-09", "displaydesc": "一般市民"}, {"index": 119, "encname": "洪O甯", "cbirthday": "2024-11-28", "displaydesc": "一般市民"}, {"index": 120, "encname": "林O", "cbirthday": "2025-07-23", "displaydesc": "一般市民"}, {"index": 121, "encname": "童O澄", "cbirthday": "2024-10-24", "displaydesc": "一般市民"}, {"index": 122, "encname": "陳O愷", "cbirthday": "2024-09-27", "displaydesc": "一般市民"}, {"index": 123, "encname": "紀O晞", "cbirthday": "2026-01-02", "displaydesc": "一般市民"}, {"index": 124, "encname": "謝O朔", "cbirthday": "2025-08-15", "displaydesc": "一般市民"}, {"index": 125, "encname": "王O瑄", "cbirthday": "2025-11-17", "displaydesc": "一般市民"}, {"index": 126, "encname": "鐘O皓", "cbirthday": "2025-02-20", "displaydesc": "一般市民"}, {"index": 127, "encname": "陳O宇", "cbirthday": "2025-08-13", "displaydesc": "優先收托"}, {"index": 128, "encname": "李O喬", "cbirthday": "2025-04-07", "displaydesc": "一般市民"}, {"index": 129, "encname": "蔡O碩", "cbirthday": "2024-07-26", "displaydesc": "一般市民"}, {"index": 130, "encname": "蔡O琋", "cbirthday": "2025-10-28", "displaydesc": "一般市民"}, {"index": 131, "encname": "楊O丞", "cbirthday": "2025-02-27", "displaydesc": "一般市民"}, {"index": 132, "encname": "吳O瑋", "cbirthday": "2024-09-12", "displaydesc": "一般市民"}, {"index": 133, "encname": "蔡O霏", "cbirthday": "2025-01-18", "displaydesc": "一般市民"}, {"index": 134, "encname": "戴O安", "cbirthday": "2024-07-01", "displaydesc": "一般市民"}, {"index": 135, "encname": "吳O陞", "cbirthday": "2025-11-24", "displaydesc": "一般市民"}, {"index": 136, "encname": "余O澄", "cbirthday": "2025-12-21", "displaydesc": "一般市民"}, {"index": 137, "encname": "李O恩", "cbirthday": "2025-09-27", "displaydesc": "一般市民"}, {"index": 138, "encname": "張O維", "cbirthday": "2025-01-09", "displaydesc": "一般市民"}, {"index": 139, "encname": "楊O晴", "cbirthday": "2025-09-29", "displaydesc": "一般市民"}, {"index": 140, "encname": "林O諾", "cbirthday": "2025-12-10", "displaydesc": "一般市民"}, {"index": 141, "encname": "李O蒔", "cbirthday": "2024-09-12", "displaydesc": "一般市民"}, {"index": 142, "encname": "陳O陽", "cbirthday": "2025-07-26", "displaydesc": "一般市民"}, {"index": 143, "encname": "蘇O心", "cbirthday": "2025-06-02", "displaydesc": "一般市民"}, {"index": 144, "encname": "黃O晞", "cbirthday": "2025-02-25", "displaydesc": "一般市民"}, {"index": 145, "encname": "蘇O晰", "cbirthday": "2024-11-25", "displaydesc": "一般市民"}, {"index": 146, "encname": "莊O濬", "cbirthday": "2024-08-01", "displaydesc": "一般市民"}, {"index": 147, "encname": "林O樂", "cbirthday": "2025-09-30", "displaydesc": "一般市民"}, {"index": 148, "encname": "賴O樂", "cbirthday": "2025-06-23", "displaydesc": "一般市民"}, {"index": 149, "encname": "林O實", "cbirthday": "2024-11-18", "displaydesc": "一般市民"}, {"index": 150, "encname": "郭O妮", "cbirthday": "2025-08-20", "displaydesc": "一般市民"}, {"index": 151, "encname": "廖O鈞", "cbirthday": "2026-02-04", "displaydesc": "一般市民"}, {"index": 152, "encname": "黃O珈", "cbirthday": "2025-07-23", "displaydesc": "一般市民"}, {"index": 153, "encname": "林O鋆", "cbirthday": "2025-07-26", "displaydesc": "一般市民"}, {"index": 154, "encname": "廖O澄", "cbirthday": "2024-12-12", "displaydesc": "優先收托"}, {"index": 155, "encname": "蘇O媛", "cbirthday": "2025-01-01", "displaydesc": "一般市民"}, {"index": 156, "encname": "劉O珩", "cbirthday": "2026-01-08", "displaydesc": "一般市民"}, {"index": 157, "encname": "潘O喬", "cbirthday": "2024-08-03", "displaydesc": "一般市民"}, {"index": 158, "encname": "朱O逸", "cbirthday": "2025-11-30", "displaydesc": "一般市民"}, {"index": 159, "encname": "陳O", "cbirthday": "2025-02-13", "displaydesc": "優先收托"}, {"index": 160, "encname": "陳O霓", "cbirthday": "2025-01-02", "displaydesc": "一般市民"}, {"index": 161, "encname": "張O妍", "cbirthday": "2025-06-24", "displaydesc": "一般市民"}, {"index": 162, "encname": "紀O桓", "cbirthday": "2025-04-13", "displaydesc": "一般市民"}, {"index": 163, "encname": "陳O璇", "cbirthday": "2025-12-06", "displaydesc": "一般市民"}, {"index": 164, "encname": "吳O軒", "cbirthday": "2025-05-05", "displaydesc": "一般市民"}, {"index": 165, "encname": "陳O彤", "cbirthday": "2025-08-17", "displaydesc": "一般市民"}, {"index": 166, "encname": "林O恩", "cbirthday": "2025-01-18", "displaydesc": "一般市民"}, {"index": 167, "encname": "林O晞", "cbirthday": "2024-08-28", "displaydesc": "一般市民"}, {"index": 168, "encname": "張O澈", "cbirthday": "2025-12-05", "displaydesc": "一般市民"}, {"index": 169, "encname": "楊O霏", "cbirthday": "2025-08-26", "displaydesc": "一般市民"}, {"index": 170, "encname": "郭O昇", "cbirthday": "2024-08-02", "displaydesc": "一般市民"}, {"index": 171, "encname": "黃O芮", "cbirthday": "2025-09-22", "displaydesc": "一般市民"}, {"index": 172, "encname": "嚴O淳", "cbirthday": "2025-07-25", "displaydesc": "一般市民"}, {"index": 173, "encname": "張O翌", "cbirthday": "2025-01-16", "displaydesc": "一般市民"}, {"index": 174, "encname": "蔡O彤", "cbirthday": "2025-11-24", "displaydesc": "一般市民"}, {"index": 175, "encname": "卓O駩", "cbirthday": "2024-10-10", "displaydesc": "一般市民"}, {"index": 176, "encname": "李O媛", "cbirthday": "2025-08-27", "displaydesc": "一般市民"}, {"index": 177, "encname": "蔡O媗", "cbirthday": "2025-02-08", "displaydesc": "一般市民"}, {"index": 178, "encname": "李O宸", "cbirthday": "2025-10-11", "displaydesc": "一般市民"}, {"index": 179, "encname": "戴O旭", "cbirthday": "2024-07-07", "displaydesc": "一般市民"}, {"index": 180, "encname": "潘O琋", "cbirthday": "2025-03-24", "displaydesc": "一般市民"}, {"index": 181, "encname": "洪O希", "cbirthday": "2025-02-21", "displaydesc": "一般市民"}, {"index": 182, "encname": "韓O豫", "cbirthday": "2025-01-17", "displaydesc": "一般市民"}, {"index": 183, "encname": "何O澄", "cbirthday": "2026-02-11", "displaydesc": "一般市民"}, {"index": 184, "encname": "王O元", "cbirthday": "2025-12-02", "displaydesc": "一般市民"}, {"index": 185, "encname": "蔡O樂", "cbirthday": "2025-11-15", "displaydesc": "一般市民"}, {"index": 186, "encname": "黃O羽", "cbirthday": "2025-11-14", "displaydesc": "一般市民"}, {"index": 187, "encname": "莊O妤", "cbirthday": "2025-07-15", "displaydesc": "一般市民"}, {"index": 188, "encname": "吳O筠", "cbirthday": "2025-12-13", "displaydesc": "一般市民"}, {"index": 189, "encname": "江O晞", "cbirthday": "2024-11-07", "displaydesc": "一般市民"}, {"index": 190, "encname": "林O妍", "cbirthday": "2025-05-09", "displaydesc": "一般市民"}, {"index": 191, "encname": "曾O宇", "cbirthday": "2024-11-21", "displaydesc": "一般市民"}, {"index": 192, "encname": "曾O程", "cbirthday": "2024-04-24", "displaydesc": "一般市民"}, {"index": 193, "encname": "廖O榛", "cbirthday": "2025-04-19", "displaydesc": "一般市民"}, {"index": 194, "encname": "李O恩", "cbirthday": "2025-12-09", "displaydesc": "一般市民"}, {"index": 195, "encname": "林O然", "cbirthday": "2025-02-12", "displaydesc": "一般市民"}, {"index": 196, "encname": "李O維", "cbirthday": "2024-10-10", "displaydesc": "一般市民"}, {"index": 197, "encname": "石O達", "cbirthday": "2025-10-28", "displaydesc": "一般市民"}, {"index": 198, "encname": "黃O宇", "cbirthday": "2025-10-23", "displaydesc": "一般市民"}, {"index": 199, "encname": "陳O維", "cbirthday": "2025-04-02", "displaydesc": "一般市民"}, {"index": 200, "encname": "王O恩", "cbirthday": "2025-03-28", "displaydesc": "一般市民"}, {"index": 201, "encname": "謝O穎", "cbirthday": "2025-06-30", "displaydesc": "一般市民"}, {"index": 202, "encname": "王O安", "cbirthday": "2025-03-30", "displaydesc": "一般市民"}, {"index": 203, "encname": "盧O蘅", "cbirthday": "2026-01-30", "displaydesc": "一般市民"}, {"index": 204, "encname": "陳O之", "cbirthday": "2025-11-28", "displaydesc": "一般市民"}, {"index": 205, "encname": "林O潤", "cbirthday": "2025-10-16", "displaydesc": "一般市民"}, {"index": 206, "encname": "陳O霏", "cbirthday": "2025-01-04", "displaydesc": "一般市民"}, {"index": 207, "encname": "楊O穎", "cbirthday": "2024-12-06", "displaydesc": "一般市民"}, {"index": 208, "encname": "楊O羽", "cbirthday": "2024-12-06", "displaydesc": "一般市民"}, {"index": 209, "encname": "莊O淳", "cbirthday": "2025-06-27", "displaydesc": "一般市民"}, {"index": 210, "encname": "林O芯", "cbirthday": "2025-08-17", "displaydesc": "一般市民"}, {"index": 211, "encname": "張O熙", "cbirthday": "2024-12-09", "displaydesc": "一般市民"}, {"index": 212, "encname": "林O融", "cbirthday": "2025-03-27", "displaydesc": "優先收托"}, {"index": 213, "encname": "李O云", "cbirthday": "2025-11-22", "displaydesc": "一般市民"}, {"index": 214, "encname": "高O辰", "cbirthday": "2024-09-12", "displaydesc": "優先收托"}, {"index": 215, "encname": "萬O碩", "cbirthday": "2025-07-01", "displaydesc": "一般市民"}, {"index": 216, "encname": "何O璇", "cbirthday": "2025-08-08", "displaydesc": "一般市民"}, {"index": 217, "encname": "顧O汝", "cbirthday": "2024-07-14", "displaydesc": "優先收托"}, {"index": 218, "encname": "林O潔", "cbirthday": "2024-11-13", "displaydesc": "一般市民"}, {"index": 219, "encname": "蕭O榛", "cbirthday": "2024-05-07", "displaydesc": "一般市民"}, {"index": 220, "encname": "洪O安", "cbirthday": "2025-10-10", "displaydesc": "一般市民"}, {"index": 221, "encname": "林O恆", "cbirthday": "2024-11-03", "displaydesc": "一般市民"}, {"index": 222, "encname": "吳O宸", "cbirthday": "2025-11-17", "displaydesc": "一般市民"}, {"index": 223, "encname": "林O希", "cbirthday": "2025-11-02", "displaydesc": "一般市民"}, {"index": 224, "encname": "黃O靖", "cbirthday": "2025-08-07", "displaydesc": "一般市民"}, {"index": 225, "encname": "林O晞", "cbirthday": "2026-01-17", "displaydesc": "一般市民"}, {"index": 226, "encname": "劉O潯", "cbirthday": "2025-03-26", "displaydesc": "一般市民"}, {"index": 227, "encname": "劉O恒", "cbirthday": "2025-05-06", "displaydesc": "一般市民"}, {"index": 228, "encname": "謝O辰", "cbirthday": "2025-10-27", "displaydesc": "一般市民"}, {"index": 229, "encname": "吳O儒", "cbirthday": "2025-03-10", "displaydesc": "一般市民"}, {"index": 230, "encname": "許O宸", "cbirthday": "2025-06-02", "displaydesc": "一般市民"}, {"index": 231, "encname": "王O展", "cbirthday": "2024-07-27", "displaydesc": "一般市民"}, {"index": 232, "encname": "蔡O鈞", "cbirthday": "2025-07-24", "displaydesc": "一般市民"}, {"index": 233, "encname": "葉O允", "cbirthday": "2025-10-16", "displaydesc": "一般市民"}, {"index": 234, "encname": "林O言", "cbirthday": "2025-09-04", "displaydesc": "一般市民"}, {"index": 235, "encname": "賴O霆", "cbirthday": "2025-10-03", "displaydesc": "一般市民"}, {"index": 236, "encname": "梁O墨", "cbirthday": "2025-08-18", "displaydesc": "一般市民"}, {"index": 237, "encname": "塗O睎", "cbirthday": "2025-10-24", "displaydesc": "一般市民"}, {"index": 238, "encname": "周O倪", "cbirthday": "2025-09-30", "displaydesc": "優先收托"}, {"index": 239, "encname": "謝O霖", "cbirthday": "2025-12-07", "displaydesc": "一般市民"}, {"index": 240, "encname": "周O安", "cbirthday": "2025-09-11", "displaydesc": "一般市民"}, {"index": 241, "encname": "張O翔", "cbirthday": "2025-09-25", "displaydesc": "一般市民"}, {"index": 242, "encname": "莊O恩", "cbirthday": "2024-08-16", "displaydesc": "優先收托"}, {"index": 243, "encname": "吳O學", "cbirthday": "2024-11-02", "displaydesc": "一般市民"}, {"index": 244, "encname": "陳O頊", "cbirthday": "2026-02-15", "displaydesc": "優先收托"}, {"index": 245, "encname": "黃O蓉", "cbirthday": "2026-02-18", "displaydesc": "一般市民"}, {"index": 246, "encname": "林O桐", "cbirthday": "2025-06-24", "displaydesc": "一般市民"}, {"index": 247, "encname": "王O升", "cbirthday": "2026-02-20", "displaydesc": "一般市民"}, {"index": 248, "encname": "陳O仁", "cbirthday": "2026-01-28", "displaydesc": "一般市民"}, {"index": 249, "encname": "林O睿", "cbirthday": "2026-01-24", "displaydesc": "一般市民"}, {"index": 250, "encname": "嚴O吟", "cbirthday": "2024-11-08", "displaydesc": "一般市民"}, {"index": 251, "encname": "蘇O然", "cbirthday": "2026-03-03", "displaydesc": "一般市民"}, {"index": 252, "encname": "陳O琁", "cbirthday": "2026-02-16", "displaydesc": "一般市民"}, {"index": 253, "encname": "陳O庭", "cbirthday": "2026-02-16", "displaydesc": "一般市民"}, {"index": 254, "encname": "林O安", "cbirthday": "2025-05-07", "displaydesc": "一般市民"}, {"index": 255, "encname": "林O森", "cbirthday": "2026-03-13", "displaydesc": "一般市民"}, {"index": 256, "encname": "周O芯", "cbirthday": "2026-01-10", "displaydesc": "一般市民"}, {"index": 257, "encname": "徐O宸", "cbirthday": "2026-03-02", "displaydesc": "一般市民"}, {"index": 258, "encname": "翁O謙", "cbirthday": "2025-07-16", "displaydesc": "一般市民"}, {"index": 259, "encname": "陳O織", "cbirthday": "2026-03-11", "displaydesc": "一般市民"}, {"index": 260, "encname": "蘇O", "cbirthday": "2026-03-30", "displaydesc": "一般市民"}, {"index": 261, "encname": "張O文", "cbirthday": "2025-09-30", "displaydesc": "一般市民"}, {"index": 262, "encname": "陳O琋", "cbirthday": "2025-09-13", "displaydesc": "一般市民"}, {"index": 263, "encname": "謝O桐", "cbirthday": "2025-07-30", "displaydesc": "一般市民"}, {"index": 264, "encname": "陳O安", "cbirthday": "2026-03-06", "displaydesc": "一般市民"}, {"index": 265, "encname": "張O昕", "cbirthday": "2025-07-16", "displaydesc": "一般市民"}]}, "latest_change": {"fetched_at": "2026-04-21T19:03:03+08:00", "removed_previous_indexes": [185], "removed": [{"name": "黃O辰", "birthday": "2026-01-01", "category": "一般市民", "previous_index": 185}], "removed_details": [{"name": "黃O辰", "birthday": "2026-01-01", "category": "一般市民", "previous_index": 185}], "added_current_indexes": [], "added": [], "added_details": [], "moved": [{"name": "蔡O樂", "birthday": "2025-11-15", "category": "一般市民", "previous_index": 186, "current_index": 185, "delta": -1}, {"name": "黃O羽", "birthday": "2025-11-14", "category": "一般市民", "previous_index": 187, "current_index": 186, "delta": -1}, {"name": "莊O妤", "birthday": "2025-07-15", "category": "一般市民", "previous_index": 188, "current_index": 187, "delta": -1}, {"name": "吳O筠", "birthday": "2025-12-13", "category": "一般市民", "previous_index": 189, "current_index": 188, "delta": -1}, {"name": "江O晞", "birthday": "2024-11-07", "category": "一般市民", "previous_index": 190, "current_index": 189, "delta": -1}, {"name": "林O妍", "birthday": "2025-05-09", "category": "一般市民", "previous_index": 191, "current_index": 190, "delta": -1}, {"name": "曾O宇", "birthday": "2024-11-21", "category": "一般市民", "previous_index": 192, "current_index": 191, "delta": -1}, {"name": "曾O程", "birthday": "2024-04-24", "category": "一般市民", "previous_index": 193, "current_index": 192, "delta": -1}, {"name": "廖O榛", "birthday": "2025-04-19", "category": "一般市民", "previous_index": 194, "current_index": 193, "delta": -1}, {"name": "李O恩", "birthday": "2025-12-09", "category": "一般市民", "previous_index": 195, "current_index": 194, "delta": -1}, {"name": "林O然", "birthday": "2025-02-12", "category": "一般市民", "previous_index": 196, "current_index": 195, "delta": -1}, {"name": "李O維", "birthday": "2024-10-10", "category": "一般市民", "previous_index": 197, "current_index": 196, "delta": -1}, {"name": "石O達", "birthday": "2025-10-28", "category": "一般市民", "previous_index": 198, "current_index": 197, "delta": -1}, {"name": "黃O宇", "birthday": "2025-10-23", "category": "一般市民", "previous_index": 199, "current_index": 198, "delta": -1}, {"name": "陳O維", "birthday": "2025-04-02", "category": "一般市民", "previous_index": 200, "current_index": 199, "delta": -1}, {"name": "王O恩", "birthday": "2025-03-28", "category": "一般市民", "previous_index": 201, "current_index": 200, "delta": -1}, {"name": "謝O穎", "birthday": "2025-06-30", "category": "一般市民", "previous_index": 202, "current_index": 201, "delta": -1}, {"name": "王O安", "birthday": "2025-03-30", "category": "一般市民", "previous_index": 203, "current_index": 202, "delta": -1}, {"name": "盧O蘅", "birthday": "2026-01-30", "category": "一般市民", "previous_index": 204, "current_index": 203, "delta": -1}, {"name": "陳O之", "birthday": "2025-11-28", "category": "一般市民", "previous_index": 205, "current_index": 204, "delta": -1}, {"name": "林O潤", "birthday": "2025-10-16", "category": "一般市民", "previous_index": 206, "current_index": 205, "delta": -1}, {"name": "陳O霏", "birthday": "2025-01-04", "category": "一般市民", "previous_index": 207, "current_index": 206, "delta": -1}, {"name": "楊O穎", "birthday": "2024-12-06", "category": "一般市民", "previous_index": 208, "current_index": 207, "delta": -1}, {"name": "楊O羽", "birthday": "2024-12-06", "category": "一般市民", "previous_index": 209, "current_index": 208, "delta": -1}, {"name": "莊O淳", "birthday": "2025-06-27", "category": "一般市民", "previous_index": 210, "current_index": 209, "delta": -1}, {"name": "林O芯", "birthday": "2025-08-17", "category": "一般市民", "previous_index": 211, "current_index": 210, "delta": -1}, {"name": "張O熙", "birthday": "2024-12-09", "category": "一般市民", "previous_index": 212, "current_index": 211, "delta": -1}, {"name": "林O融", "birthday": "2025-03-27", "category": "優先收托", "previous_index": 213, "current_index": 212, "delta": -1}, {"name": "李O云", "birthday": "2025-11-22", "category": "一般市民", "previous_index": 214, "current_index": 213, "delta": -1}, {"name": "高O辰", "birthday": "2024-09-12", "category": "優先收托", "previous_index": 215, "current_index": 214, "delta": -1}, {"name": "萬O碩", "birthday": "2025-07-01", "category": "一般市民", "previous_index": 216, "current_index": 215, "delta": -1}, {"name": "何O璇", "birthday": "2025-08-08", "category": "一般市民", "previous_index": 217, "current_index": 216, "delta": -1}, {"name": "顧O汝", "birthday": "2024-07-14", "category": "優先收托", "previous_index": 218, "current_index": 217, "delta": -1}, {"name": "林O潔", "birthday": "2024-11-13", "category": "一般市民", "previous_index": 219, "current_index": 218, "delta": -1}, {"name": "蕭O榛", "birthday": "2024-05-07", "category": "一般市民", "previous_index": 220, "current_index": 219, "delta": -1}, {"name": "洪O安", "birthday": "2025-10-10", "category": "一般市民", "previous_index": 221, "current_index": 220, "delta": -1}, {"name": "林O恆", "birthday": "2024-11-03", "category": "一般市民", "previous_index": 222, "current_index": 221, "delta": -1}, {"name": "吳O宸", "birthday": "2025-11-17", "category": "一般市民", "previous_index": 223, "current_index": 222, "delta": -1}, {"name": "林O希", "birthday": "2025-11-02", "category": "一般市民", "previous_index": 224, "current_index": 223, "delta": -1}, {"name": "黃O靖", "birthday": "2025-08-07", "category": "一般市民", "previous_index": 225, "current_index": 224, "delta": -1}, {"name": "林O晞", "birthday": "2026-01-17", "category": "一般市民", "previous_index": 226, "current_index": 225, "delta": -1}, {"name": "劉O潯", "birthday": "2025-03-26", "category": "一般市民", "previous_index": 227, "current_index": 226, "delta": -1}, {"name": "劉O恒", "birthday": "2025-05-06", "category": "一般市民", "previous_index": 228, "current_index": 227, "delta": -1}, {"name": "謝O辰", "birthday": "2025-10-27", "category": "一般市民", "previous_index": 229, "current_index": 228, "delta": -1}, {"name": "吳O儒", "birthday": "2025-03-10", "category": "一般市民", "previous_index": 230, "current_index": 229, "delta": -1}, {"name": "許O宸", "birthday": "2025-06-02", "category": "一般市民", "previous_index": 231, "current_index": 230, "delta": -1}, {"name": "王O展", "birthday": "2024-07-27", "category": "一般市民", "previous_index": 232, "current_index": 231, "delta": -1}, {"name": "蔡O鈞", "birthday": "2025-07-24", "category": "一般市民", "previous_index": 233, "current_index": 232, "delta": -1}, {"name": "葉O允", "birthday": "2025-10-16", "category": "一般市民", "previous_index": 234, "current_index": 233, "delta": -1}, {"name": "林O言", "birthday": "2025-09-04", "category": "一般市民", "previous_index": 235, "current_index": 234, "delta": -1}, {"name": "賴O霆", "birthday": "2025-10-03", "category": "一般市民", "previous_index": 236, "current_index": 235, "delta": -1}, {"name": "梁O墨", "birthday": "2025-08-18", "category": "一般市民", "previous_index": 237, "current_index": 236, "delta": -1}, {"name": "塗O睎", "birthday": "2025-10-24", "category": "一般市民", "previous_index": 238, "current_index": 237, "delta": -1}, {"name": "周O倪", "birthday": "2025-09-30", "category": "優先收托", "previous_index": 239, "current_index": 238, "delta": -1}, {"name": "謝O霖", "birthday": "2025-12-07", "category": "一般市民", "previous_index": 240, "current_index": 239, "delta": -1}, {"name": "周O安", "birthday": "2025-09-11", "category": "一般市民", "previous_index": 241, "current_index": 240, "delta": -1}, {"name": "張O翔", "birthday": "2025-09-25", "category": "一般市民", "previous_index": 242, "current_index": 241, "delta": -1}, {"name": "莊O恩", "birthday": "2024-08-16", "category": "優先收托", "previous_index": 243, "current_index": 242, "delta": -1}, {"name": "吳O學", "birthday": "2024-11-02", "category": "一般市民", "previous_index": 244, "current_index": 243, "delta": -1}, {"name": "陳O頊", "birthday": "2026-02-15", "category": "優先收托", "previous_index": 245, "current_index": 244, "delta": -1}, {"name": "黃O蓉", "birthday": "2026-02-18", "category": "一般市民", "previous_index": 246, "current_index": 245, "delta": -1}, {"name": "林O桐", "birthday": "2025-06-24", "category": "一般市民", "previous_index": 247, "current_index": 246, "delta": -1}, {"name": "王O升", "birthday": "2026-02-20", "category": "一般市民", "previous_index": 248, "current_index": 247, "delta": -1}, {"name": "陳O仁", "birthday": "2026-01-28", "category": "一般市民", "previous_index": 249, "current_index": 248, "delta": -1}, {"name": "林O睿", "birthday": "2026-01-24", "category": "一般市民", "previous_index": 250, "current_index": 249, "delta": -1}, {"name": "嚴O吟", "birthday": "2024-11-08", "category": "一般市民", "previous_index": 251, "current_index": 250, "delta": -1}, {"name": "蘇O然", "birthday": "2026-03-03", "category": "一般市民", "previous_index": 252, "current_index": 251, "delta": -1}, {"name": "陳O琁", "birthday": "2026-02-16", "category": "一般市民", "previous_index": 253, "current_index": 252, "delta": -1}, {"name": "陳O庭", "birthday": "2026-02-16", "category": "一般市民", "previous_index": 254, "current_index": 253, "delta": -1}, {"name": "林O安", "birthday": "2025-05-07", "category": "一般市民", "previous_index": 255, "current_index": 254, "delta": -1}, {"name": "林O森", "birthday": "2026-03-13", "category": "一般市民", "previous_index": 256, "current_index": 255, "delta": -1}, {"name": "周O芯", "birthday": "2026-01-10", "category": "一般市民", "previous_index": 257, "current_index": 256, "delta": -1}, {"name": "徐O宸", "birthday": "2026-03-02", "category": "一般市民", "previous_index": 258, "current_index": 257, "delta": -1}, {"name": "翁O謙", "birthday": "2025-07-16", "category": "一般市民", "previous_index": 259, "current_index": 258, "delta": -1}, {"name": "陳O織", "birthday": "2026-03-11", "category": "一般市民", "previous_index": 260, "current_index": 259, "delta": -1}, {"name": "蘇O", "birthday": "2026-03-30", "category": "一般市民", "previous_index": 261, "current_index": 260, "delta": -1}, {"name": "張O文", "birthday": "2025-09-30", "category": "一般市民", "previous_index": 262, "current_index": 261, "delta": -1}, {"name": "陳O琋", "birthday": "2025-09-13", "category": "一般市民", "previous_index": 263, "current_index": 262, "delta": -1}, {"name": "謝O桐", "birthday": "2025-07-30", "category": "一般市民", "previous_index": 264, "current_index": 263, "delta": -1}, {"name": "陳O安", "birthday": "2026-03-06", "category": "一般市民", "previous_index": 265, "current_index": 264, "delta": -1}, {"name": "張O昕", "birthday": "2025-07-16", "category": "一般市民", "previous_index": 266, "current_index": 265, "delta": -1}], "changed": true, "baseline": false, "previous_waiting_count": 266, "current_waiting_count": 265, "net_waiting_count_change": -1, "likely_withdrawn_previous_indexes": [185], "likely_admitted_previous_indexes": [], "highlight_shift": {"previous_index": 186, "current_index": 185, "name": "蔡O樂", "delta": -1}, "summary_lines": ["185 號離開名單", "186 → 185（只顯示第一個代表性變動）"], "change_kind": "shrink"}, "history": [{"date": "2026-04-21", "fetched_at": "2026-04-21T13:14:48+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false}, {"date": "2026-04-21", "fetched_at": "2026-04-21T13:14:48+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false}, {"date": "2026-04-21", "fetched_at": "2026-04-21T13:33:28+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false}, {"date": "2026-04-21", "fetched_at": "2026-04-21T13:45:07+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null}, {"date": "2026-04-21", "fetched_at": "2026-04-21T13:53:15+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T14:05:51+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T14:06:27+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T14:09:33+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T14:22:52+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T14:33:15+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T14:52:04+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T15:02:20+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T15:05:19+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T15:07:12+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T15:08:32+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T15:16:29+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T15:21:35+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T15:25:14+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T15:41:48+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T17:31:25+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T17:32:12+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T17:34:09+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T17:45:50+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T17:49:12+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T17:55:01+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T17:58:58+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T18:00:13+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T18:02:22+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T18:03:02+08:00", "waiting_count": 266, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T19:03:03+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": true, "change_kind": "shrink", "summary_lines": ["185 號離開名單", "186 → 185（只顯示第一個代表性變動）"], "highlight_shift": {"previous_index": 186, "current_index": 185, "name": "蔡O樂", "delta": -1}, "removed_details": [{"name": "黃O辰", "birthday": "2026-01-01", "category": "一般市民", "previous_index": 185}], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T20:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T20:50:06+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T21:03:33+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T21:05:28+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T21:08:18+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T21:41:26+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T22:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T22:11:55+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T22:12:58+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T22:17:06+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-21", "fetched_at": "2026-04-21T23:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T00:03:03+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T01:03:05+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T02:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T03:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T04:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T05:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T06:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T07:03:03+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T08:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T09:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T09:18:27+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T09:18:28+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T10:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}, {"date": "2026-04-22", "fetched_at": "2026-04-22T10:03:02+08:00", "waiting_count": 265, "last_month_enrolled": 42, "changed": false, "change_kind": "stable", "summary_lines": ["名單無變動"], "highlight_shift": null, "removed_details": [], "added_details": [], "likely_age_out_previous_indexes": []}], "rule_text": "三、缺額遞補原則：\n\n因中心收托涉及各班人數、幼兒年齡發展、師生比及身分別等差異因素，因此如有缺額時，依下列原則遞補：\n\n1.若為優先收托名額出缺時，優先收托對象優先於一般家庭，再依出缺年齡適齡遞補\n\n2.若為一般收托名額出缺時，依出缺年齡於全數備取名單中適齡遞補", "validity_text": "有效期限至116/07/31", "related_info_text": "相關說明：\n\n一、備取序號：係指現行實際之備取順序（未分齡）\n\n二、本表係依幼兒備取編號順序排列\n\n備註：優先對象指\n\n1.本府列冊之低收入戶及中低收入戶兒童。\n\n2.具有本市特殊境遇家庭及弱勢兒童少年生活補助身分資格之兒童。\n\n3.父母之一方為中重度身心障礙、服常備兵役（以徵兵者為限，不含後備役）、或處一年以上有期徒刑或受拘束人身自由之保安處分一年以上且執行中，致無法自行照顧家中未滿二歲兒童，而須送請托育人員照顧之兒童。\n\n4.家庭有同胞兄弟姐妹三名以上之兒童。\n\n5.原住民兒童。\n\n6.父母雙方或單親一方為未成年。\n\n三、缺額遞補原則：\n\n因中心收托涉及各班人數、幼兒年齡發展、師生比及身分別等差異因素，因此如有缺額時，依下列原則遞補：\n\n1.若為優先收托名額出缺時，優先收托對象優先於一般家庭，再依出缺年齡適齡遞補\n\n2.若為一般收托名額出缺時，依出缺年齡於全數備取名單中適齡遞補\n\n四、不列入備取名單情形：\n\n幼兒已入托、家長自行取消備取或電話通知取消、年滿2歲已逾法定入托年齡、經簡訊或電話備取通知未回覆者。\n\n五、114年7月報名期間結束後，自114年8月1日起開放候補登記，依其報名時間排序於114年7月備取抽籤順序之後，其備取名額有效期間至115年7月31日止。 ※建議於有效期間未被通知遞補入托且未滿兩歲者，皆應參與當年度7月備取登記，並請留意登記時間。\n\n六、上個月入托 42 名。"}</script>
+  
+  <script>
+    const data = JSON.parse(document.getElementById('dashboard-data').textContent);
+    const snapshot = data.snapshot;
+    const latest = data.latest_change || { removed_previous_indexes: [], added_current_indexes: [], moved: [], likely_admitted_previous_indexes: [], likely_withdrawn_previous_indexes: [], likely_age_out_previous_indexes: [] };
+    const history = data.history || [];
+
+    const $ = (id) => document.getElementById(id);
+    const fmt = new Intl.DateTimeFormat('zh-TW', { dateStyle: 'medium', timeStyle: 'short' });
+    
+    // --- 日期計算工具 ---
+    function getDaysOld(birthStr, targetStr) {
+        if (!birthStr || !targetStr) return 0;
+        const bDate = new Date(birthStr);
+        const tDate = new Date(targetStr.split('T')[0]);
+        return Math.floor((tDate - bDate) / (1000 * 60 * 60 * 24));
+    }
+
+    function getAgeString(birthStr, targetStr) {
+        if (!birthStr || !targetStr) return '—';
+        const [bY, bM, bD] = birthStr.split('-').map(Number);
+        const targetDate = new Date(targetStr);
+        const tY = targetDate.getFullYear();
+        const tM = targetDate.getMonth() + 1;
+        const tD = targetDate.getDate();
+
+        let years = tY - bY;
+        let months = tM - bM;
+        let days = tD - bD;
+
+        if (days < 0) {
+            months--;
+            const prevMonth = new Date(tY, tM - 1, 0); 
+            days += prevMonth.getDate();
+        }
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+        
+        if (years < 0) return '尚未出生';
+        return `${years}Y / ${months}M / ${days}D`;
+    }
+
+    // --- 卡片數值更新 ---
+    let changeText = '';
+    if (latest.changed && latest.fetched_at) {
+        const cDate = new Date(latest.fetched_at);
+        changeText = ` (發生於 ${cDate.getMonth() + 1}/${cDate.getDate()} ${cDate.getHours()}:${String(cDate.getMinutes()).padStart(2, '0')})`;
+        const cEl = $('latest-change-time');
+        if (cEl) cEl.textContent = changeText;
+    }
+    
+    $('updated-at').textContent = fmt.format(new Date(snapshot.fetched_at));
+    $('waiting-count').textContent = snapshot.waiting_count;
+    $('lastnum').textContent = snapshot.last_month_enrolled ?? '—';
+    $('capacity').textContent = `${snapshot.org.capnum ?? '—'} / ${snapshot.org.enroll_count ?? '—'}`;
+    
+    $('removed-count').textContent = latest.removed_previous_indexes.length;
+    $('admitted-count').textContent = (latest.likely_admitted_previous_indexes || []).length;
+    $('age-out-count').textContent = (latest.likely_age_out_previous_indexes || []).length;
+    $('withdrawn-count').textContent = (latest.likely_withdrawn_previous_indexes || []).length;
+    
+    $('removed-summary').textContent = latest.removed_previous_indexes.length ? '序號 ' + latest.removed_previous_indexes.join('、') + changeText : '尚無紀錄';
+    $('admitted-summary').textContent = latest.likely_admitted_previous_indexes?.length ? '序號 ' + latest.likely_admitted_previous_indexes.join('、') : '無';
+    $('age-out-summary').textContent = latest.likely_age_out_previous_indexes?.length ? '序號 ' + latest.likely_age_out_previous_indexes.join('、') : '無';
+    $('withdrawn-summary').textContent = latest.likely_withdrawn_previous_indexes?.length ? '序號 ' + latest.likely_withdrawn_previous_indexes.join('、') : '無';
+
+    // --- Chip標籤 ---
+    function renderChips(targetId, values, emptyText, formatter) {
+      const target = $(targetId);
+      if(!target) return;
+      target.innerHTML = '';
+      if (!values || !values.length) {
+        target.innerHTML = `<div class="chip">${emptyText}</div>`;
+        return;
+      }
+      values.forEach((value) => {
+        const el = document.createElement('div');
+        el.className = 'chip'; el.textContent = formatter(value);
+        target.appendChild(el);
+      });
+    }
+
+    renderChips('removed-chips', latest.removed_previous_indexes, '尚無紀錄', (v) => `序號 ${v}`);
+    renderChips('admitted-chips', latest.likely_admitted_previous_indexes, '無', (v) => `序號 ${v}`);
+    renderChips('age-out-chips', latest.likely_age_out_previous_indexes, '無', (v) => `序號 ${v}`);
+    renderChips('withdrawn-chips', latest.likely_withdrawn_previous_indexes, '無', (v) => `序號 ${v}`);
+
+    // --- 名次推進明細 ---
+    const movedTable = $('moved-table');
+    if (movedTable) {
+        if (!latest.moved || !latest.moved.length) {
+          movedTable.innerHTML = '<tr><td colspan="4">尚無紀錄</td></tr>';
+        } else {
+          latest.moved.forEach((item) => {
+            const cls = item.delta < 0 ? 'delta-up' : (item.delta > 0 ? 'delta-down' : 'delta-flat');
+            movedTable.insertAdjacentHTML('beforeend', `<tr><td>${item.name}</td><td>${item.previous_index}</td><td>${item.current_index}</td><td class="${cls}">${item.delta}</td></tr>`);
+          });
+        }
+    }
+
+    // --- 前20名表格 (加入屆齡紅字判定) ---
+    const top20Body = $('top20-table');
+    if (top20Body) {
+        snapshot.entries.slice(0, 20).forEach(e => {
+            const ageStr = getAgeString(e.cbirthday, snapshot.fetched_at);
+            const daysOld = getDaysOld(e.cbirthday, snapshot.fetched_at);
+            const className = daysOld >= 716 ? ' class="aging-out"' : '';
+            top20Body.insertAdjacentHTML('beforeend', `<tr${className}><td>${e.index}</td><td>${e.encname}</td><td>${e.cbirthday}</td><td>${ageStr}</td><td>${e.displaydesc}</td></tr>`);
+        });
+    }
+
+    // --- 所有名單表格 (加入屆齡紅字判定) ---
+    function sortEntries(entries, key, direction) {
+      const sorted = [...entries].sort((a, b) => {
+        if (key === 'index') return Number(a[key]) - Number(b[key]);
+        if (key === 'age') return String(b.cbirthday).localeCompare(String(a.cbirthday));
+        return String(a[key]).localeCompare(String(b[key]), 'zh-Hant');
+      });
+      return direction === 'desc' ? sorted.reverse() : sorted;
+    }
+
+    function renderAllListTable() {
+      const key = $('all-list-sort-key').value;
+      const dir = $('all-list-sort-direction').value;
+      const rows = sortEntries(snapshot.entries, key, dir);
+      const target = $('all-list-table');
+      if(!target) return;
+      target.innerHTML = '';
+      rows.forEach((e) => {
+        const ageStr = getAgeString(e.cbirthday, snapshot.fetched_at);
+        const daysOld = getDaysOld(e.cbirthday, snapshot.fetched_at);
+        const className = daysOld >= 716 ? ' class="aging-out"' : '';
+        target.insertAdjacentHTML('beforeend', `<tr${className}><td>${e.index}</td><td>${e.encname}</td><td>${e.cbirthday}</td><td>${ageStr}</td><td>${e.displaydesc}</td></tr>`);
+      });
+    }
+
+    const sortKeyEl = $('all-list-sort-key');
+    const sortDirEl = $('all-list-sort-direction');
+    if(sortKeyEl) sortKeyEl.addEventListener('change', renderAllListTable);
+    if(sortDirEl) sortDirEl.addEventListener('change', renderAllListTable);
+    renderAllListTable();
+
+    // --- 前20名身分長條圖 ---
+    const top20Bars = $('top20-bars');
+    if (top20Bars) {
+        const counts = new Map();
+        snapshot.entries.slice(0, 20).forEach((entry) => counts.set(entry.displaydesc, (counts.get(entry.displaydesc) || 0) + 1));
+        const topCategoryTotal = Math.max(1, snapshot.entries.slice(0, 20).length);
+        const maxCount = Math.max(1, ...counts.values());
+        [...counts.entries()].sort((a, b) => b[1] - a[1]).forEach(([label, count]) => {
+          const pct = Math.round((count / topCategoryTotal) * 1000) / 10;
+          const widthPct = (count / maxCount) * 100;
+          top20Bars.insertAdjacentHTML('beforeend', `<div class="bar-row"><div>${label}</div><div class="bar-track"><div class="bar-fill" style="width:${widthPct}%"></div></div><div>${count} 人 / ${pct}%</div></div>`);
+        });
+    }
+
+    // --- 畫圖引擎 ---
+    function getDailyHistory() {
+        const dailyMap = {};
+        history.forEach(p => { dailyMap[p.fetched_at.split('T')[0]] = p; });
+        return Object.values(dailyMap);
+    }
+
+    function initDateSelector() {
+        const dates = [...new Set(history.map(p => p.fetched_at.split('T')[0]))].reverse();
+        const selector = $('date-selector');
+        if(!selector) return;
+        dates.forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = opt.textContent = d;
+            selector.appendChild(opt);
+        });
+        selector.onchange = () => renderHourlyChart();
+    }
+
+    function drawChart(svgId, points, labelMode) {
+      const svg = $(svgId);
+      if(!svg) return;
+      if (!points || !points.length) {
+        svg.innerHTML = '<text x="20" y="40" fill="#9bb2c8">尚無歷史資料</text>';
+        return;
+      }
+      
+      svg.innerHTML = '';
+      const width = 760, height = 300, pad = 36;
+      const vals = points.map((p) => p.waiting_count);
+      const min = Math.min(...vals), max = Math.max(...vals);
+      const range = Math.max(1, max - min);
+      const xStep = points.length === 1 ? 0 : (width - pad * 2) / (points.length - 1);
+      const toX = (i) => pad + i * xStep;
+      const toY = (value) => height - pad - ((value - min) / range) * (height - pad * 2);
+      
+      let html = '';
+      for (let i = 0; i <= 4; i++) {
+        const y = pad + i * ((height - pad * 2) / 4);
+        html += `<line x1="${pad}" y1="${y}" x2="${width - pad}" y2="${y}" stroke="#17324c" stroke-width="1" />`;
+      }
+      
+      const linePath = points.map((p, i) => `${toX(i)},${toY(p.waiting_count)}`).join(' ');
+      const color = labelMode === 'time' ? '#8ef7c2' : '#52d1ff';
+      html += `<polyline fill="none" stroke="${color}" stroke-width="3" points="${linePath}" />`;
+      html += `<text x="${pad}" y="20" fill="#9bb2c8" font-size="12">最少 ${min} / 最多 ${max}</text>`;
+      
+      points.forEach((p, i) => {
+        const x = toX(i), y = toY(p.waiting_count);
+        const labelText = labelMode === 'date' ? p.fetched_at.split('T')[0].substring(5) : p.fetched_at.split('T')[1].substring(0,5);
+        if (points.length <= 15 || i % Math.ceil(points.length / 10) === 0) {
+            html += `<text x="${x}" y="${height - 10}" fill="#9bb2c8" font-size="11" text-anchor="middle">${labelText}</text>`;
+        }
+        html += `<circle cx="${x}" cy="${y}" r="4" fill="#52d1ff"><title>${p.fetched_at.replace('T', ' ')}：${p.waiting_count} 人</title></circle>`;
+      });
+      svg.innerHTML = html;
+    }
+
+    function renderHourlyChart() {
+        const date = $('date-selector').value;
+        if(!date) return;
+        const dayPoints = history.filter(p => p.fetched_at.startsWith(date));
+        drawChart('hourly-chart', dayPoints, 'time');
+    }
+
+    // --- 歷史紀錄清單 ---
+    const timeline = $('history-timeline');
+    const stableToggle = $('toggle-stable');
+
+    function updateStableVisibility() {
+      document.querySelectorAll('.timeline-item[data-change-kind="stable"]').forEach((node) => {
+        node.classList.toggle('stable-hidden', !stableToggle.checked);
+      });
+    }
+
+    if(stableToggle) stableToggle.addEventListener('change', updateStableVisibility);
+
+    if (timeline) {
+        if (!history.length) {
+          timeline.innerHTML = '<div class="timeline-item">尚無歷史紀錄</div>';
+        } else {
+          [...history].reverse().forEach((item) => {
+            const card = document.createElement('div');
+            card.className = 'timeline-item';
+            card.style.background = '#13253a'; card.style.padding = '15px'; card.style.borderRadius = '10px'; card.style.marginBottom = '10px';
+            card.dataset.changeKind = item.change_kind || 'stable';
+            if ((item.change_kind || 'stable') === 'stable') card.classList.add('stable-hidden');
+            
+            let detailsHtml = '';
+            if (item.removed_details && item.removed_details.length > 0) {
+                detailsHtml = '<div style="margin-top:10px;"><table class="panel-table" style="font-size:13px;"><thead><tr><th>原序號</th><th>兒童姓名</th><th>當時歲數</th><th>推測類型</th></tr></thead><tbody>';
+                item.removed_details.forEach(rd => {
+                    const age = getAgeString(rd.birthday, item.fetched_at);
+                    let type = '自行取消';
+                    if ((item.likely_age_out_previous_indexes || []).includes(rd.previous_index)) type = '<span style="color:var(--danger)">屆齡取消</span>';
+                    else if (rd.previous_index <= 15) type = '<span style="color:var(--ok)">遞補入托</span>';
+                    detailsHtml += `<tr><td>${rd.previous_index}</td><td>${rd.name}</td><td>${age}</td><td>${type}</td></tr>`;
+                });
+                detailsHtml += '</tbody></table></div>';
+            }
+
+            const lines = (item.summary_lines || ['名單無變動']).map((line) => `<li>${line}</li>`).join('');
+            let highlight = item.highlight_shift ? `<div class="timeline-highlight">代表性變動：${item.highlight_shift.previous_index} → ${item.highlight_shift.current_index}（${item.highlight_shift.name}）</div>` : '';
+            
+            card.innerHTML = `
+                <div class="timeline-meta" style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                    <div>${fmt.format(new Date(item.fetched_at))}</div>
+                    <div style="color:var(--accent-2)">總數：${item.waiting_count} 人</div>
+                </div>
+                <ul class="timeline-lines" style="margin:0; padding-left:20px; color:var(--muted);">${lines}</ul>
+                ${highlight}${detailsHtml}
+            `;
+            timeline.appendChild(card);
+          });
+          updateStableVisibility();
+        }
+    }
+
+    // --- 相關說明區 ---
+    function renderRelatedInfo(text) {
+      const target = $('related-info-text');
+      if(!target) return;
+      const marker = '三、缺額遞補原則：';
+      const start = text.indexOf(marker);
+      if (start === -1) { target.textContent = text; return; }
+      const before = text.slice(0, start).trim();
+      const afterMarker = text.slice(start + marker.length);
+      let end = afterMarker.length;
+      ['四、不列入備取名單情形：', '五、', '六、'].forEach(c => {
+        const idx = afterMarker.indexOf(c);
+        if (idx !== -1 && idx < end) end = idx;
+      });
+      const highlightBody = afterMarker.slice(0, end).trim();
+      const after = afterMarker.slice(end).trim();
+      const regexHeading = /^(相關說明：|[一二三四五六七八九十]+、.*|備註：.*)$/;
+      const regexBullet = /^\d+\./;
+
+      function buildSections(t) {
+        const sections = []; let current = null;
+        t.split('\n').map(l => l.trim()).filter(Boolean).forEach(l => {
+          if (regexHeading.test(l) && !regexBullet.test(l)) {
+            if (current) sections.push(current);
+            const parts = l.split('：');
+            current = { title: parts[0] + (parts.length > 1 ? '：' : ''), notes: parts.slice(1).join('：').trim() ? [parts.slice(1).join('：').trim()] : [], bullets: [] };
+          } else if (regexBullet.test(l)) {
+            if (!current) current = { title: '', notes: [], bullets: [] };
+            current.bullets.push(l.replace(regexBullet, '').trim());
+          } else {
+            if (!current) current = { title: '', notes: [], bullets: [] };
+            current.notes.push(l);
+          }
+        });
+        if (current) sections.push(current);
+        return sections;
+      }
+      function renderSection(s) {
+        return `<section class="related-section">${s.title ? `<div class="related-block-title">${s.title}</div>` : ''}${s.notes.map(n => `<div class="related-note">${n}</div>`).join('')}${s.bullets.length ? `<ul class="related-list">${s.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}</section>`;
+      }
+      const blocks = buildSections(before).map(renderSection);
+      blocks.push(`<section class="related-section rule-highlight"><strong>三、缺額遞補原則</strong><div class="related-note">${highlightBody.replace(/\n/g, '<br>')}</div></section>`);
+      blocks.push(...buildSections(after).map(renderSection));
+      target.innerHTML = blocks.join('');
+    }
+    renderRelatedInfo(data.related_info_text || '');
+
+    // --- 分頁切換 ---
+    document.querySelectorAll('.tab-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const tab = button.dataset.tab;
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn === button));
+        document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+        $('tab-' + tab).classList.add('active');
+        if (tab === 'hourly-detail') renderHourlyChart();
+      });
+    });
+
+    // --- 啟動初始化 ---
+    window.onload = () => {
+        drawChart('history-chart', getDailyHistory(), 'date');
+        initDateSelector();
+        renderHourlyChart();
+    };
+  </script>
+</body>
+</html>

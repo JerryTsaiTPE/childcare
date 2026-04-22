@@ -1,0 +1,89 @@
+NTPC Childcare Dashboard - Windows 11 VM 部署說明
+
+資料夾用途
+- 此資料夾專門放 Windows 11 VM 部署相關檔案，方便集中管理。
+- 主要檔案：
+  1. install_hourly_task.ps1
+  2. task_scheduler_hourly_template.xml
+
+專案最低需求
+- Windows 11
+- Python 3.11 或 3.12
+- 安裝 Python 時請勾選 Add Python to PATH
+
+確認 Python
+PowerShell 執行：
+python --version
+或
+py -3 --version
+
+本專案是否一定要 venv？
+- 目前不是必要。
+- 專案目前使用 Python 標準庫，不需要另外 pip install 第三方套件。
+- 若未來加入外部套件，再補 venv 即可。
+
+建議專案放置路徑
+- 例如：C:\Projects\ntpc-childcare-dashboard
+
+手動測試更新
+1. 進入專案目錄
+2. 執行：
+python scripts\update_dashboard.py
+或
+py -3 scripts\update_dashboard.py
+
+成功後應看到：
+- index.html 更新
+- data\latest_snapshot.json 更新
+- data\history.json 更新
+- data\changes.json 更新
+
+排程方式 A：用 PowerShell 自動建立（推薦）
+1. 以系統管理員身分開啟 PowerShell
+2. 進入本資料夾
+3. 執行：
+powershell -ExecutionPolicy Bypass -File .\install_hourly_task.ps1
+
+若要自訂工作名稱，可用：
+powershell -ExecutionPolicy Bypass -File .\install_hourly_task.ps1 -TaskName "NTPC Childcare Dashboard Hourly Update"
+
+此腳本會：
+- 自動抓專案根目錄
+- 使用 scripts\run_update_windows.bat 當作執行目標
+- 建立每 1 小時執行一次的工作排程
+- 每次更新成功後，自動將產出的 index.html 同步到 Z:\childcare\index.html
+
+排程方式 B：匯入 XML 範本
+1. 打開 task_scheduler_hourly_template.xml
+2. 將下列 placeholder 改成您的實際值：
+   - YOUR_TASK_NAME
+   - YOUR_WINDOWS_USERNAME
+   - C:\Projects\ntpc-childcare-dashboard\scripts\run_update_windows.bat
+   - C:\Projects\ntpc-childcare-dashboard
+3. 開啟「工作排程器」
+4. 選擇「匯入工作」
+5. 匯入修改後的 XML
+
+批次檔位置
+- 實際執行檔：scripts\run_update_windows.bat
+- 作用：
+  - 切換到專案根目錄
+  - 執行 update_dashboard.py
+  - 將執行紀錄寫到 logs\ 目錄
+  - 更新成功後自動複製 index.html 到 Z:\childcare\index.html
+
+log 位置
+- logs\update_yyyy-MM-dd_HH-mm-ss.log
+
+建議驗證
+1. 先手動執行一次：
+   scripts\run_update_windows.bat
+2. 確認 logs\ 有新 log
+3. 再建立工作排程
+4. 在工作排程器內手動按一次「執行」測試
+
+若排程失敗，優先檢查
+- Python 是否已加入 PATH
+- 專案是否完整複製到 Windows 路徑
+- scripts\run_update_windows.bat 是否能手動正常執行
+- logs\ 內的錯誤訊息
