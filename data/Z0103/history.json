@@ -28,5 +28,35 @@
     "removed_details": [],
     "added_details": [],
     "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-22",
+    "fetched_at": "2026-04-22T14:03:57+08:00",
+    "waiting_count": 83,
+    "last_month_enrolled": 0,
+    "changed": false,
+    "change_kind": "stable",
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [],
+    "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-22",
+    "fetched_at": "2026-04-22T14:05:32+08:00",
+    "waiting_count": 83,
+    "last_month_enrolled": 0,
+    "changed": false,
+    "change_kind": "stable",
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [],
+    "likely_age_out_previous_indexes": []
   }
 ]
