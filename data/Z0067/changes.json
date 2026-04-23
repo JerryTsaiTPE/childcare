@@ -1240,5 +1240,80 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-23T10:07:53+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      131,
+      132
+    ],
+    "added": [
+      {
+        "name": "藍O心",
+        "birthday": "2025-06-22",
+        "category": "一般市民",
+        "current_index": 131
+      },
+      {
+        "name": "林O實",
+        "birthday": "2024-11-18",
+        "category": "一般市民",
+        "current_index": 132
+      }
+    ],
+    "added_details": [
+      {
+        "name": "藍O心",
+        "birthday": "2025-06-22",
+        "category": "一般市民",
+        "current_index": 131
+      },
+      {
+        "name": "林O實",
+        "birthday": "2024-11-18",
+        "category": "一般市民",
+        "current_index": 132
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 130,
+    "current_waiting_count": 132,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 131 號"
+    ],
+    "change_kind": "grow"
+  },
+  {
+    "fetched_at": "2026-04-23T10:09:33+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 132,
+    "current_waiting_count": 132,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
   }
 ]
