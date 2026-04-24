@@ -1,0 +1,17 @@
+[
+  {
+    "date": "2026-04-24",
+    "fetched_at": "2026-04-24T23:53:42+08:00",
+    "waiting_count": 50,
+    "last_month_enrolled": 2,
+    "changed": false,
+    "change_kind": "baseline",
+    "summary_lines": [
+      "首次建立基線快照"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [],
+    "likely_age_out_previous_indexes": []
+  }
+]
