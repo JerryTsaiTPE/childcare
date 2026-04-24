@@ -1,0 +1,162 @@
+{
+  "org": {
+    "orgid": "Z0126",
+    "orgname": "新北市政府委託社團法人家庭婦幼關懷協會辦理土城新洲公共托育中心",
+    "orgshort": "土城新洲",
+    "distdesc": "土城區",
+    "distno": "27",
+    "capnum": 45,
+    "enroll_count": 66,
+    "cmethod": "02-22682018"
+  },
+  "fetched_at": "2026-04-25T00:00:08+08:00",
+  "waiting_count": 24,
+  "last_month_enrolled": 1,
+  "preshow": false,
+  "entries": [
+    {
+      "index": 1,
+      "encname": "魏O頡",
+      "cbirthday": "2024-06-06",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 2,
+      "encname": "李O晨",
+      "cbirthday": "2024-09-03",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 3,
+      "encname": "張O煖",
+      "cbirthday": "2024-07-31",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 4,
+      "encname": "陳O旭",
+      "cbirthday": "2024-12-10",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 5,
+      "encname": "陳O諾",
+      "cbirthday": "2025-03-19",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 6,
+      "encname": "徐O辰",
+      "cbirthday": "2024-11-12",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 7,
+      "encname": "陳O榆",
+      "cbirthday": "2025-04-30",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 8,
+      "encname": "郭O佑",
+      "cbirthday": "2025-07-14",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 9,
+      "encname": "李O夏",
+      "cbirthday": "2025-09-23",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 10,
+      "encname": "傅O樂",
+      "cbirthday": "2025-04-23",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 11,
+      "encname": "劉O熙",
+      "cbirthday": "2025-11-12",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 12,
+      "encname": "嚴O恩",
+      "cbirthday": "2025-05-12",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 13,
+      "encname": "羅O勛",
+      "cbirthday": "2025-06-17",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 14,
+      "encname": "郭O妘",
+      "cbirthday": "2025-11-13",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 15,
+      "encname": "林O凱",
+      "cbirthday": "2025-09-08",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 16,
+      "encname": "潘O希",
+      "cbirthday": "2025-12-03",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 17,
+      "encname": "李O熙",
+      "cbirthday": "2024-12-03",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 18,
+      "encname": "劉O華",
+      "cbirthday": "2025-12-17",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 19,
+      "encname": "周O及",
+      "cbirthday": "2026-01-14",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 20,
+      "encname": "黃O瀚",
+      "cbirthday": "2025-09-20",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 21,
+      "encname": "黃O昀",
+      "cbirthday": "2025-01-07",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 22,
+      "encname": "林O予",
+      "cbirthday": "2025-07-06",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 23,
+      "encname": "曾O芮",
+      "cbirthday": "2026-02-19",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 24,
+      "encname": "劉O銨",
+      "cbirthday": "2026-01-15",
+      "displaydesc": "優先收托"
+    }
+  ]
+}
