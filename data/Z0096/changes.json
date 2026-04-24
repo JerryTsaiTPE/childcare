@@ -3710,5 +3710,44 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-24T14:15:16+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      119
+    ],
+    "added": [
+      {
+        "name": "藍O心",
+        "birthday": "2025-06-22",
+        "category": "一般市民",
+        "current_index": 119
+      }
+    ],
+    "added_details": [
+      {
+        "name": "藍O心",
+        "birthday": "2025-06-22",
+        "category": "一般市民",
+        "current_index": 119
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 118,
+    "current_waiting_count": 119,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 119 號"
+    ],
+    "change_kind": "grow"
   }
 ]
