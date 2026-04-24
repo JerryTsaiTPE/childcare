@@ -1131,5 +1131,27 @@
     "removed_details": [],
     "added_details": [],
     "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-24",
+    "fetched_at": "2026-04-24T09:16:21+08:00",
+    "waiting_count": 67,
+    "last_month_enrolled": 1,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 67 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "彭O晞",
+        "birthday": "2024-08-12",
+        "category": "一般市民",
+        "current_index": 67
+      }
+    ],
+    "likely_age_out_previous_indexes": []
   }
 ]
