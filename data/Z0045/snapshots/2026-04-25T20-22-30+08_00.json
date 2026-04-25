@@ -1,0 +1,792 @@
+{
+  "org": {
+    "orgid": "Z0045",
+    "orgname": "新北市政府委託社團法人中華民國學前教育發展學會辦理新莊中港公共托育中心(托嬰中心)",
+    "orgshort": "新莊中港",
+    "distdesc": "新莊區",
+    "distno": "05",
+    "capnum": 45,
+    "enroll_count": 225,
+    "cmethod": "02-22761115"
+  },
+  "fetched_at": "2026-04-25T20:22:30+08:00",
+  "waiting_count": 129,
+  "last_month_enrolled": 0,
+  "preshow": false,
+  "entries": [
+    {
+      "index": 1,
+      "encname": "王O漩",
+      "cbirthday": "2024-06-21",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 2,
+      "encname": "林O晨",
+      "cbirthday": "2024-10-14",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 3,
+      "encname": "黃O愷",
+      "cbirthday": "2025-01-31",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 4,
+      "encname": "葉O晞",
+      "cbirthday": "2024-05-29",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 5,
+      "encname": "許O熙",
+      "cbirthday": "2024-10-30",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 6,
+      "encname": "陳O允",
+      "cbirthday": "2024-08-13",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 7,
+      "encname": "鄭O綸",
+      "cbirthday": "2024-06-22",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 8,
+      "encname": "劉O妘",
+      "cbirthday": "2025-01-06",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 9,
+      "encname": "楊O勛",
+      "cbirthday": "2024-09-28",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 10,
+      "encname": "賴O霏",
+      "cbirthday": "2024-08-19",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 11,
+      "encname": "李O鈴",
+      "cbirthday": "2024-10-24",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 12,
+      "encname": "陳O彤",
+      "cbirthday": "2024-05-10",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 13,
+      "encname": "盧O君",
+      "cbirthday": "2024-11-04",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 14,
+      "encname": "田O瑈",
+      "cbirthday": "2024-07-03",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 15,
+      "encname": "劉O霈",
+      "cbirthday": "2024-12-02",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 16,
+      "encname": "劉O玥",
+      "cbirthday": "2024-11-25",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 17,
+      "encname": "何O玹",
+      "cbirthday": "2024-11-23",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 18,
+      "encname": "朱O涵",
+      "cbirthday": "2024-12-13",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 19,
+      "encname": "許O凱",
+      "cbirthday": "2024-06-21",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 20,
+      "encname": "張O拓",
+      "cbirthday": "2025-03-12",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 21,
+      "encname": "邱O澤",
+      "cbirthday": "2025-06-12",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 22,
+      "encname": "王O恩",
+      "cbirthday": "2024-09-18",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 23,
+      "encname": "張O竺",
+      "cbirthday": "2025-01-04",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 24,
+      "encname": "張O安",
+      "cbirthday": "2025-01-04",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 25,
+      "encname": "林O語",
+      "cbirthday": "2024-11-18",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 26,
+      "encname": "江O霏",
+      "cbirthday": "2025-05-16",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 27,
+      "encname": "陳O",
+      "cbirthday": "2024-08-25",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 28,
+      "encname": "劉O希",
+      "cbirthday": "2024-10-23",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 29,
+      "encname": "馬O騰",
+      "cbirthday": "2024-11-22",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 30,
+      "encname": "黃O尹",
+      "cbirthday": "2025-03-22",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 31,
+      "encname": "邱O寧",
+      "cbirthday": "2025-01-25",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 32,
+      "encname": "許O玥",
+      "cbirthday": "2024-11-23",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 33,
+      "encname": "鐘O序",
+      "cbirthday": "2025-01-09",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 34,
+      "encname": "鐘O心",
+      "cbirthday": "2025-01-09",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 35,
+      "encname": "王O瑒",
+      "cbirthday": "2024-08-05",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 36,
+      "encname": "林O頡",
+      "cbirthday": "2024-07-14",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 37,
+      "encname": "劉O暘",
+      "cbirthday": "2024-05-28",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 38,
+      "encname": "劉O璇",
+      "cbirthday": "2024-08-01",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 39,
+      "encname": "周O璇",
+      "cbirthday": "2025-05-09",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 40,
+      "encname": "張O",
+      "cbirthday": "2025-06-23",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 41,
+      "encname": "鄭O沅",
+      "cbirthday": "2024-06-21",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 42,
+      "encname": "羅O",
+      "cbirthday": "2025-01-25",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 43,
+      "encname": "黃O欣",
+      "cbirthday": "2025-07-15",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 44,
+      "encname": "劉O岑",
+      "cbirthday": "2025-04-11",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 45,
+      "encname": "湯O宇",
+      "cbirthday": "2024-11-17",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 46,
+      "encname": "謝O龍",
+      "cbirthday": "2025-05-22",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 47,
+      "encname": "邱O岳",
+      "cbirthday": "2025-01-02",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 48,
+      "encname": "段O彤",
+      "cbirthday": "2025-05-05",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 49,
+      "encname": "高O樂",
+      "cbirthday": "2025-05-19",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 50,
+      "encname": "王O恩",
+      "cbirthday": "2025-03-21",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 51,
+      "encname": "李O宸",
+      "cbirthday": "2025-08-20",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 52,
+      "encname": "施O澈",
+      "cbirthday": "2025-07-18",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 53,
+      "encname": "方O鈞",
+      "cbirthday": "2025-04-13",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 54,
+      "encname": "王O允",
+      "cbirthday": "2025-08-09",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 55,
+      "encname": "陳O偉",
+      "cbirthday": "2025-08-06",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 56,
+      "encname": "黃O晏",
+      "cbirthday": "2024-08-17",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 57,
+      "encname": "張O禎",
+      "cbirthday": "2025-05-03",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 58,
+      "encname": "黃O晴",
+      "cbirthday": "2024-05-31",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 59,
+      "encname": "林O緯",
+      "cbirthday": "2024-06-27",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 60,
+      "encname": "蘇O奇",
+      "cbirthday": "2025-07-14",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 61,
+      "encname": "黃O樂",
+      "cbirthday": "2025-09-17",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 62,
+      "encname": "謝O霖",
+      "cbirthday": "2024-09-11",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 63,
+      "encname": "李O",
+      "cbirthday": "2025-08-11",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 64,
+      "encname": "王O愷",
+      "cbirthday": "2024-06-07",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 65,
+      "encname": "王O瑄",
+      "cbirthday": "2024-08-28",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 66,
+      "encname": "黃O斐",
+      "cbirthday": "2025-09-03",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 67,
+      "encname": "徐O騰",
+      "cbirthday": "2025-10-16",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 68,
+      "encname": "吳O菲",
+      "cbirthday": "2025-09-30",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 69,
+      "encname": "許O瑜",
+      "cbirthday": "2025-10-13",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 70,
+      "encname": "蔡O杰",
+      "cbirthday": "2025-05-01",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 71,
+      "encname": "陳O霏",
+      "cbirthday": "2024-11-23",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 72,
+      "encname": "陳O宇",
+      "cbirthday": "2025-11-04",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 73,
+      "encname": "張O維",
+      "cbirthday": "2024-06-25",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 74,
+      "encname": "林O祐",
+      "cbirthday": "2025-08-12",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 75,
+      "encname": "林O晨",
+      "cbirthday": "2025-01-17",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 76,
+      "encname": "陳O睿",
+      "cbirthday": "2024-10-01",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 77,
+      "encname": "林O宸",
+      "cbirthday": "2025-09-28",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 78,
+      "encname": "黃O安",
+      "cbirthday": "2025-08-16",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 79,
+      "encname": "李O霏",
+      "cbirthday": "2025-07-12",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 80,
+      "encname": "翁O安",
+      "cbirthday": "2025-07-02",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 81,
+      "encname": "何O芸",
+      "cbirthday": "2025-12-10",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 82,
+      "encname": "陳O霏",
+      "cbirthday": "2024-06-03",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 83,
+      "encname": "張O綺",
+      "cbirthday": "2025-09-22",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 84,
+      "encname": "丁O維",
+      "cbirthday": "2025-03-31",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 85,
+      "encname": "李O涵",
+      "cbirthday": "2025-08-02",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 86,
+      "encname": "陳O辰",
+      "cbirthday": "2025-06-13",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 87,
+      "encname": "陳O皜",
+      "cbirthday": "2026-01-02",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 88,
+      "encname": "簡O依",
+      "cbirthday": "2025-10-30",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 89,
+      "encname": "郭O謙",
+      "cbirthday": "2026-01-16",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 90,
+      "encname": "藍O霏",
+      "cbirthday": "2025-11-15",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 91,
+      "encname": "莊O宸",
+      "cbirthday": "2025-02-22",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 92,
+      "encname": "周O珩",
+      "cbirthday": "2025-11-16",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 93,
+      "encname": "林O彤",
+      "cbirthday": "2025-12-18",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 94,
+      "encname": "廖O霓",
+      "cbirthday": "2025-01-18",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 95,
+      "encname": "陳O晴",
+      "cbirthday": "2024-10-26",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 96,
+      "encname": "羅O言",
+      "cbirthday": "2025-12-12",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 97,
+      "encname": "邱O恩",
+      "cbirthday": "2025-12-27",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 98,
+      "encname": "吳O辰",
+      "cbirthday": "2026-01-10",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 99,
+      "encname": "陳O岑",
+      "cbirthday": "2025-12-16",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 100,
+      "encname": "郭O瑄",
+      "cbirthday": "2025-03-26",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 101,
+      "encname": "王O妤",
+      "cbirthday": "2025-11-18",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 102,
+      "encname": "王O帆",
+      "cbirthday": "2026-01-20",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 103,
+      "encname": "吳O菲",
+      "cbirthday": "2026-01-14",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 104,
+      "encname": "林O橙",
+      "cbirthday": "2025-11-27",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 105,
+      "encname": "陳O暘",
+      "cbirthday": "2026-02-24",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 106,
+      "encname": "張O勛",
+      "cbirthday": "2025-12-12",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 107,
+      "encname": "蔡O彤",
+      "cbirthday": "2025-11-14",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 108,
+      "encname": "蕭O彤",
+      "cbirthday": "2025-12-31",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 109,
+      "encname": "游O樂",
+      "cbirthday": "2025-11-05",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 110,
+      "encname": "蔡O霓",
+      "cbirthday": "2025-11-28",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 111,
+      "encname": "林O杰",
+      "cbirthday": "2026-01-24",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 112,
+      "encname": "王O彤",
+      "cbirthday": "2026-01-30",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 113,
+      "encname": "李O婷",
+      "cbirthday": "2026-02-21",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 114,
+      "encname": "黃O雯",
+      "cbirthday": "2024-06-16",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 115,
+      "encname": "陳O禛",
+      "cbirthday": "2026-02-25",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 116,
+      "encname": "盧O安",
+      "cbirthday": "2025-08-20",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 117,
+      "encname": "曾O晨",
+      "cbirthday": "2026-02-23",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 118,
+      "encname": "吳O葳",
+      "cbirthday": "2025-12-03",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 119,
+      "encname": "趙O諺",
+      "cbirthday": "2025-09-05",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 120,
+      "encname": "陳O衡",
+      "cbirthday": "2025-02-07",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 121,
+      "encname": "蕭O翔",
+      "cbirthday": "2025-02-20",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 122,
+      "encname": "朱O諺",
+      "cbirthday": "2025-01-23",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 123,
+      "encname": "林O霖",
+      "cbirthday": "2025-11-01",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 124,
+      "encname": "李O瑄",
+      "cbirthday": "2025-03-12",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 125,
+      "encname": "黃O旭",
+      "cbirthday": "2024-10-29",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 126,
+      "encname": "楊O勳",
+      "cbirthday": "2026-03-15",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 127,
+      "encname": "蘇O羿",
+      "cbirthday": "2026-02-21",
+      "displaydesc": "一般市民"
+    },
+    {
+      "index": 128,
+      "encname": "黃O雯",
+      "cbirthday": "2026-03-07",
+      "displaydesc": "優先收托"
+    },
+    {
+      "index": 129,
+      "encname": "吳O瑄",
+      "cbirthday": "2026-04-22",
+      "displaydesc": "優先收托"
+    }
+  ]
+}
