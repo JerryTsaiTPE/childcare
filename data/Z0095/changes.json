@@ -2994,5 +2994,77 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-25T20:15:02+08:00",
+    "removed_previous_indexes": [
+      43
+    ],
+    "removed": [
+      {
+        "name": "楊O盛",
+        "birthday": "2026-02-08",
+        "category": "一般市民",
+        "previous_index": 43
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "楊O盛",
+        "birthday": "2026-02-08",
+        "category": "一般市民",
+        "previous_index": 43
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "劉O霏",
+        "birthday": "2026-03-04",
+        "category": "一般市民",
+        "previous_index": 44,
+        "current_index": 43,
+        "delta": -1
+      },
+      {
+        "name": "張O茜",
+        "birthday": "2025-07-29",
+        "category": "一般市民",
+        "previous_index": 45,
+        "current_index": 44,
+        "delta": -1
+      },
+      {
+        "name": "侯O安",
+        "birthday": "2026-03-14",
+        "category": "一般市民",
+        "previous_index": 46,
+        "current_index": 45,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 46,
+    "current_waiting_count": 45,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      43
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 44,
+      "current_index": 43,
+      "name": "劉O霏",
+      "delta": -1
+    },
+    "summary_lines": [
+      "43 號離開名單",
+      "44 → 43（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink"
   }
 ]
