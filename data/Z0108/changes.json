@@ -4013,5 +4013,93 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-25T21:04:57+08:00",
+    "removed_previous_indexes": [
+      93
+    ],
+    "removed": [
+      {
+        "name": "林O羽",
+        "birthday": "2026-02-16",
+        "category": "一般市民",
+        "previous_index": 93
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "林O羽",
+        "birthday": "2026-02-16",
+        "category": "一般市民",
+        "previous_index": 93
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "李O皓",
+        "birthday": "2025-09-07",
+        "category": "優先收托",
+        "previous_index": 94,
+        "current_index": 93,
+        "delta": -1
+      },
+      {
+        "name": "蔡O緯",
+        "birthday": "2025-11-18",
+        "category": "一般市民",
+        "previous_index": 95,
+        "current_index": 94,
+        "delta": -1
+      },
+      {
+        "name": "陳O瑄",
+        "birthday": "2026-02-03",
+        "category": "優先收托",
+        "previous_index": 96,
+        "current_index": 95,
+        "delta": -1
+      },
+      {
+        "name": "李O錞",
+        "birthday": "2025-10-28",
+        "category": "優先收托",
+        "previous_index": 97,
+        "current_index": 96,
+        "delta": -1
+      },
+      {
+        "name": "吳O嫙",
+        "birthday": "2026-04-03",
+        "category": "一般市民",
+        "previous_index": 98,
+        "current_index": 97,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 98,
+    "current_waiting_count": 97,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      93
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 94,
+      "current_index": 93,
+      "name": "李O皓",
+      "delta": -1
+    },
+    "summary_lines": [
+      "93 號離開名單",
+      "94 → 93（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink"
   }
 ]
