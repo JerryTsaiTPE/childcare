@@ -1,4 +1,4 @@
-# 板橋柏翠托育備取名單 Dashboard
+# 新北公托備取追蹤 Dashboard
 
 這個專案會每天抓取新北育兒資訊網公開 API：
 - 備取名單：`/webapi/NpsApply/GetStandbyList?orgid=Z0130`
