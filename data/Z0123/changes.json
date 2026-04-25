@@ -504,5 +504,28 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-26T05:15:11+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 97,
+    "current_waiting_count": 97,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable"
   }
 ]
