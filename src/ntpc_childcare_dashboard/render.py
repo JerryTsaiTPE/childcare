@@ -16,7 +16,6 @@ def render_dashboard(
     validity_text: str,
     related_info_text: str,
 ) -> str:
-    # 💡 保留：瀏覽器分頁的 Title
     safe_title = "新北市公托候補追蹤Dashboard"
 
     payload = {
@@ -92,6 +91,10 @@ def render_dashboard(
     .panel { padding: 20px; }
     .panel h2 { margin: 0 0 14px; font-size: 20px; }
     .chart-box { min-height: 320px; width: 100%; position: relative; }
+    
+    /* 💡 新增：精美的 Tooltip 樣式 */
+    .chart-tooltip { position: absolute; background: rgba(13, 27, 42, 0.95); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 8px; font-size: 13px; pointer-events: none; opacity: 0; transition: opacity 0.2s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.4); z-index: 100; white-space: nowrap; line-height: 1.5; }
+
     .bar-row { display: grid; grid-template-columns: 80px 1fr 110px; align-items: center; gap: 10px; margin-bottom: 10px; }
     .bar-track { height: 12px; border-radius: 999px; background: #08121f; overflow: hidden; border: 1px solid #17324c; }
     .bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
@@ -140,6 +143,8 @@ def render_dashboard(
 </head>
 <body>
   
+  <div id="chart-tooltip" class="chart-tooltip"></div>
+
   <div id="stats-overlay" class="overlay"></div>
   <div id="stats-panel" class="slide-panel">
     <div class="slide-panel-header">
@@ -203,7 +208,7 @@ def render_dashboard(
       <section class="panels">
         <div class="panel chart-box">
           <h2>📈 近一週備取總數 <span class="sub" style="font-size:13px; font-weight:normal;">(顯示每日最後狀態)</span></h2>
-          <svg id="history-chart" width="100%" height="300" viewBox="0 0 760 300" preserveAspectRatio="none"></svg>
+          <svg id="history-chart" width="100%" height="300"></svg>
         </div>
         <div class="panel">
           <h2>前 20 名備取身分</h2>
@@ -278,7 +283,7 @@ def render_dashboard(
           <label>選擇日期查看當日趨勢：</label>
           <select id="date-selector" class="select-input"></select>
         </div>
-        <svg id="hourly-chart" width="100%" height="300" viewBox="0 0 760 300" preserveAspectRatio="none"></svg>
+        <svg id="hourly-chart" width="100%" height="300"></svg>
       </div>
     </section>
 
@@ -287,7 +292,7 @@ def render_dashboard(
         <h2>所有名單 <span class="sub" style="font-size:14px; font-weight:normal; margin-left:10px; color:var(--danger);">※ 紅色字體代表該幼兒已滿兩歲或距滿兩歲不到 14 天，即將被系統自動取消候補。</span></h2>
         
         <div class="sub" style="margin-bottom: 15px; color: var(--muted); border-left: 3px solid var(--accent); padding-left: 10px; font-size: 13px;">
-          同步候補如顯示超過一家公托，大概率為去識別化導致同名同生日(或是雙胞胎姓名近似)，依規定一人同時只能候補兩間。
+          如果同步候補超過一家公托屬於正常現象，去識別化容易導致同名同生日，依規定一人同時只能候補兩間。
         </div>
 
         <div class="control-row" style="margin-bottom:15px;">
@@ -480,7 +485,6 @@ def render_dashboard(
                 }
             }
 
-            // 💡 修正：讓頁面上的大標題恢復動態顯示目前選取的中心
             const titleEl = $('main-title');
             if (titleEl && snapshot.org) titleEl.textContent = `${snapshot.org.orgshort} 公托備取追蹤`;
             const pillEl = $('org-pill');
@@ -749,6 +753,7 @@ def render_dashboard(
         });
     }
 
+    // 💡 修改：動態計算寬度並加入 Tooltip 感應區
     function drawChart(svgId, points, labelMode) {
       const svg = $(svgId);
       if(!svg) return;
@@ -756,8 +761,14 @@ def render_dashboard(
         svg.innerHTML = '<text x="20" y="40" fill="#9bb2c8">尚無歷史資料</text>';
         return;
       }
-      svg.innerHTML = '';
-      const width = 760, height = 300, pad = 36;
+      
+      const pRect = svg.parentElement.getBoundingClientRect();
+      const width = pRect.width > 0 ? pRect.width : 760;
+      const height = 300, pad = 40;
+      
+      // 動態設定 viewBox 比例，移除 preserveAspectRatio 避免文字變形
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      
       const vals = points.map((p) => p.waiting_count);
       const min = Math.min.apply(null, vals);
       const max = Math.max.apply(null, vals);
@@ -765,23 +776,36 @@ def render_dashboard(
       const xStep = points.length === 1 ? 0 : (width - pad * 2) / (points.length - 1);
       const toX = (i) => pad + i * xStep;
       const toY = (value) => height - pad - ((value - min) / range) * (height - pad * 2);
+      
       let html = '';
       for (let i = 0; i <= 4; i++) {
         const y = pad + i * ((height - pad * 2) / 4);
         html += `<line x1="${pad}" y1="${y}" x2="${width - pad}" y2="${y}" stroke="#17324c" stroke-width="1" />`;
       }
+      
       const linePath = points.map((p, i) => `${toX(i)},${toY(p.waiting_count)}`).join(' ');
       const color = labelMode === 'time' ? '#8ef7c2' : '#52d1ff';
       html += `<polyline fill="none" stroke="${color}" stroke-width="3" points="${linePath}" />`;
       html += `<text x="${pad}" y="20" fill="#9bb2c8" font-size="12">最少 ${min} / 最多 ${max}</text>`;
+      
       points.forEach((p, i) => {
         const x = toX(i), y = toY(p.waiting_count);
         const labelText = labelMode === 'date' ? p.fetched_at.split('T')[0].substring(5) : p.fetched_at.split('T')[1].substring(0,5);
         if (points.length <= 15 || i % Math.ceil(points.length / 10) === 0) {
             html += `<text x="${x}" y="${height - 10}" fill="#9bb2c8" font-size="11" text-anchor="middle">${labelText}</text>`;
         }
-        html += `<circle cx="${x}" cy="${y}" r="4" fill="#52d1ff"><title>${p.fetched_at.replace('T', ' ')}：${p.waiting_count} 人</title></circle>`;
+        
+        // 建立 Tooltip 內容
+        const fullTime = p.fetched_at.replace('T', ' ');
+        const tooltipHtml = `${fullTime}<br><span style='color:${color}; font-size:16px; font-weight:bold;'>${p.waiting_count} 人</span>`;
+        
+        // 畫出實際的點 (取消 pointer-events 避免干擾 hover)
+        html += `<circle cx="${x}" cy="${y}" r="4" fill="${color}" style="pointer-events:none;"></circle>`;
+        
+        // 畫出隱形的感應區，半徑加大到 14，方便滑鼠游標觸發
+        html += `<circle cx="${x}" cy="${y}" r="14" fill="transparent" class="hover-target" data-info="${tooltipHtml}" style="cursor:pointer;"></circle>`;
       });
+      
       svg.innerHTML = html;
     }
 
@@ -877,6 +901,36 @@ def render_dashboard(
             if (statsBtn) statsBtn.addEventListener('click', toggleStatsPanel);
             if (closeStatsBtn) closeStatsBtn.addEventListener('click', toggleStatsPanel);
             if (statsOverlay) statsOverlay.addEventListener('click', toggleStatsPanel);
+
+            // 💡 新增：綁定圖表 Tooltip 的滑鼠事件
+            const tooltip = $('chart-tooltip');
+            document.addEventListener('mouseover', (e) => {
+                if (e.target && e.target.classList && e.target.classList.contains('hover-target')) {
+                    tooltip.innerHTML = e.target.getAttribute('data-info');
+                    tooltip.style.opacity = '1';
+                }
+            });
+            document.addEventListener('mousemove', (e) => {
+                if (tooltip.style.opacity === '1') {
+                    tooltip.style.left = (e.pageX + 15) + 'px';
+                    tooltip.style.top = (e.pageY + 15) + 'px';
+                }
+            });
+            document.addEventListener('mouseout', (e) => {
+                if (e.target && e.target.classList && e.target.classList.contains('hover-target')) {
+                    tooltip.style.opacity = '0';
+                }
+            });
+            
+            // 💡 新增：當視窗縮放時，重新繪製圖表以維持完美比例
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    drawChart('history-chart', getDailyHistory(), 'date');
+                    renderHourlyChart();
+                }, 200);
+            });
 
             const sortKeyEl = $('all-list-sort-key');
             if(sortKeyEl) sortKeyEl.addEventListener('change', renderAllListTable);
