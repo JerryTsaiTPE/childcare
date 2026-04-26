@@ -92,7 +92,6 @@ def render_dashboard(
     .panel h2 { margin: 0 0 14px; font-size: 20px; }
     .chart-box { min-height: 320px; width: 100%; position: relative; }
     
-    /* 💡 新增：精美的 Tooltip 樣式 */
     .chart-tooltip { position: absolute; background: rgba(13, 27, 42, 0.95); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 8px; font-size: 13px; pointer-events: none; opacity: 0; transition: opacity 0.2s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.4); z-index: 100; white-space: nowrap; line-height: 1.5; }
 
     .bar-row { display: grid; grid-template-columns: 80px 1fr 110px; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -220,12 +219,10 @@ def render_dashboard(
         <div class="panel">
           <h2>最新變動摘要 <span id="latest-change-time" style="font-size: 14px; font-weight: normal; color: var(--warn); margin-left: 8px;"></span></h2>
           <div class="list">
-            
             <div class="list-block">
               <h3>新增候補</h3>
               <div class="chips" id="added-chips"></div>
             </div>
-
             <div class="list-block">
               <h3>離開名單序號</h3>
               <div class="chips" id="removed-chips"></div>
@@ -277,8 +274,12 @@ def render_dashboard(
     </section>
 
     <section id="tab-hourly-detail" class="tab-panel">
+      <div class="panel chart-box" style="margin-bottom: 18px;">
+        <h2>📅 近一個月走勢 <span class="sub" style="font-size:13px; font-weight:normal;">(顯示每日最後狀態)</span></h2>
+        <svg id="monthly-chart" width="100%" height="300"></svg>
+      </div>
       <div class="panel chart-box">
-        <h2>🕒 每日走勢</h2>
+        <h2>🕒 單日詳細走勢</h2>
         <div class="control-row" style="margin-bottom: 15px;">
           <label>選擇日期查看當日趨勢：</label>
           <select id="date-selector" class="select-input"></select>
@@ -683,7 +684,13 @@ def render_dashboard(
             renderRelatedInfo(data.related_info_text || '無相關說明');
 
             initDateSelector();
-            drawChart('history-chart', getDailyHistory(), 'date');
+            
+            // 💡 修改：總覽區的近一週走勢，只取最後 7 筆資料
+            drawChart('history-chart', getDailyHistory().slice(-7), 'date');
+            
+            // 💡 新增：歷史區的近一個月走勢，取最後 30 筆資料
+            drawChart('monthly-chart', getDailyHistory().slice(-30), 'date');
+            
             renderHourlyChart();
             
         } catch(err) {
@@ -753,7 +760,6 @@ def render_dashboard(
         });
     }
 
-    // 💡 修改：動態計算寬度並加入 Tooltip 感應區
     function drawChart(svgId, points, labelMode) {
       const svg = $(svgId);
       if(!svg) return;
@@ -766,7 +772,6 @@ def render_dashboard(
       const width = pRect.width > 0 ? pRect.width : 760;
       const height = 300, pad = 40;
       
-      // 動態設定 viewBox 比例，移除 preserveAspectRatio 避免文字變形
       svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
       
       const vals = points.map((p) => p.waiting_count);
@@ -795,14 +800,11 @@ def render_dashboard(
             html += `<text x="${x}" y="${height - 10}" fill="#9bb2c8" font-size="11" text-anchor="middle">${labelText}</text>`;
         }
         
-        // 建立 Tooltip 內容
-        const fullTime = p.fetched_at.replace('T', ' ');
+        // 💡 修改：精準截斷時間字串，移除時區資訊 (例如 +08:00 或 Z)
+        const fullTime = p.fetched_at.substring(0, 19).replace('T', ' ');
         const tooltipHtml = `${fullTime}<br><span style='color:${color}; font-size:16px; font-weight:bold;'>${p.waiting_count} 人</span>`;
         
-        // 畫出實際的點 (取消 pointer-events 避免干擾 hover)
         html += `<circle cx="${x}" cy="${y}" r="4" fill="${color}" style="pointer-events:none;"></circle>`;
-        
-        // 畫出隱形的感應區，半徑加大到 14，方便滑鼠游標觸發
         html += `<circle cx="${x}" cy="${y}" r="14" fill="transparent" class="hover-target" data-info="${tooltipHtml}" style="cursor:pointer;"></circle>`;
       });
       
@@ -902,7 +904,6 @@ def render_dashboard(
             if (closeStatsBtn) closeStatsBtn.addEventListener('click', toggleStatsPanel);
             if (statsOverlay) statsOverlay.addEventListener('click', toggleStatsPanel);
 
-            // 💡 新增：綁定圖表 Tooltip 的滑鼠事件
             const tooltip = $('chart-tooltip');
             document.addEventListener('mouseover', (e) => {
                 if (e.target && e.target.classList && e.target.classList.contains('hover-target')) {
@@ -922,12 +923,12 @@ def render_dashboard(
                 }
             });
             
-            // 💡 新增：當視窗縮放時，重新繪製圖表以維持完美比例
             let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
-                    drawChart('history-chart', getDailyHistory(), 'date');
+                    drawChart('history-chart', getDailyHistory().slice(-7), 'date');
+                    drawChart('monthly-chart', getDailyHistory().slice(-30), 'date');
                     renderHourlyChart();
                 }, 200);
             });
@@ -947,7 +948,10 @@ def render_dashboard(
                 document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
                 const tp = $('tab-' + tab);
                 if(tp) tp.classList.add('active');
-                if (tab === 'hourly-detail') renderHourlyChart();
+                if (tab === 'hourly-detail') {
+                    drawChart('monthly-chart', getDailyHistory().slice(-30), 'date');
+                    renderHourlyChart();
+                }
               });
             });
             renderCurrentOrg();
