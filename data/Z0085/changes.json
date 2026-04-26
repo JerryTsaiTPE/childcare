@@ -665,5 +665,69 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-26T12:15:08+08:00",
+    "removed_previous_indexes": [
+      104
+    ],
+    "removed": [
+      {
+        "name": "黃O熙",
+        "birthday": "2025-01-05",
+        "category": "一般市民",
+        "previous_index": 104
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "黃O熙",
+        "birthday": "2025-01-05",
+        "category": "一般市民",
+        "previous_index": 104
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "洪O媗",
+        "birthday": "2025-03-30",
+        "category": "一般市民",
+        "previous_index": 105,
+        "current_index": 104,
+        "delta": -1
+      },
+      {
+        "name": "陳O妡",
+        "birthday": "2026-04-01",
+        "category": "一般市民",
+        "previous_index": 106,
+        "current_index": 105,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 106,
+    "current_waiting_count": 105,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      104
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 105,
+      "current_index": 104,
+      "name": "洪O媗",
+      "delta": -1
+    },
+    "summary_lines": [
+      "104 號離開名單",
+      "105 → 104（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink"
   }
 ]
