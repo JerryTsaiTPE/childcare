@@ -1,0 +1,9 @@
+[Wed 04/22/2026 11:31:55.11] Starting update 
+Traceback (most recent call last):
+  File "C:\Users\JerryPC\Desktop\childcare\scripts\update_dashboard.py", line 16, in <module>
+    from playwright.sync_api import sync_playwright
+ModuleNotFoundError: No module named 'playwright'
+        1 file(s) copied.
+[Wed 04/22/2026 11:31:55.52] Synced index.html to "Z:\childcare\index.html" 
+
+[Wed 04/22/2026 11:31:57.38] Finished with exit code 0 

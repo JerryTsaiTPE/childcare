@@ -8,13 +8,17 @@ import ssl
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+# 強制 Windows 控制台使用 UTF-8 編碼
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stderr.reconfigure(encoding='utf-8')
+
 # 定義專案路徑
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / 'src'
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-# 匯入自定義模組
 from ntpc_childcare_dashboard.render import render_dashboard
 from ntpc_childcare_dashboard.tracker import (
     build_change_record,
@@ -23,66 +27,31 @@ from ntpc_childcare_dashboard.tracker import (
     parse_standby_payload,
 )
 
-# API 與常數設定
-API_STANDBY = 'https://lovebaby.sw.ntpc.gov.tw/webapi/NpsApply/GetStandbyList?orgid=Z0130'
+# 💡 升級版：支援 [區域] 標籤與行內 #註解 的讀取邏輯
+def get_target_orgs():
+    org_file = ROOT / 'scripts' / 'org_ids.txt'
+    if not org_file.exists():
+        return []
+    
+    orgs = []
+    with open(org_file, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            # 略過空行、全行註解、以及 [區域] 標籤
+            if not line or line.startswith('#') or line.startswith('['):
+                continue
+            # 處理行內註解，例如 "Z0014 #淡水淡海"，只取 # 前面的部分
+            org_id = line.split('#')[0].strip()
+            if org_id:
+                orgs.append(org_id)
+    return orgs
+
 API_ORGS = 'https://lovebaby.sw.ntpc.gov.tw/webapi/Org/GetPublicNpsOrgList'
-ORG_ID = 'Z0130'
-VALIDITY_TEXT = '有效期限至116/07/31'
-RULE_TEXT = """三、缺額遞補原則：
-
-因中心收托涉及各班人數、幼兒年齡發展、師生比及身分別等差異因素，因此如有缺額時，依下列原則遞補：
-
-1.若為優先收托名額出缺時，優先收托對象優先於一般家庭，再依出缺年齡適齡遞補
-
-2.若為一般收托名額出缺時，依出缺年齡於全數備取名單中適齡遞補"""
-
-RELATED_INFO_TEXT = """相關說明：
-
-一、備取序號：係指現行實際之備取順序（未分齡）
-
-二、本表係依幼兒備取編號順序排列
-
-備註：優先對象指
-
-1.本府列冊之低收入戶及中低收入戶兒童。
-
-2.具有本市特殊境遇家庭及弱勢兒童少年生活補助身分資格之兒童。
-
-3.父母之一方為中重度身心障礙、服常備兵役（以徵兵者為限，不含後備役）、或處一年以上有期徒刑或受拘束人身自由之保安處分一年以上且執行中，致無法自行照顧家中未滿二歲兒童，而須送請托育人員照顧之兒童。
-
-4.家庭有同胞兄弟姐妹三名以上之兒童。
-
-5.原住民兒童。
-
-6.父母雙方或單親一方為未成年。
-
-三、缺額遞補原則：
-
-因中心收托涉及各班人數、幼兒年齡發展、師生比及身分別等差異因素，因此如有缺額時，依下列原則遞補：
-
-1.若為優先收托名額出缺時，優先收托對象優先於一般家庭，再依出缺年齡適齡遞補
-
-2.若為一般收托名額出缺時，依出缺年齡於全數備取名單中適齡遞補
-
-四、不列入備取名單情形：
-
-幼兒已入托、家長自行取消備取或電話通知取消、年滿2歲已逾法定入托年齡、經簡訊或電話備取通知未回覆者。
-
-五、114年7月報名期間結束後，自114年8月1日起開放候補登記，依其報名時間排序於114年7月備取抽籤順序之後，其備取名額有效期間至115年7月31日止。 ※建議於有效期間未被通知遞補入托且未滿兩歲者，皆應參與當年度7月備取登記，並請留意登記時間。
-
-六、上個月入托 42 名。"""
-
-# 檔案路徑設定
 DATA_DIR = ROOT / 'data'
-SNAPSHOT_DIR = DATA_DIR / 'snapshots'
-LATEST_PATH = DATA_DIR / 'latest_snapshot.json'
-CHANGES_PATH = DATA_DIR / 'changes.json'
-HISTORY_PATH = DATA_DIR / 'history.json'
 INDEX_PATH = ROOT / 'index.html'
-
+CACHE_FILE = DATA_DIR / 'info_cache.json'
 
 def fetch_json(url: str) -> dict:
-    """抓取 API 資料並處理 SSL 驗證與 User-Agent"""
     req = urllib.request.Request(
         url,
         headers={
@@ -91,125 +60,159 @@ def fetch_json(url: str) -> dict:
             'Referer': 'https://lovebaby.sw.ntpc.gov.tw/',
         },
     )
-    # 建立不驗證 SSL 的環境以繞過政府網站憑證問題
     context = ssl._create_unverified_context()
     with urllib.request.urlopen(req, timeout=30, context=context) as response:
         return json.load(response)
 
-
 def load_json(path: Path, default):
-    """安全載入 JSON 檔案"""
     if not path.exists():
         return default
     try:
-        return json.loads(path.read_text(encoding='utf-8'))
-    except Exception:
+        return json.loads(path.read_text(encoding='utf-8-sig'))
+    except Exception as e:
+        print(f"⚠️ 警告：無法讀取 {path.name} ({e})，使用預設空資料。")
         return default
 
-
 def save_json(path: Path, payload) -> None:
-    """存檔 JSON 並確保縮排與中文顯示正常"""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8')
 
-
-def load_org_info() -> dict:
-    """取得中心的基本資訊"""
-    payload = fetch_json(API_ORGS)
-    for item in payload.get('data') or []:
-        if item.get('orgid') == ORG_ID:
-            return item
-    raise RuntimeError(f'找不到 orgid={ORG_ID} 的中心資料')
-
-
 def trim_history(history: list[dict], limit: int = 1000) -> list[dict]:
-    """將歷史紀錄上限提升至 1000 筆，供前端進行每日走勢分析"""
     if len(history) <= limit:
         return history
     return history[-limit:]
 
 
 def main() -> int:
+    TARGET_ORGS = get_target_orgs()
+    if not TARGET_ORGS:
+        print("❌ 無法載入中心名單 (org_ids.txt)，請檢查路徑或檔案內容。")
+        return 1
+
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
-
-    # 1. 抓取遠端資料
-    standby_payload = fetch_json(API_STANDBY)
-    org_info = load_org_info()
-    parsed = parse_standby_payload(standby_payload)
     
-    # 2. 定義時區 (UTC+8 台北時間)
-    tz_taipei = timezone(timedelta(hours=8))
-    fetched_at = datetime.now(tz_taipei).isoformat(timespec='seconds')
+    print("🚀 [高速模式] 獲取新北市公托清單...")
+    try:
+        orgs_payload = fetch_json(API_ORGS)
+        org_info_map = {item.get('orgid'): item for item in orgs_payload.get('data') or []}
+    except Exception as e:
+        print(f"獲取公托清單失敗: {e}")
+        org_info_map = {}
 
-    snapshot = {
-        'org': org_info,
-        'fetched_at': fetched_at,
-        **parsed,
-    }
+    # 💡 載入網頁說明快取
+    info_cache = load_json(CACHE_FILE, {})
 
-    # 3. 處理快照比對與歷史紀錄
-    previous_snapshot = load_json(LATEST_PATH, None)
-    previous_entries = previous_snapshot.get('entries', []) if previous_snapshot else []
-    
-    # 比對新舊快照差異
-    diff = diff_snapshots(previous_entries, snapshot['entries'])
-    change_record = build_change_record(
-        fetched_at=fetched_at,
-        diff=diff,
-        previous_count=(previous_snapshot or {}).get('waiting_count'),
-        current_count=snapshot['waiting_count'],
-    )
+    all_org_data = {} 
 
-    # 更新歷史紀錄 (用於圖表走勢)
-    history = load_json(HISTORY_PATH, [])
-    history.append(make_history_entry(snapshot, change_record))
-    history = trim_history(history)
+    for org_id in TARGET_ORGS:
+        org_dir = DATA_DIR / org_id
+        org_dir.mkdir(parents=True, exist_ok=True)
+        snapshot_dir = org_dir / 'snapshots'
+        snapshot_dir.mkdir(parents=True, exist_ok=True)
 
-    # 更新變動摘要紀錄
-    changes = load_json(CHANGES_PATH, [])
-    changes.append(change_record)
-    changes = trim_history(changes, limit=500)
+        latest_path = org_dir / 'latest_snapshot.json'
+        changes_path = org_dir / 'changes.json'
+        history_path = org_dir / 'history.json'
 
-    # --- 核心邏輯修改：找出「最後一次有意義的變動」傳給前端總覽頁面 ---
-    last_meaningful_change = change_record
-    for c in reversed(changes):
-        if c.get("changed"):
-            last_meaningful_change = c
-            break
+        org_info = org_info_map.get(org_id, {"orgid": org_id, "orgname": "未知中心", "orgshort": org_id, "distdesc": "未知"})
 
-    # 4. 呼叫渲染函數產生 HTML
-    html = render_dashboard(
-        snapshot=snapshot,
-        latest_change=last_meaningful_change, # 傳入最後變動，確保總覽卡片不歸零
-        history=history,
-        rule_text=RULE_TEXT,
-        validity_text=VALIDITY_TEXT,
-        related_info_text=RELATED_INFO_TEXT,
-    )
+        # --- 步驟 1: 高速抓取 API 的 JSON 數據 ---
+        api_standby = f'https://lovebaby.sw.ntpc.gov.tw/webapi/NpsApply/GetStandbyList?orgid={org_id}'
+        try:
+            standby_payload = fetch_json(api_standby)
+        except Exception as e:
+            print(f"   ⚠️ 抓取 {org_id} API 失敗，略過。")
+            continue
 
-    # 5. 儲存結果
-    # 檔名格式化處理 (避免 Windows 不支援冒號字元)
-    stamp = fetched_at.replace(':', '-').replace('+08-00', '+08_00')
-    
-    save_json(SNAPSHOT_DIR / f'{stamp}.json', snapshot)
-    save_json(LATEST_PATH, snapshot)
-    save_json(HISTORY_PATH, history)
-    save_json(CHANGES_PATH, changes)
-    
-    # 寫入最後的 HTML 檔案
+        # --- 步驟 2: 從快取讀取網頁文字 (瞬間完成) ---
+        cached_org_info = info_cache.get(org_id, {})
+        center_memo = cached_org_info.get("related_info_text", "尚未抓取中心說明，請手動執行一次 run_slow_scraper.bat")
+        center_validity = cached_org_info.get("validity_text", "未知 (需執行快取更新)")
+
+        parsed = parse_standby_payload(standby_payload)
+        tz_taipei = timezone(timedelta(hours=8))
+        fetched_at = datetime.now(tz_taipei).isoformat(timespec='seconds')
+
+        snapshot = {
+            'org': org_info,
+            'fetched_at': fetched_at,
+            **parsed,
+        }
+
+        previous_snapshot = load_json(latest_path, {})
+        if not isinstance(previous_snapshot, dict): previous_snapshot = {}
+        previous_entries = previous_snapshot.get('entries', [])
+
+        diff = diff_snapshots(previous_entries, snapshot['entries'])
+        change_record = build_change_record(
+            fetched_at=fetched_at,
+            diff=diff,
+            previous_count=(previous_snapshot or {}).get('waiting_count'),
+            current_count=snapshot['waiting_count'],
+        )
+
+        history = load_json(history_path, [])
+        if not isinstance(history, list): history = []
+        history.append(make_history_entry(snapshot, change_record))
+        history = trim_history(history)
+
+        changes = load_json(changes_path, [])
+        if not isinstance(changes, list): changes = []
+        changes.append(change_record)
+        changes = trim_history(changes, limit=500)
+
+        last_meaningful_change = change_record
+        for c in reversed(changes):
+            if c.get("changed"):
+                last_meaningful_change = c
+                break
+
+        stamp = fetched_at.replace(':', '-').replace('+08-00', '+08_00')
+        save_json(snapshot_dir / f'{stamp}.json', snapshot)
+        save_json(latest_path, snapshot)
+        save_json(history_path, history)
+        save_json(changes_path, changes)
+
+        all_org_data[org_id] = {
+            "snapshot": snapshot,
+            "latest_change": last_meaningful_change,
+            "history": history,
+            "related_info_text": center_memo,
+            "validity_text": center_validity
+        }
+        
+        print(f"✅ {org_id} 高速更新完成。")
+
+    if not all_org_data:
+        print("沒有成功抓取任何中心資料，終止執行。")
+        return 1
+
+    # ==========================================
+    # 🔍 全域交叉比對重複登記邏輯 (包含身分別)
+    # ==========================================
+    global_map = {}
+    for oid, data in all_org_data.items():
+        o_name = data['snapshot']['org']['orgshort']
+        for entry in data['snapshot']['entries']:
+            # 💡 在這裡加上 displaydesc 作為比對條件
+            key = (entry['encname'], entry['cbirthday'], entry.get('displaydesc', '')) 
+            if key not in global_map: 
+                global_map[key] = []
+            global_map[key].append({"org_name": o_name, "index": entry['index'], "org_id": oid})
+
+    for oid, data in all_org_data.items():
+        for entry in data['snapshot']['entries']:
+            # 💡 在這裡也加上 displaydesc
+            key = (entry['encname'], entry['cbirthday'], entry.get('displaydesc', ''))
+            others = [m for m in global_map[key] if m['org_id'] != oid]
+            entry['sync_list'] = [f"{o['org_name']}({o['index']})" for o in others]
+
+    print("====================================")
+    print("產生 HTML 儀表板...")
+    html = render_dashboard(all_data=all_org_data, rule_text="", validity_text="", related_info_text="")
     INDEX_PATH.write_text(html, encoding='utf-8')
-
-    # 輸出狀態供 Log 查看
-    print(json.dumps({
-        'status': 'success',
-        'waiting_count': snapshot['waiting_count'],
-        'history_size': len(history),
-        'fetched_at': fetched_at,
-    }, ensure_ascii=False, indent=2))
-    
+    print("🎉 高速更新與推播全部完成！")
     return 0
-
 
 if __name__ == '__main__':
     try:

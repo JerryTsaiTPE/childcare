@@ -1,0 +1,16 @@
+[Thu 04/23/2026 11:10:23.46] Starting update 
+正在獲取新北市公托清單...
+====================================
+處理中心: Z0130
+   啟動 Playwright 爬取 Z0130 網頁文字...
+Traceback (most recent call last):
+  File "C:\Users\JerryPC\Desktop\childcare\scripts\update_dashboard.py", line 172, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\JerryPC\Desktop\childcare\scripts\update_dashboard.py", line 128, in main
+    change_record = build_change_record(fetched_at, diff, prev_snap.get('waiting_count'), snapshot['waiting_count'])
+TypeError: build_change_record() takes 0 positional arguments but 4 were given
+        1 file(s) copied.
+[Thu 04/23/2026 11:10:34.46] Synced index.html to "Z:\childcare\index.html" 
+
+[Thu 04/23/2026 11:10:42.62] Finished with exit code 0 

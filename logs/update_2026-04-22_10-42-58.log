@@ -1,0 +1,10 @@
+[Wed 04/22/2026 10:42:58.76] Starting update 
+Critical Error: name 'safe_orgid' is not defined
+正在獲取新北市所有公托清單...
+開始處理中心: Z0130
+開始處理中心: Z0096
+資料抓取完畢，開始產生 HTML 儀表板...
+        1 file(s) copied.
+[Wed 04/22/2026 10:42:59.30] Synced index.html to "Z:\childcare\index.html" 
+
+[Wed 04/22/2026 10:43:02.15] Finished with exit code 0 

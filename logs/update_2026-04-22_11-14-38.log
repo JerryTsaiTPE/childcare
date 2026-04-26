@@ -1,0 +1,11 @@
+[Wed 04/22/2026 11:14:38.99] Starting update 
+正在獲取新北市所有公托清單...
+開始處理中心: Z0130
+開始處理中心: Z0096
+開始處理中心: Z0116
+資料抓取完畢，開始產生 HTML 儀表板...
+儀表板更新成功！
+        1 file(s) copied.
+[Wed 04/22/2026 11:14:39.69] Synced index.html to "Z:\childcare\index.html" 
+
+[Wed 04/22/2026 11:14:42.70] Finished with exit code 0 
