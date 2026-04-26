@@ -688,5 +688,42 @@
     "removed_details": [],
     "added_details": [],
     "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-27",
+    "fetched_at": "2026-04-27T01:15:04+08:00",
+    "waiting_count": 91,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "19 等 2 筆序號離開名單",
+      "20 → 19（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 20,
+      "current_index": 19,
+      "name": "陳O宇",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "陳O汝",
+        "birthday": "2024-04-27",
+        "category": "一般市民",
+        "previous_index": 19
+      },
+      {
+        "name": "陳O昊",
+        "birthday": "2024-04-27",
+        "category": "優先收托",
+        "previous_index": 23
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [
+      19,
+      23
+    ]
   }
 ]
