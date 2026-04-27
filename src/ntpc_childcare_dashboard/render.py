@@ -72,14 +72,14 @@ def render_dashboard(
     .close-btn:hover { color: var(--danger); transform: scale(1.1); }
     .slide-panel-content { padding: 24px; overflow-y: auto; flex-grow: 1; display: grid; gap: 16px; align-content: flex-start; }
     
-    /* 💡 新增：行政區統計清單樣式 */
     .dist-stats-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(0,0,0,0.2); border-radius: 12px; overflow: hidden; }
-    .dist-stats-table th, .dist-stats-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .dist-stats-table th { font-size: 13px; color: var(--muted); background: rgba(255,255,255,0.02); }
-    .dist-stats-table td { font-size: 15px; }
+    .dist-stats-table th, .dist-stats-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .dist-stats-table th { font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.02); text-transform: uppercase; letter-spacing: 1px; }
+    .dist-stats-table td { font-size: 14px; }
     .dist-stats-table tr:last-child td { border-bottom: none; }
     .dist-name { font-weight: bold; color: var(--accent-2); }
     .dist-count { text-align: right; font-weight: bold; font-family: Consolas, monospace; }
+    .dist-pct { text-align: right; color: var(--muted); font-size: 12px; font-family: Consolas, monospace; }
 
     .tabs { display: flex; gap: 10px; margin-bottom: 18px; overflow-x: auto; padding-bottom: 4px; }
     .tab-btn { border: 1px solid var(--border); background: var(--tab-bg); color: var(--muted); border-radius: 999px; padding: 10px 16px; cursor: pointer; white-space: nowrap; flex: 0 0 auto; transition: 0.2s; }
@@ -178,7 +178,7 @@ def render_dashboard(
         <h3 style="margin-top:0; font-size:16px; color: var(--accent-2);">各行政區備取概況 (人頭數)</h3>
         <table class="dist-stats-table">
           <thead>
-            <tr><th>行政區</th><th style="text-align:right;">備取人數</th></tr>
+            <tr><th>行政區</th><th style="text-align:right;">人數</th><th style="text-align:right;">占比</th></tr>
           </thead>
           <tbody id="district-stats-body">
             </tbody>
@@ -414,11 +414,11 @@ def render_dashboard(
         return y >= 2;
     }
 
-    // 💡 修改：計算全區統計，並加入各區備取細節
+    // 💡 修改：全區統計增加「占比」計算
     function calculateGlobalStats() {
         let totalCap = 0;
         let globalUniqueChildren = new Set();
-        let districtUniqueMap = {}; // { "板橋區": Set(), ... }
+        let districtUniqueMap = {}; 
 
         orgIds.forEach(id => {
             const snap = allData[id].snapshot;
@@ -439,24 +439,32 @@ def render_dashboard(
             }
         });
 
+        const totalUniqueCount = globalUniqueChildren.size;
+
         const gcEl = $('global-cap-count');
         const guEl = $('global-unique-waitlist');
         const goEl = $('global-org-count');
         
         if (goEl) goEl.textContent = orgIds.length + ' 間';
         if (gcEl) gcEl.textContent = totalCap + ' 名';
-        if (guEl) guEl.textContent = '約 ' + globalUniqueChildren.size + ' 人';
+        if (guEl) guEl.textContent = '約 ' + totalUniqueCount + ' 人';
 
-        // 💡 渲染行政區清單
         const distBody = $('district-stats-body');
         if (distBody) {
             distBody.innerHTML = '';
-            // 排序行政區 (依人數由多到少)
             const sortedDistricts = Object.keys(districtUniqueMap).sort((a, b) => districtUniqueMap[b].size - districtUniqueMap[a].size);
             
             sortedDistricts.forEach(d => {
                 const count = districtUniqueMap[d].size;
-                const row = `<tr><td class="dist-name">${d}</td><td class="dist-count">${count} 人</td></tr>`;
+                // 💡 計算占比：該區人數 / 全市總人數
+                const percentage = totalUniqueCount > 0 ? ((count / totalUniqueCount) * 100).toFixed(1) : 0;
+                
+                const row = `
+                    <tr>
+                        <td class="dist-name">${d}</td>
+                        <td class="dist-count">${count} 人</td>
+                        <td class="dist-pct">${percentage}%</td>
+                    </tr>`;
                 distBody.insertAdjacentHTML('beforeend', row);
             });
         }
