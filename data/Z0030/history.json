@@ -913,5 +913,33 @@
     "removed_details": [],
     "added_details": [],
     "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-27",
+    "fetched_at": "2026-04-27T16:15:07+08:00",
+    "waiting_count": 64,
+    "last_month_enrolled": 4,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "1 號離開名單",
+      "2 → 1（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 2,
+      "current_index": 1,
+      "name": "吳O瑄",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "許O願",
+        "birthday": "2024-11-18",
+        "category": "一般市民",
+        "previous_index": 1
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": []
   }
 ]

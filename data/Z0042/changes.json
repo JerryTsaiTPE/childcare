@@ -1401,5 +1401,70 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T16:15:06+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      74,
+      75,
+      76
+    ],
+    "added": [
+      {
+        "name": "葛O熹",
+        "birthday": "2024-08-02",
+        "category": "一般市民",
+        "current_index": 74
+      },
+      {
+        "name": "吳O宥",
+        "birthday": "2026-02-04",
+        "category": "優先收托",
+        "current_index": 75
+      },
+      {
+        "name": "王O桓",
+        "birthday": "2026-03-24",
+        "category": "優先收托",
+        "current_index": 76
+      }
+    ],
+    "added_details": [
+      {
+        "name": "葛O熹",
+        "birthday": "2024-08-02",
+        "category": "一般市民",
+        "current_index": 74
+      },
+      {
+        "name": "吳O宥",
+        "birthday": "2026-02-04",
+        "category": "優先收托",
+        "current_index": 75
+      },
+      {
+        "name": "王O桓",
+        "birthday": "2026-03-24",
+        "category": "優先收托",
+        "current_index": 76
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 73,
+    "current_waiting_count": 76,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 74 號"
+    ],
+    "change_kind": "grow"
   }
 ]
