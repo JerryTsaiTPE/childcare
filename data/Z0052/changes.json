@@ -1286,5 +1286,109 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T11:15:04+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      85,
+      86,
+      87,
+      88,
+      89,
+      90
+    ],
+    "added": [
+      {
+        "name": "王O勛",
+        "birthday": "2026-03-25",
+        "category": "一般市民",
+        "current_index": 85
+      },
+      {
+        "name": "何O于",
+        "birthday": "2026-01-29",
+        "category": "優先收托",
+        "current_index": 86
+      },
+      {
+        "name": "周O宭",
+        "birthday": "2025-05-03",
+        "category": "一般市民",
+        "current_index": 87
+      },
+      {
+        "name": "陳O",
+        "birthday": "2025-05-09",
+        "category": "優先收托",
+        "current_index": 88
+      },
+      {
+        "name": "徐O斐",
+        "birthday": "2025-08-29",
+        "category": "一般市民",
+        "current_index": 89
+      },
+      {
+        "name": "尤O甯",
+        "birthday": "2025-03-06",
+        "category": "一般市民",
+        "current_index": 90
+      }
+    ],
+    "added_details": [
+      {
+        "name": "王O勛",
+        "birthday": "2026-03-25",
+        "category": "一般市民",
+        "current_index": 85
+      },
+      {
+        "name": "何O于",
+        "birthday": "2026-01-29",
+        "category": "優先收托",
+        "current_index": 86
+      },
+      {
+        "name": "周O宭",
+        "birthday": "2025-05-03",
+        "category": "一般市民",
+        "current_index": 87
+      },
+      {
+        "name": "陳O",
+        "birthday": "2025-05-09",
+        "category": "優先收托",
+        "current_index": 88
+      },
+      {
+        "name": "徐O斐",
+        "birthday": "2025-08-29",
+        "category": "一般市民",
+        "current_index": 89
+      },
+      {
+        "name": "尤O甯",
+        "birthday": "2025-03-06",
+        "category": "一般市民",
+        "current_index": 90
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 84,
+    "current_waiting_count": 90,
+    "net_waiting_count_change": 6,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 6 筆候補，最前面出現在 85 號"
+    ],
+    "change_kind": "grow"
   }
 ]

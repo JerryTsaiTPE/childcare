@@ -4276,5 +4276,70 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T11:15:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      84,
+      85,
+      86
+    ],
+    "added": [
+      {
+        "name": "許O鵬",
+        "birthday": "2025-07-06",
+        "category": "一般市民",
+        "current_index": 84
+      },
+      {
+        "name": "陳O晴",
+        "birthday": "2026-04-23",
+        "category": "一般市民",
+        "current_index": 85
+      },
+      {
+        "name": "吳O辰",
+        "birthday": "2024-12-18",
+        "category": "一般市民",
+        "current_index": 86
+      }
+    ],
+    "added_details": [
+      {
+        "name": "許O鵬",
+        "birthday": "2025-07-06",
+        "category": "一般市民",
+        "current_index": 84
+      },
+      {
+        "name": "陳O晴",
+        "birthday": "2026-04-23",
+        "category": "一般市民",
+        "current_index": 85
+      },
+      {
+        "name": "吳O辰",
+        "birthday": "2024-12-18",
+        "category": "一般市民",
+        "current_index": 86
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 83,
+    "current_waiting_count": 86,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 84 號"
+    ],
+    "change_kind": "grow"
   }
 ]

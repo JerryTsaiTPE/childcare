@@ -1447,5 +1447,46 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T11:15:11+08:00",
+    "removed_previous_indexes": [
+      42
+    ],
+    "removed": [
+      {
+        "name": "林O浠",
+        "birthday": "2025-07-09",
+        "category": "優先收托",
+        "previous_index": 42
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "林O浠",
+        "birthday": "2025-07-09",
+        "category": "優先收托",
+        "previous_index": 42
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 42,
+    "current_waiting_count": 41,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      42
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "42 號離開名單"
+    ],
+    "change_kind": "shrink"
   }
 ]
