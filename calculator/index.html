@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>新北市幼兒園招生日期計算機（BETA）</title>
+  <title>新北市幼兒園招生日期計算機（115學年度）</title>
   <style>
     :root {
       --bg: #07111f;
@@ -40,7 +40,10 @@
     .value.warn { color: var(--warn); }
     .value.bad { color: var(--danger); }
     .value.muted { color: var(--muted); }
-    .controls { display: grid; grid-template-columns: 1.3fr 0.7fr auto; gap: 12px; align-items: end; margin-top: 16px; }
+    
+    /* 調整為兩欄佈局，移除原本第三欄 auto 的按鈕位置 */
+    .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: end; margin-top: 16px; }
+    
     label { display: block; color: var(--muted); font-size: 13px; margin-bottom: 6px; }
     select {
       width: 100%;
@@ -52,18 +55,6 @@
       font-size: 16px;
       outline: none;
     }
-    button {
-      border: 1px solid var(--border);
-      background: #13314d;
-      color: var(--text);
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-size: 15px;
-      cursor: pointer;
-      transition: 0.2s;
-      white-space: nowrap;
-    }
-    button:hover { border-color: var(--accent); }
     .section-title { margin: 22px 0 12px; font-size: 20px; }
     .table-wrap { width: 100%; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; min-width: 760px; }
@@ -76,7 +67,6 @@
     .note { padding: 14px 16px; border-radius: 14px; background: #091522; border: 1px solid #18324d; line-height: 1.75; color: #d9ebff; }
     .list { margin: 10px 0 0; padding-left: 20px; line-height: 1.8; }
     
-    /* 針對「對應的報名日期與提醒區間」放大字體與增加間距 */
     #public-schedule ul.list, #private-schedule ul.list {
       font-size: 17px;
       color: #d9ebff;
@@ -84,6 +74,11 @@
     #public-schedule ul.list li, #private-schedule ul.list li {
       margin-bottom: 8px;
     }
+
+    .info-bar { display: flex; flex-wrap: wrap; column-gap: 24px; row-gap: 12px; }
+    .info-item { display: flex; align-items: baseline; gap: 8px; }
+    .info-label { color: var(--muted); font-size: 13px; }
+    .info-value { font-weight: 700; font-size: 16px; color: var(--text); }
 
     .footer { color: var(--muted); font-size: 13px; margin-top: 18px; text-align: center; }
     .source-list a { color: var(--accent); text-decoration: none; }
@@ -98,7 +93,7 @@
   <div class="wrap">
     <section class="hero">
       <div>
-        <h1>新北市幼兒園招生日期計算機(BETA)</h1>
+        <h1>新北市幼兒園招生日期計算機</h1>
         <div class="sub">依 115 學年度新北市公開資料整理：<br>公立／非營利有全市統一時程；私立／準公共則以各園簡章為準，但仍受教育局公告的日期區間限制。</div>
       </div>
       <div class="sub" style="text-align:right;">版本：115 學年度<br>目的：輸入生日後，自動判斷可報名類型與提醒區間</div>
@@ -121,7 +116,6 @@
             <option value="116">116 學年度（2027/09/01）(未公布-暫定)</option>
           </select>
         </div>
-        <button id="btn-today">帶入今天</button>
       </div>
       <div id="birthday-current" class="note" style="margin-top:14px;"></div>
       <div class="grid" id="summary-cards"></div>
@@ -494,13 +488,23 @@
       if (!target) return;
       const config = getAcademicConfig();
       if (!birth) {
-        target.innerHTML = '目前生日：<b>尚未選擇</b>';
+        target.innerHTML = `
+          <div class="info-bar">
+            <div class="info-item"><span class="info-label">生日</span><span class="info-value">尚未選擇</span></div>
+          </div>
+        `;
         return;
       }
       const today = new Date();
       const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
       
-      target.innerHTML = `目前生日：<b>${formatDate(birth)}</b>　｜　年齡基準：<b>${config.label} ${formatDate(config.referenceDate)}</b>　｜　目前年齡：<b>${formatBirthdayCompact(birth, todayIso)}</b>`;
+      target.innerHTML = `
+        <div class="info-bar">
+          <div class="info-item"><span class="info-label">生日</span><span class="info-value">${formatDate(birth)}</span></div>
+          <div class="info-item"><span class="info-label">查詢學年</span><span class="info-value">${config.label} (${formatDate(config.referenceDate)})</span></div>
+          <div class="info-item"><span class="info-label">今天年齡</span><span class="info-value">${formatBirthdayCompact(birth, todayIso)}</span></div>
+        </div>
+      `;
     }
 
     function renderModeSection(birth) {
@@ -603,7 +607,14 @@
       }
 
       if (ageSummary) {
-        ageSummary.innerHTML = `生日：<b>${formatDate(birth)}</b><br>查詢基準：<b>${config.label} ${formatDate(config.referenceDate)}</b><br>${config.label}入學時年齡：<b>${compactAge}</b><br>${public3 ? '<span class="pill ok">公立／非營利 3 歲班</span>' : ''}${privateEligible ? '<span class="pill ok">私立／準公共</span>' : ''}${public2 ? '<span class="pill warn">公立／非營利 2 歲班</span>' : ''}`;
+        ageSummary.innerHTML = `
+          ${config.label}入學時年齡：<b>${compactAge}</b>
+          <div style="margin-top: 6px;">
+            ${public3 ? '<span class="pill ok">公立／非營利 3 歲班</span>' : ''}
+            ${privateEligible ? '<span class="pill ok">私立／準公共</span>' : ''}
+            ${public2 ? '<span class="pill warn">公立／非營利 2 歲班</span>' : ''}
+          </div>
+        `;
       }
 
       const publicReminders = reminderTextForPublic(birth);
@@ -691,12 +702,6 @@
       $('birthday-day').addEventListener('change', syncBirthdayFromSelectors);
       $('academic-year').addEventListener('change', () => {
         saveAcademicYear(getSelectedAcademicYear());
-        render();
-      });
-      $('btn-today').addEventListener('click', () => {
-        const today = new Date();
-        setBirthdayFromIso(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
-        saveBirthday(currentBirthday);
         render();
       });
     }
