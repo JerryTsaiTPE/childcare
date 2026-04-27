@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>新北市幼兒園招生日期計算機（115學年度）</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: #0d1b2a;
+      --card: #13253a;
+      --border: #284864;
+      --accent: #52d1ff;
+      --accent-2: #8ef7c2;
+      --text: #edf6ff;
+      --muted: #9bb2c8;
+      --warn: #ffd166;
+      --danger: #ff7b7b;
+      --ok: #8ef7c2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, 'Noto Sans TC', sans-serif;
+      background: linear-gradient(180deg, #06101b, #0b1626 30%, #09131f);
+      color: var(--text);
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; }
+    .hero { display: flex; justify-content: space-between; gap: 16px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 18px; }
+    .hero h1 { margin: 0 0 8px; font-size: 32px; }
+    .sub { color: var(--muted); line-height: 1.7; }
+    .panel, .card { background: rgba(16, 30, 48, 0.92); border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 14px 30px rgba(0,0,0,0.22); }
+    .panel { padding: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 16px 0; }
+    .card { padding: 16px; }
+    .card.active { border-color: var(--accent); box-shadow: 0 0 0 1px rgba(82, 209, 255, 0.25), 0 14px 30px rgba(0,0,0,0.22); }
+    .metric { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+    .value { font-size: 24px; font-weight: 700; line-height: 1.35; }
+    .value.ok { color: var(--ok); }
+    .value.warn { color: var(--warn); }
+    .value.bad { color: var(--danger); }
+    .value.muted { color: var(--muted); }
+    .controls { display: grid; grid-template-columns: 1.3fr 0.7fr auto; gap: 12px; align-items: end; margin-top: 16px; }
+    label { display: block; color: var(--muted); font-size: 13px; margin-bottom: 6px; }
+    select {
+      width: 100%;
+      background: #0a1624;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 16px;
+      outline: none;
+    }
+    button {
+      border: 1px solid var(--border);
+      background: #13314d;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    button:hover { border-color: var(--accent); }
+    .section-title { margin: 22px 0 12px; font-size: 20px; }
+    .table-wrap { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td { text-align: left; padding: 12px 10px; border-bottom: 1px solid rgba(107, 139, 168, 0.18); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; }
+    .pill { display: inline-flex; padding: 4px 10px; border-radius: 999px; background: #0a1624; border: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-right: 6px; margin-bottom: 6px; }
+    .pill.ok { color: #c6ffe4; border-color: rgba(142,247,194,.5); background: rgba(142,247,194,.12); }
+    .pill.warn { color: #ffe8a3; border-color: rgba(255,209,102,.45); background: rgba(255,209,102,.12); }
+    .pill.bad { color: #ffc6c6; border-color: rgba(255,123,123,.45); background: rgba(255,123,123,.12); }
+    .note { padding: 14px 16px; border-radius: 14px; background: #091522; border: 1px solid #18324d; line-height: 1.75; color: #d9ebff; }
+    .list { margin: 10px 0 0; padding-left: 20px; line-height: 1.8; }
+    .footer { color: var(--muted); font-size: 13px; margin-top: 18px; text-align: center; }
+    .source-list a { color: var(--accent); text-decoration: none; }
+    .source-list a:hover { text-decoration: underline; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .picker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .picker-grid select { font-size: 15px; }
+    @media (max-width: 900px) { .controls, .split, .picker-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <h1>新北市幼兒園招生日期計算機</h1>
+        <div class="sub">依 115 學年度新北市公開資料整理：<br>公立／非營利有全市統一時程；私立／準公共則以各園簡章為準，但仍受教育局公告的日期區間限制。</div>
+      </div>
+      <div class="sub" style="text-align:right;">版本：115 學年度<br>目的：輸入生日後，自動判斷可報名類型與提醒區間</div>
+    </section>
+
+    <section class="panel">
+      <div class="controls">
+        <div>
+          <label>生日（西元）</label>
+          <div class="picker-grid">
+            <select id="birthday-year"></select>
+            <select id="birthday-month"></select>
+            <select id="birthday-day"></select>
+          </div>
+        </div>
+        <div>
+          <label for="academic-year">查詢基準</label>
+          <select id="academic-year">
+            <option value="115">115 學年度（2026/09/01）</option>
+            <option value="116">116 學年度（2027/09/01）</option>
+          </select>
+          <div class="sub" style="margin-top:8px;">皆以 9/1 為年齡基準；116 學年度目前先提供年齡判斷。</div>
+        </div>
+        <button id="btn-today">帶入今天</button>
+      </div>
+      <div id="birthday-current" class="note" style="margin-top:14px;"></div>
+      <div class="grid" id="summary-cards"></div>
+      <div id="age-summary" class="note"></div>
+    </section>
+
+    <h2 class="section-title">優先關注項目</h2>
+    <section class="panel">
+      <div id="mode-summary" class="note"></div>
+      <div class="grid" id="mode-cards"></div>
+    </section>
+
+    <h2 class="section-title">我該看哪一種班型？</h2>
+    <section class="panel">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>類型</th>
+              <th>生日區間</th>
+              <th>判斷結果</th>
+              <th>要注意的日期</th>
+            </tr>
+          </thead>
+          <tbody id="result-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <h2 class="section-title">今天起的報名倒數</h2>
+    <section class="panel">
+      <div id="countdown-summary" class="note"></div>
+      <div class="grid" id="countdown-cards"></div>
+    </section>
+
+    <h2 class="section-title">對應的報名日期與提醒區間</h2>
+    <section class="panel">
+      <div class="split">
+        <div>
+          <div class="card">
+            <div class="metric">公立／非營利幼兒園</div>
+            <div class="value" style="font-size:20px;">全市統一時程</div>
+            <div class="sub" id="public-schedule"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="metric">私立／準公共幼兒園</div>
+            <div class="value" style="font-size:20px;">各園自訂簡章</div>
+            <div class="sub" id="private-schedule"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <h2 class="section-title">官方依據</h2>
+    <section class="panel source-list">
+      <ul class="list">
+        <li><a href="https://kidedu.ntpc.edu.tw/var/file/0/1000/img/72/884183377.pdf" target="_blank" rel="noopener">新北市115學年度公立及非營利幼兒園招生簡章</a>：4/29 缺額公告、4/30 10:00~5/7 16:00 報名、5/19 抽籤、5/19~5/20 報到。</li>
+        <li><a href="https://kidedu.ntpc.edu.tw/p/406-1000-14589,r137.php" target="_blank" rel="noopener">新北市幼兒教育資源網公告</a>：準公共幼兒園登記時間區間應在 115/5/1~115/6/30，且至少 5 日、含 1 日假日。</li>
+        <li><a href="https://kidedu.ntpc.edu.tw/p/412-1000-154.php" target="_blank" rel="noopener">招生收費頁面</a>：公幼招生簡章與相關資訊入口。</li>
+      </ul>
+      <div class="sub" style="margin-top: 10px;">註：私立幼兒園若非準公共，各園的招生方式與日期仍可能不同；本頁先以新北市教育局公開的「準公共」規範作為可通用的提醒基準。</div>
+    </section>
+
+    <div class="footer">新北市幼兒園招生日期計算機</div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'ntpc_childcare_birthday';
+    const ACADEMIC_YEAR_KEY = 'ntpc_childcare_academic_year';
+    const ACADEMIC_CONFIG = {
+      '115': {
+        label: '115 學年度',
+        referenceDate: '2026-09-01',
+        publicGeneral: { start: '2020-09-02', end: '2023-09-01' },
+        publicTwo: { start: '2023-09-02', end: '2024-09-01' },
+        privateRange: { start: '2020-09-02', end: '2024-09-01' },
+        publicSchedule: [
+          '缺額公告：115/4/29 09:00',
+          '網路登記：115/4/30 10:00 ～ 115/5/7 16:00',
+          '資格審查：115/5/8 ～ 115/5/12',
+          '補件截止：115/5/14 16:00',
+          '公開抽籤：115/5/19 12:00 起',
+          '錄取結果：115/5/19 15:00 後',
+          '正取報到：115/5/19 15:00 ～ 115/5/20 18:00'
+        ],
+        countdown: {
+          publicNotice: '2026-04-29',
+          publicStart: '2026-04-30',
+          publicEnd: '2026-05-07',
+          privateWatch: '2026-04-01',
+          privateStart: '2026-05-01',
+          privateEnd: '2026-06-30',
+          schoolStart: '2026-09-01'
+        }
+      },
+      '116': {
+        label: '116 學年度',
+        referenceDate: '2027-09-01',
+        publicGeneral: { start: '2021-09-02', end: '2024-09-01' },
+        publicTwo: { start: '2024-09-02', end: '2025-09-01' },
+        privateRange: { start: '2021-09-02', end: '2025-09-01' },
+        publicSchedule: [
+          '116 學年度正式招生日期尚未公告',
+          '目前先提供 9/1 年齡基準下的可報名年齡判斷',
+          '待教育局公告後，可再補上缺額公告、報名、抽籤與報到日期'
+        ],
+        countdown: {
+          publicNotice: '2027-04-29',
+          publicStart: '2027-04-30',
+          publicEnd: '2027-05-07',
+          privateWatch: '2027-04-01',
+          privateStart: '2027-05-01',
+          privateEnd: '2027-06-30',
+          schoolStart: '2027-09-01'
+        }
+      }
+    };
+
+    const $ = (id) => document.getElementById(id);
+    let currentBirthday = '';
+
+    function getSelectedAcademicYear() {
+      return $('academic-year')?.value || '115';
+    }
+
+    function getAcademicConfig() {
+      return ACADEMIC_CONFIG[getSelectedAcademicYear()] || ACADEMIC_CONFIG['115'];
+    }
+
+    function parseDateOnly(value) {
+      if (!value) return null;
+      const [y, m, d] = value.split('-').map(Number);
+      if (!y || !m || !d) return null;
+      return new Date(Date.UTC(y, m - 1, d));
+    }
+
+    function formatDate(isoDate) {
+      const [y, m, d] = isoDate.split('-').map(Number);
+      return `${y}/${String(m).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
+    }
+
+    // 【修改點 1】年齡格式增加空格，若尚未出生則顯示提示
+    function formatBirthdayCompact(birthStr, refStr) {
+      const parts = getAgeParts(birthStr, refStr);
+      if (!parts) return '—';
+      if (parts.years < 0) return '尚未出生';
+      return `${parts.years}Y / ${parts.months}M / ${parts.days}D`;
+    }
+
+    function getBirthdayBounds() {
+      const today = new Date();
+      const maxIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const minDate = new Date(today.getFullYear() - 6, today.getMonth(), today.getDate());
+      const minIso = `${minDate.getFullYear()}-${String(minDate.getMonth() + 1).padStart(2, '0')}-${String(minDate.getDate()).padStart(2, '0')}`;
+      return { minIso, maxIso, minDate, maxDate: today };
+    }
+
+    function clampBirthdayIso(iso) {
+      if (!iso) return '';
+      const bounds = getBirthdayBounds();
+      if (iso < bounds.minIso) return bounds.minIso;
+      if (iso > bounds.maxIso) return bounds.maxIso;
+      return iso;
+    }
+
+    function compareDateStrings(a, b) { return a.localeCompare(b); }
+    function inRange(birth, start, end) { return compareDateStrings(birth, start) >= 0 && compareDateStrings(birth, end) <= 0; }
+
+    function daysInMonth(year, month) {
+      return new Date(year, month, 0).getDate();
+    }
+
+    function getBirthdayFromSelects() {
+      const y = $('birthday-year').value;
+      const m = $('birthday-month').value;
+      const d = $('birthday-day').value;
+      if (!y || !m || !d) return '';
+      return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+    }
+
+    function updateDayOptions() {
+      const year = Number($('birthday-year').value);
+      const month = Number($('birthday-month').value);
+      const daySel = $('birthday-day');
+      if (!year || !month || !daySel) return;
+      const currentDay = Number(daySel.value) || 1;
+      const total = daysInMonth(year, month);
+      daySel.innerHTML = '';
+      for (let i = 1; i <= total; i++) {
+        const opt = document.createElement('option');
+        opt.value = String(i).padStart(2, '0');
+        opt.textContent = `${i} 日`;
+        daySel.appendChild(opt);
+      }
+      daySel.value = String(Math.min(currentDay, total)).padStart(2, '0');
+    }
+
+    function setBirthdayFromIso(iso) {
+      const parsed = parseDateOnly(iso);
+      const y = $('birthday-year');
+      const m = $('birthday-month');
+      if (!parsed || !y || !m) return;
+      y.value = String(parsed.getUTCFullYear());
+      m.value = String(parsed.getUTCMonth() + 1).padStart(2, '0');
+      updateDayOptions();
+      $('birthday-day').value = String(parsed.getUTCDate()).padStart(2, '0');
+      currentBirthday = getBirthdayFromSelects();
+    }
+
+    function saveBirthday(value) {
+      try { localStorage.setItem(STORAGE_KEY, value); } catch (_) {}
+    }
+
+    function saveAcademicYear(value) {
+      try { localStorage.setItem(ACADEMIC_YEAR_KEY, value); } catch (_) {}
+    }
+
+    function loadBirthday() {
+      try { return localStorage.getItem(STORAGE_KEY) || ''; } catch (_) { return ''; }
+    }
+
+    function loadAcademicYear() {
+      try { return localStorage.getItem(ACADEMIC_YEAR_KEY) || '115'; } catch (_) { return '115'; }
+    }
+
+    function getAgeParts(birthStr, refStr) {
+      const birth = parseDateOnly(birthStr);
+      const ref = parseDateOnly(refStr);
+      if (!birth || !ref) return null;
+      let years = ref.getUTCFullYear() - birth.getUTCFullYear();
+      let months = ref.getUTCMonth() - birth.getUTCMonth();
+      let days = ref.getUTCDate() - birth.getUTCDate();
+      if (days < 0) { months -= 1; days += daysInMonth(ref.getUTCFullYear(), ref.getUTCMonth()); }
+      if (months < 0) { years -= 1; months += 12; }
+      return { years, months, days, birth };
+    }
+
+    function addYearsUTC(dateObj, years) {
+      return new Date(Date.UTC(dateObj.getUTCFullYear() + years, dateObj.getUTCMonth(), dateObj.getUTCDate()));
+    }
+
+    function formatMD(dateObj) {
+      return `${dateObj.getUTCFullYear()}/${String(dateObj.getUTCMonth() + 1).padStart(2, '0')}/${String(dateObj.getUTCDate()).padStart(2, '0')}`;
+    }
+
+    function eligibilityText(match, yesText, noText) {
+      return match ? `<span class="pill ok">符合</span>${yesText}` : `<span class="pill bad">不符合</span>${noText}`;
+    }
+
+    function reminderTextForPublic(birth) {
+      const config = getAcademicConfig();
+      const lines = [];
+      if (inRange(birth, config.publicGeneral.start, config.publicGeneral.end)) {
+        if (getSelectedAcademicYear() === '115') {
+          lines.push('可報名公立／非營利 3 歲以上班；請留意 115/4/30 10:00 到 115/5/7 16:00 的網路登記。');
+        } else {
+          lines.push('符合公立／非營利 3 歲以上班年齡區間；116 學年度正式招生日期尚未公告。');
+        }
+      }
+      if (inRange(birth, config.publicTwo.start, config.publicTwo.end)) {
+        lines.push('也可能符合公立／非營利 2 歲班，但要看園所是否核定招收。');
+      }
+      return lines;
+    }
+
+    function reminderTextForPrivate(birth) {
+      const config = getAcademicConfig();
+      if (!inRange(birth, config.privateRange.start, config.privateRange.end)) {
+        return [`這個生日不在新北市 ${config.label} 幼兒園的可報名年齡區間內。`];
+      }
+      if (compareDateStrings(birth, config.publicTwo.start) >= 0 && compareDateStrings(birth, config.privateRange.end) <= 0) {
+        if (getSelectedAcademicYear() === '115') {
+          return [
+            '若報名私立／準公共，請看各園簡章；市府要求登記期程必須落在 115/5/1～115/6/30。',
+            '各園登記至少 5 日，且至少包含 1 日假日；抽籤需在截止後 3 日內完成。',
+            '簡章至少要在登記前 1 個月公告，所以 4 月下旬起就可以開始密切注意園所公告。'
+          ];
+        }
+        return [
+          '符合 116 學年度私立／準公共年齡區間。',
+          '正式招生日期仍需等各園簡章與教育局公告。'
+        ];
+      }
+      return [
+        '私立／準公共也要符合國小前的年齡區間；若孩子太小，先看托嬰銜接。',
+        `若孩子已接近滿 3 歲，可留意 ${formatDate(config.referenceDate)} 開學的幼兒園銜接時間。`
+      ];
+    }
+
+    function buildAutoMode(birthStr) {
+      const config = getAcademicConfig();
+      const parts = getAgeParts(birthStr, config.referenceDate);
+      if (!parts) return { key: 'public', label: '公立／非營利', why: '請先輸入生日。' };
+      if (parts.years < 2) return { key: 'nursery', label: '托嬰銜接', why: '9/1 開學時仍偏小(未滿2歲)，先看托嬰退托與幼幼班銜接。' };
+      if (parts.years === 2) return { key: 'public', label: '公立／非營利', why: '這個年齡最需要先確認公幼／非營利 2 歲班。' };
+      return { key: 'private', label: '私立／準公共', why: '這個年齡可同時看私立／準公共與幼兒園銜接。' };
+    }
+
+    function buildTransitionInfo(birthStr) {
+      const config = getAcademicConfig();
+      const parts = getAgeParts(birthStr, config.referenceDate);
+      if (!parts) return { headline: '請先輸入生日', items: [], reference: `本區塊是依 ${config.label} ${formatDate(config.referenceDate)} 開學日推算。` };
+      const secondBirthday = addYearsUTC(parts.birth, 2);
+      const thirdBirthday = addYearsUTC(parts.birth, 3);
+      if (parts.years >= 3) {
+        return {
+          headline: '已進入滿 3 足歲區間，托嬰中心通常要在 3 歲生日後退托',
+          items: [`3 歲生日：${formatMD(thirdBirthday)}，通常可視為最後可在托嬰中心的當天；下一天開始就要退托。`, `若開學日為 ${formatDate(config.referenceDate)}，則 ${formatDate(config.referenceDate)} 可直接銜接幼兒園（通常是小班或依園所安排的班級）。`],
+          reference: `本區塊是依 ${config.label} ${formatDate(config.referenceDate)} 開學日推算；托嬰／幼兒園實際規定仍以各園公告為準。`
+        };
+      }
+      if (parts.years === 2) {
+        return {
+          headline: '9/1 開學時是 2 歲，常見情況可無縫從托嬰接到幼幼班',
+          items: [`2 歲生日：${formatMD(secondBirthday)}，到 8/31 仍可留在托嬰中心，${formatDate(config.referenceDate)} 直接轉幼幼班。`, '這正對應你給的例子：7/31 滿 2 歲，8/31 還在托嬰，9/1 接幼幼班。'],
+          reference: `本區塊是依 ${config.label} ${formatDate(config.referenceDate)} 開學日推算；托嬰／幼兒園實際規定仍以各園公告為準。`
+        };
+      }
+      return {
+        headline: '9/1 開學時仍未滿 2 歲，先看托嬰中心與園所最低收托／招生年齡',
+        items: [`2 歲生日：${formatMD(secondBirthday)}。若屆時還未達幼幼班年齡，通常先留在托嬰中心，後續再看 ${formatDate(config.referenceDate)} 是否能銜接。`],
+        reference: `本區塊是依 ${config.label} ${formatDate(config.referenceDate)} 開學日推算；托嬰／幼兒園實際規定仍以各園公告為準。`
+      };
+    }
+
+    function countDaysFromToday(targetIso) {
+      const today = new Date();
+      const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const target = parseDateOnly(targetIso);
+      const start = parseDateOnly(todayIso);
+      if (!target || !start) return { text: '—', state: 'bad' };
+      const diff = Math.round((target - start) / 86400000);
+      if (diff > 0) return { text: `還有 ${diff} 天`, state: 'ok' };
+      if (diff === 0) return { text: '就是今天', state: 'warn' };
+      return { text: `已過 ${Math.abs(diff)} 天`, state: 'bad' };
+    }
+
+    function renderCountdownSection(birth) {
+      const summary = $('countdown-summary');
+      const cardsEl = $('countdown-cards');
+      if (!summary || !cardsEl) return;
+      const config = getAcademicConfig();
+      const countdown = config.countdown;
+      const today = new Date();
+      const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const cards = [
+        ['公立／非營利缺額公告', countdown.publicNotice],
+        ['公立／非營利網路登記開始', countdown.publicStart],
+        ['公立／非營利網路登記結束', countdown.publicEnd],
+        ['私立／準公共開始密切注意簡章', countdown.privateWatch],
+        ['私立／準公共可登記最早日', countdown.privateStart],
+        ['私立／準公共登記截止', countdown.privateEnd],
+        [`${config.label}開學／銜接日`, countdown.schoolStart]
+      ];
+      if (birth) {
+        const parts = getAgeParts(birth, config.referenceDate);
+        if (parts) {
+          cards.push(['滿 2 歲日', addYearsUTC(parts.birth, 2).toISOString().slice(0, 10)]);
+          cards.push(['滿 3 歲日', addYearsUTC(parts.birth, 3).toISOString().slice(0, 10)]);
+        }
+      }
+      const publicStart = countDaysFromToday(countdown.publicStart);
+      const publicEnd = countDaysFromToday(countdown.publicEnd);
+      const privateStart = countDaysFromToday(countdown.privateStart);
+      const privateEnd = countDaysFromToday(countdown.privateEnd);
+      summary.innerHTML = `今天是 <b>${todayIso}</b>。<br>${config.label}公立／非營利：${publicStart.text}開始報名，${publicEnd.text}結束。<br>${config.label}私立／準公共：${privateStart.text}起可見各園簡章，${privateEnd.text}為公告要求的最晚區間。`;
+      cardsEl.innerHTML = cards.map(([label, iso]) => {
+        const state = countDaysFromToday(iso);
+        return `<div class="card"><div class="metric">${label}</div><div class="value ${state.state}">${state.text}</div></div>`;
+      }).join('');
+    }
+
+    // 【修改點 2】目前年齡固定以「今天」為基準進行推算
+    function renderCurrentBirthday(birth) {
+      const target = $('birthday-current');
+      if (!target) return;
+      const config = getAcademicConfig();
+      if (!birth) {
+        target.innerHTML = '目前生日：<b>尚未選擇</b>';
+        return;
+      }
+      const today = new Date();
+      const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      
+      target.innerHTML = `目前生日：<b>${formatDate(birth)}</b>　｜　年齡基準：<b>${config.label} ${formatDate(config.referenceDate)}</b>　｜　目前年齡：<b>${formatBirthdayCompact(birth, todayIso)}</b>`;
+    }
+
+    // 【修改點 3】優先關注項目的查詢基準只保留學年度名稱，去除了日期括號
+    function renderModeSection(birth) {
+      const mode = buildAutoMode(birth);
+      const summary = $('mode-summary');
+      const cards = $('mode-cards');
+      const config = getAcademicConfig();
+      if (!summary || !cards) return;
+      
+      summary.innerHTML = `<b>目前建議優先查看：${mode.label}</b><br>${mode.why}<br>查詢基準：${config.label}`;
+      const items = [
+        { key: 'public', label: '公立／非營利', hint: getSelectedAcademicYear() === '115' ? '缺額公告、網路登記、抽籤與報到時間。' : '先看年齡區間；正式日期待教育局公告。' },
+        { key: 'private', label: '私立／準公共', hint: getSelectedAcademicYear() === '115' ? '簡章公告、5/1～6/30 登記區間、各園自訂時程。' : '先看年齡區間；正式日期待各園簡章公告。' },
+        { key: 'nursery', label: '托嬰銜接', hint: '算好退托日、有抽到幼幼班可以 9/1 銜接。' }
+      ];
+      cards.innerHTML = items.map((item) => `
+        <div class="card ${item.key === mode.key ? 'active' : ''}">
+          <div class="metric">${item.label}</div>
+          <div class="value ${item.key === mode.key ? 'ok' : 'muted'}" style="font-size:20px;">${item.key === mode.key ? '建議優先看' : '可參考'}</div>
+          <div class="sub" style="margin-top:8px;">${item.hint}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderTransitionSection(birth) {
+      const transition = buildTransitionInfo(birth);
+      const summary = $('transition-summary');
+      const cards = $('transition-cards');
+      if (summary) summary.innerHTML = `<b>${transition.headline}</b><br>${transition.reference}`;
+      if (cards) {
+        cards.innerHTML = transition.items.map((item) => `<div class="card"><div class="metric">銜接說明</div><div class="value" style="font-size:20px;">${item}</div></div>`).join('');
+      }
+    }
+
+    function render() {
+      const birth = currentBirthday || getBirthdayFromSelects();
+      const summary = $('summary-cards');
+      const ageSummary = $('age-summary');
+      const resultTable = $('result-table');
+      const publicSchedule = $('public-schedule');
+      const privateSchedule = $('private-schedule');
+      const config = getAcademicConfig();
+      const publicScheduleItems = config.publicSchedule;
+      const privateScheduleItems = getSelectedAcademicYear() === '115'
+        ? [
+            '各園須在登記前 1 個月公告招生規定。',
+            '登記時間區間須落在 115/5/1 ～ 115/6/30 之間。',
+            '登記至少 5 日，且至少包含 1 日假日。',
+            '若採現場登記，每日開放不得少於 2 小時。',
+            '登記截止後 3 日內進行抽籤。'
+          ]
+        : [
+            '116 學年度私立／準公共正式招生日期尚未公告。',
+            '目前先提供年齡判斷，實際仍以各園簡章與教育局公告為準。'
+          ];
+
+      if (publicSchedule) publicSchedule.innerHTML = publicScheduleItems.map((item) => `<span class="pill">${item}</span>`).join('');
+      if (privateSchedule) privateSchedule.innerHTML = privateScheduleItems.map((item) => `<span class="pill warn">${item}</span>`).join('');
+
+      if (!birth) {
+        if (summary) summary.innerHTML = `<div class="card"><div class="metric">公立／非營利 3 歲班</div><div class="value">請先選生日</div></div><div class="card"><div class="metric">私立／準公共</div><div class="value">請先選生日</div></div><div class="card"><div class="metric">公立／非營利 2 歲班</div><div class="value">請先選生日</div></div>`;
+        if (ageSummary) ageSummary.textContent = '請先從下拉選單選生日。';
+        if (resultTable) resultTable.innerHTML = '<tr><td colspan="4">請先選生日</td></tr>';
+        renderCurrentBirthday('');
+        renderModeSection('');
+        renderCountdownSection('');
+        return;
+      }
+
+      const public3 = inRange(birth, config.publicGeneral.start, config.publicGeneral.end);
+      const public2 = inRange(birth, config.publicTwo.start, config.publicTwo.end);
+      const privateEligible = inRange(birth, config.privateRange.start, config.privateRange.end);
+      const compactAge = formatBirthdayCompact(birth, config.referenceDate);
+      const publicDates = `${formatDate(config.publicGeneral.start)} ～ ${formatDate(config.publicGeneral.end)}`;
+      const public2Dates = `${formatDate(config.publicTwo.start)} ～ ${formatDate(config.publicTwo.end)}`;
+      const privateDates = `${formatDate(config.privateRange.start)} ～ ${formatDate(config.privateRange.end)}（國小前）`;
+      const publicDeadlineText = getSelectedAcademicYear() === '115'
+        ? '4/29 缺額公告，4/30 10:00～5/7 16:00 網路登記'
+        : '正式日期尚未公告，先看年齡區間';
+      const privateDeadlineText = getSelectedAcademicYear() === '115'
+        ? '各園簡章自訂，但登記區間須在 5/1～6/30 之間'
+        : '正式日期尚未公告，請等各園簡章與教育局公告';
+      const public3Yes = getSelectedAcademicYear() === '115'
+        ? '你的生日落在可報名區間內。'
+        : '你的生日落在 116 學年度可報名區間內。';
+      const privateYes = getSelectedAcademicYear() === '115'
+        ? '115 學年度通常可看準公共／私立招生簡章。'
+        : '116 學年度可先確認私立／準公共年齡資格。';
+
+      if (summary) {
+        summary.innerHTML = `
+          <div class="card"><div class="metric">公立／非營利 幼幼班 ( 2-3 歲)</div><div class="value ${public2 ? 'ok' : 'bad'}">${public2 ? '符合（需核定園所）' : '不符合'}</div></div>
+          <div class="card"><div class="metric">私立／準公共 幼幼班至入國小前( 2-6 歲)</div><div class="value ${privateEligible ? 'ok' : 'bad'}">${privateEligible ? '符合' : '不符合'}</div></div>
+          <div class="card"><div class="metric">公立／非營利 3 歲以上至入國小前( 3-6 歲)</div><div class="value ${public3 ? 'ok' : 'bad'}">${public3 ? '符合' : '不符合'}</div></div>
+        `;
+      }
+
+      // 【修改點 4】age-summary 中的年齡顯示，配合學年度名稱，並刪除（約X歲X個月）
+      if (ageSummary) {
+        ageSummary.innerHTML = `生日：<b>${formatDate(birth)}</b><br>查詢基準：<b>${config.label} ${formatDate(config.referenceDate)}</b><br>${config.label}入學時年齡：<b>${compactAge}</b><br>${public3 ? '<span class="pill ok">公立／非營利 3 歲班</span>' : ''}${privateEligible ? '<span class="pill ok">私立／準公共</span>' : ''}${public2 ? '<span class="pill warn">公立／非營利 2 歲班</span>' : ''}`;
+      }
+
+      const publicReminders = reminderTextForPublic(birth);
+      const privateReminders = reminderTextForPrivate(birth);
+
+      if (resultTable) {
+        resultTable.innerHTML = `
+          <tr><td>公立／非營利 2 歲班</td><td>${public2Dates}</td><td>${eligibilityText(public2, '你的生日落在 2 歲班區間內。', '你的生日不在 2 歲班區間。')}</td><td>${getSelectedAcademicYear() === '115' ? '同上，但須看園所是否核定招收 2 歲班' : '正式日期尚未公告，但仍須看園所是否核定招收 2 歲班'}</td></tr>
+          <tr><td>私立／準公共</td><td>${privateDates}</td><td>${eligibilityText(privateEligible, privateYes, '這個生日不在新北市幼兒園可報名年齡區間內。')}</td><td>${privateDeadlineText}</td></tr>
+          <tr><td>公立／非營利 3 歲班</td><td>${publicDates}</td><td>${eligibilityText(public3, public3Yes, '你的生日不在 3 歲班區間。')}</td><td>${publicDeadlineText}</td></tr>
+        `;
+      }
+
+      if (publicSchedule) {
+        const publicBlock = publicReminders.length ? publicReminders.map((t) => `<li>${t}</li>`).join('') : `<li>你的生日不在 ${config.label} 公立／非營利的一般 3 歲班區間。</li>`;
+        publicSchedule.insertAdjacentHTML('beforeend', `<div style="margin-top:12px;"><ul class="list">${publicBlock}</ul></div>`);
+      }
+      if (privateSchedule) {
+        const privateBlock = privateReminders.map((t) => `<li>${t}</li>`).join('');
+        privateSchedule.insertAdjacentHTML('beforeend', `<div style="margin-top:12px;"><ul class="list">${privateBlock}</ul></div>`);
+      }
+
+      renderCurrentBirthday(birth);
+      renderModeSection(birth);
+      renderCountdownSection(birth);
+    }
+
+    function populateSelectors() {
+      const ySel = $('birthday-year');
+      const mSel = $('birthday-month');
+      const dSel = $('birthday-day');
+      if (!ySel || !mSel || !dSel) return;
+
+      const bounds = getBirthdayBounds();
+      const minYear = bounds.minDate.getFullYear();
+      const maxYear = bounds.maxDate.getFullYear();
+
+      ySel.innerHTML = '';
+      mSel.innerHTML = '';
+      dSel.innerHTML = '';
+
+      for (let y = minYear; y <= maxYear; y++) {
+        const opt = document.createElement('option');
+        opt.value = String(y);
+        opt.textContent = `${y} 年`;
+        ySel.appendChild(opt);
+      }
+
+      for (let m = 1; m <= 12; m++) {
+        const opt = document.createElement('option');
+        opt.value = String(m).padStart(2, '0');
+        opt.textContent = `${m} 月`;
+        mSel.appendChild(opt);
+      }
+
+      for (let d = 1; d <= 31; d++) {
+        const opt = document.createElement('option');
+        opt.value = String(d).padStart(2, '0');
+        opt.textContent = `${d} 日`;
+        dSel.appendChild(opt);
+      }
+    }
+
+    function syncBirthdayFromSelectors() {
+      updateDayOptions();
+      currentBirthday = getBirthdayFromSelects();
+      saveBirthday(currentBirthday);
+      render();
+    }
+
+    function restoreBirthdayInput() {
+      const savedYear = loadAcademicYear();
+      if ($('academic-year')) $('academic-year').value = ACADEMIC_CONFIG[savedYear] ? savedYear : '115';
+      const saved = loadBirthday();
+      if (saved) {
+        setBirthdayFromIso(clampBirthdayIso(saved));
+        return;
+      }
+      setBirthdayFromIso(clampBirthdayIso('2023-09-01'));
+    }
+
+    function bindEvents() {
+      $('birthday-year').addEventListener('change', syncBirthdayFromSelectors);
+      $('birthday-month').addEventListener('change', syncBirthdayFromSelectors);
+      $('birthday-day').addEventListener('change', syncBirthdayFromSelectors);
+      $('academic-year').addEventListener('change', () => {
+        saveAcademicYear(getSelectedAcademicYear());
+        render();
+      });
+      $('btn-today').addEventListener('click', () => {
+        const today = new Date();
+        setBirthdayFromIso(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`);
+        saveBirthday(currentBirthday);
+        render();
+      });
+    }
+
+    function init() {
+      populateSelectors();
+      restoreBirthdayInput();
+      bindEvents();
+      saveBirthday(currentBirthday);
+      saveAcademicYear(getSelectedAcademicYear());
+      render();
+    }
+
+    init();
+  </script>
+</body>
+</html>
