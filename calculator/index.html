@@ -78,11 +78,11 @@
     
     /* 針對「對應的報名日期與提醒區間」放大字體與增加間距 */
     #public-schedule ul.list, #private-schedule ul.list {
-      font-size: 17px; /* 放大字體 */
-      color: #d9ebff;  /* 調亮文字顏色，增加對比 */
+      font-size: 17px;
+      color: #d9ebff;
     }
     #public-schedule ul.list li, #private-schedule ul.list li {
-      margin-bottom: 8px; /* 增加項目間的距離 */
+      margin-bottom: 8px;
     }
 
     .footer { color: var(--muted); font-size: 13px; margin-top: 18px; text-align: center; }
@@ -478,13 +478,7 @@
         ['私立／準公共登記截止', countdown.privateEnd],
         [`${config.label}開學／銜接日`, countdown.schoolStart]
       ];
-      if (birth) {
-        const parts = getAgeParts(birth, config.referenceDate);
-        if (parts) {
-          cards.push(['滿 2 歲日', addYearsUTC(parts.birth, 2).toISOString().slice(0, 10)]);
-          cards.push(['滿 3 歲日', addYearsUTC(parts.birth, 3).toISOString().slice(0, 10)]);
-        }
-      }
+      
       const publicStart = countDaysFromToday(countdown.publicStart);
       const publicEnd = countDaysFromToday(countdown.publicEnd);
       const privateStart = countDaysFromToday(countdown.privateStart);
@@ -584,15 +578,19 @@
       const publicDates = `${formatDate(config.publicGeneral.start)} ～ ${formatDate(config.publicGeneral.end)}`;
       const public2Dates = `${formatDate(config.publicTwo.start)} ～ ${formatDate(config.publicTwo.end)}`;
       const privateDates = `${formatDate(config.privateRange.start)} ～ ${formatDate(config.privateRange.end)}（國小前）`;
+      
       const publicDeadlineText = getSelectedAcademicYear() === '115'
         ? '4/29 缺額公告，4/30 10:00～5/7 16:00 網路登記'
         : '正式日期尚未公告，先看年齡區間';
+        
       const privateDeadlineText = getSelectedAcademicYear() === '115'
         ? '各園簡章自訂，但登記區間須在 5/1～6/30 之間'
         : '正式日期尚未公告，請等各園簡章與教育局公告';
+        
       const public3Yes = getSelectedAcademicYear() === '115'
         ? '你的生日落在可報名區間內。'
         : '你的生日落在 116 學年度可報名區間內。';
+        
       const privateYes = getSelectedAcademicYear() === '115'
         ? '115 學年度通常可看準公共／私立招生簡章。'
         : '116 學年度可先確認私立／準公共年齡資格。';
@@ -613,8 +611,9 @@
       const privateReminders = reminderTextForPrivate(birth);
 
       if (resultTable) {
+        // 【修改點】將公立／非營利 2 歲班要注意的日期，改為與 3 歲班相同的 publicDeadlineText，並附加但書
         resultTable.innerHTML = `
-          <tr><td>公立／非營利 2 歲班</td><td>${public2Dates}</td><td>${eligibilityText(public2, '你的生日落在 2 歲班區間內。', '你的生日不在 2 歲班區間。')}</td><td>${getSelectedAcademicYear() === '115' ? '同上，但須看園所是否核定招收 2 歲班' : '正式日期尚未公告，但仍須看園所是否核定招收 2 歲班'}</td></tr>
+          <tr><td>公立／非營利 2 歲班</td><td>${public2Dates}</td><td>${eligibilityText(public2, '你的生日落在 2 歲班區間內。', '你的生日不在 2 歲班區間。')}</td><td>${publicDeadlineText}，但須看園所是否核定招收 2 歲班</td></tr>
           <tr><td>私立／準公共</td><td>${privateDates}</td><td>${eligibilityText(privateEligible, privateYes, '這個生日不在新北市幼兒園可報名年齡區間內。')}</td><td>${privateDeadlineText}</td></tr>
           <tr><td>公立／非營利 3 歲班</td><td>${publicDates}</td><td>${eligibilityText(public3, public3Yes, '你的生日不在 3 歲班區間。')}</td><td>${publicDeadlineText}</td></tr>
         `;
