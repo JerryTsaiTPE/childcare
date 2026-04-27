@@ -98,7 +98,7 @@
   <div class="wrap">
     <section class="hero">
       <div>
-        <h1>新北市幼兒園招生日期計算機 (BETA)</h1>
+        <h1>新北市幼兒園招生日期計算機(BETA)</h1>
         <div class="sub">依 115 學年度新北市公開資料整理：<br>公立／非營利有全市統一時程；私立／準公共則以各園簡章為準，但仍受教育局公告的日期區間限制。</div>
       </div>
       <div class="sub" style="text-align:right;">版本：115 學年度<br>目的：輸入生日後，自動判斷可報名類型與提醒區間</div>
@@ -118,9 +118,8 @@
           <label for="academic-year">查詢基準</label>
           <select id="academic-year">
             <option value="115">115 學年度（2026/09/01）</option>
-            <option value="116">116 學年度（2027/09/01）</option>
+            <option value="116">116 學年度（2027/09/01）(未公布-暫定)</option>
           </select>
-          <div class="sub" style="margin-top:8px;">皆以 9/1 為年齡基準；116 學年度目前先提供年齡判斷。</div>
         </div>
         <button id="btn-today">帶入今天</button>
       </div>
@@ -611,7 +610,6 @@
       const privateReminders = reminderTextForPrivate(birth);
 
       if (resultTable) {
-        // 【修改點】將公立／非營利 2 歲班要注意的日期，改為與 3 歲班相同的 publicDeadlineText，並附加但書
         resultTable.innerHTML = `
           <tr><td>公立／非營利 2 歲班</td><td>${public2Dates}</td><td>${eligibilityText(public2, '你的生日落在 2 歲班區間內。', '你的生日不在 2 歲班區間。')}</td><td>${publicDeadlineText}，但須看園所是否核定招收 2 歲班</td></tr>
           <tr><td>私立／準公共</td><td>${privateDates}</td><td>${eligibilityText(privateEligible, privateYes, '這個生日不在新北市幼兒園可報名年齡區間內。')}</td><td>${privateDeadlineText}</td></tr>
