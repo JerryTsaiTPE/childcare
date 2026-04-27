@@ -1884,5 +1884,70 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T12:15:06+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      114,
+      115,
+      116
+    ],
+    "added": [
+      {
+        "name": "簡O宸",
+        "birthday": "2026-03-26",
+        "category": "一般市民",
+        "current_index": 114
+      },
+      {
+        "name": "胡O謙",
+        "birthday": "2026-02-24",
+        "category": "一般市民",
+        "current_index": 115
+      },
+      {
+        "name": "黃O佑",
+        "birthday": "2026-04-19",
+        "category": "一般市民",
+        "current_index": 116
+      }
+    ],
+    "added_details": [
+      {
+        "name": "簡O宸",
+        "birthday": "2026-03-26",
+        "category": "一般市民",
+        "current_index": 114
+      },
+      {
+        "name": "胡O謙",
+        "birthday": "2026-02-24",
+        "category": "一般市民",
+        "current_index": 115
+      },
+      {
+        "name": "黃O佑",
+        "birthday": "2026-04-19",
+        "category": "一般市民",
+        "current_index": 116
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 113,
+    "current_waiting_count": 116,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 114 號"
+    ],
+    "change_kind": "grow"
   }
 ]

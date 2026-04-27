@@ -2803,5 +2803,45 @@
     "removed_details": [],
     "added_details": [],
     "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-27",
+    "fetched_at": "2026-04-27T12:15:02+08:00",
+    "waiting_count": 48,
+    "last_month_enrolled": 1,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增 4 筆候補，最前面出現在 45 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "謝O羽",
+        "birthday": "2026-04-16",
+        "category": "優先收托",
+        "current_index": 45
+      },
+      {
+        "name": "巫O勛",
+        "birthday": "2026-04-11",
+        "category": "一般市民",
+        "current_index": 46
+      },
+      {
+        "name": "許O鵬",
+        "birthday": "2025-07-06",
+        "category": "一般市民",
+        "current_index": 47
+      },
+      {
+        "name": "莊O媗",
+        "birthday": "2025-01-08",
+        "category": "一般市民",
+        "current_index": 48
+      }
+    ],
+    "likely_age_out_previous_indexes": []
   }
 ]

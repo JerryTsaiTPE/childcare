@@ -4299,5 +4299,83 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T12:15:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      45,
+      46,
+      47,
+      48
+    ],
+    "added": [
+      {
+        "name": "謝O羽",
+        "birthday": "2026-04-16",
+        "category": "優先收托",
+        "current_index": 45
+      },
+      {
+        "name": "巫O勛",
+        "birthday": "2026-04-11",
+        "category": "一般市民",
+        "current_index": 46
+      },
+      {
+        "name": "許O鵬",
+        "birthday": "2025-07-06",
+        "category": "一般市民",
+        "current_index": 47
+      },
+      {
+        "name": "莊O媗",
+        "birthday": "2025-01-08",
+        "category": "一般市民",
+        "current_index": 48
+      }
+    ],
+    "added_details": [
+      {
+        "name": "謝O羽",
+        "birthday": "2026-04-16",
+        "category": "優先收托",
+        "current_index": 45
+      },
+      {
+        "name": "巫O勛",
+        "birthday": "2026-04-11",
+        "category": "一般市民",
+        "current_index": 46
+      },
+      {
+        "name": "許O鵬",
+        "birthday": "2025-07-06",
+        "category": "一般市民",
+        "current_index": 47
+      },
+      {
+        "name": "莊O媗",
+        "birthday": "2025-01-08",
+        "category": "一般市民",
+        "current_index": 48
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 44,
+    "current_waiting_count": 48,
+    "net_waiting_count_change": 4,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 4 筆候補，最前面出現在 45 號"
+    ],
+    "change_kind": "grow"
   }
 ]
