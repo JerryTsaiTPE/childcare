@@ -1332,5 +1332,57 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T13:15:08+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      94,
+      95
+    ],
+    "added": [
+      {
+        "name": "汪O廷",
+        "birthday": "2025-07-08",
+        "category": "優先收托",
+        "current_index": 94
+      },
+      {
+        "name": "簡O軒",
+        "birthday": "2024-10-09",
+        "category": "優先收托",
+        "current_index": 95
+      }
+    ],
+    "added_details": [
+      {
+        "name": "汪O廷",
+        "birthday": "2025-07-08",
+        "category": "優先收托",
+        "current_index": 94
+      },
+      {
+        "name": "簡O軒",
+        "birthday": "2024-10-09",
+        "category": "優先收托",
+        "current_index": 95
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 93,
+    "current_waiting_count": 95,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 94 號"
+    ],
+    "change_kind": "grow"
   }
 ]
