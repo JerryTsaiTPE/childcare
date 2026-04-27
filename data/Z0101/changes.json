@@ -1263,5 +1263,70 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T10:15:12+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      28,
+      29,
+      30
+    ],
+    "added": [
+      {
+        "name": "林O浠",
+        "birthday": "2025-07-09",
+        "category": "優先收托",
+        "current_index": 28
+      },
+      {
+        "name": "李O緹",
+        "birthday": "2026-04-15",
+        "category": "一般市民",
+        "current_index": 29
+      },
+      {
+        "name": "李O蘋",
+        "birthday": "2026-04-15",
+        "category": "一般市民",
+        "current_index": 30
+      }
+    ],
+    "added_details": [
+      {
+        "name": "林O浠",
+        "birthday": "2025-07-09",
+        "category": "優先收托",
+        "current_index": 28
+      },
+      {
+        "name": "李O緹",
+        "birthday": "2026-04-15",
+        "category": "一般市民",
+        "current_index": 29
+      },
+      {
+        "name": "李O蘋",
+        "birthday": "2026-04-15",
+        "category": "一般市民",
+        "current_index": 30
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 27,
+    "current_waiting_count": 30,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 28 號"
+    ],
+    "change_kind": "grow"
   }
 ]

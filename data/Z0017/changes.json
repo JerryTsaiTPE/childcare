@@ -1263,5 +1263,76 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T10:15:08+08:00",
+    "removed_previous_indexes": [
+      99
+    ],
+    "removed": [
+      {
+        "name": "李O丞",
+        "birthday": "2026-04-20",
+        "category": "一般市民",
+        "previous_index": 99
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "李O丞",
+        "birthday": "2026-04-20",
+        "category": "一般市民",
+        "previous_index": 99
+      }
+    ],
+    "added_current_indexes": [
+      99,
+      100
+    ],
+    "added": [
+      {
+        "name": "李O丞",
+        "birthday": "2026-04-20",
+        "category": "優先收托",
+        "current_index": 99
+      },
+      {
+        "name": "阮O福",
+        "birthday": "2025-12-15",
+        "category": "優先收托",
+        "current_index": 100
+      }
+    ],
+    "added_details": [
+      {
+        "name": "李O丞",
+        "birthday": "2026-04-20",
+        "category": "優先收托",
+        "current_index": 99
+      },
+      {
+        "name": "阮O福",
+        "birthday": "2025-12-15",
+        "category": "優先收托",
+        "current_index": 100
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 99,
+    "current_waiting_count": 100,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      99
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "99 號離開名單",
+      "新增 2 筆候補，最前面出現在 99 號"
+    ],
+    "change_kind": "grow"
   }
 ]

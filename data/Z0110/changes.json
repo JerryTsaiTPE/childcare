@@ -1263,5 +1263,44 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T10:15:08+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      27
+    ],
+    "added": [
+      {
+        "name": "陳O安",
+        "birthday": "2026-02-02",
+        "category": "一般市民",
+        "current_index": 27
+      }
+    ],
+    "added_details": [
+      {
+        "name": "陳O安",
+        "birthday": "2026-02-02",
+        "category": "一般市民",
+        "current_index": 27
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 26,
+    "current_waiting_count": 27,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 27 號"
+    ],
+    "change_kind": "grow"
   }
 ]

@@ -823,5 +823,27 @@
     "removed_details": [],
     "added_details": [],
     "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-27",
+    "fetched_at": "2026-04-27T10:15:07+08:00",
+    "waiting_count": 72,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 72 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "劉O杉",
+        "birthday": "2025-10-17",
+        "category": "一般市民",
+        "current_index": 72
+      }
+    ],
+    "likely_age_out_previous_indexes": []
   }
 ]
