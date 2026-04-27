@@ -72,14 +72,21 @@ def render_dashboard(
     .close-btn:hover { color: var(--danger); transform: scale(1.1); }
     .slide-panel-content { padding: 24px; overflow-y: auto; flex-grow: 1; display: grid; gap: 16px; align-content: flex-start; }
     
-    .dist-stats-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(0,0,0,0.2); border-radius: 12px; overflow: hidden; }
-    .dist-stats-table th, .dist-stats-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    /* 💡 優化：行政區統計清單樣式 (修復對齊問題) */
+    .dist-stats-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(0,0,0,0.2); border-radius: 12px; overflow: hidden; table-layout: fixed; }
+    .dist-stats-table th, .dist-stats-table td { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .dist-stats-table th { font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.02); text-transform: uppercase; letter-spacing: 1px; }
+    
+    /* 欄位寬度與對齊控制 */
+    .dist-col-name { text-align: left; width: 40%; }
+    .dist-col-num { text-align: right; width: 35%; }
+    .dist-col-pct { text-align: right; width: 25%; }
+
     .dist-stats-table td { font-size: 14px; }
     .dist-stats-table tr:last-child td { border-bottom: none; }
     .dist-name { font-weight: bold; color: var(--accent-2); }
-    .dist-count { text-align: right; font-weight: bold; font-family: Consolas, monospace; }
-    .dist-pct { text-align: right; color: var(--muted); font-size: 12px; font-family: Consolas, monospace; }
+    .dist-count { font-weight: bold; font-family: Consolas, monospace; }
+    .dist-pct { color: var(--muted); font-size: 12px; font-family: Consolas, monospace; }
 
     .tabs { display: flex; gap: 10px; margin-bottom: 18px; overflow-x: auto; padding-bottom: 4px; }
     .tab-btn { border: 1px solid var(--border); background: var(--tab-bg); color: var(--muted); border-radius: 999px; padding: 10px 16px; cursor: pointer; white-space: nowrap; flex: 0 0 auto; transition: 0.2s; }
@@ -175,10 +182,14 @@ def render_dashboard(
       </div>
       
       <div class="panel" style="padding: 15px; background: transparent; border-color: var(--border);">
-        <h3 style="margin-top:0; font-size:16px; color: var(--accent-2);">各行政區備取概況 (人頭數)</h3>
+        <h3 style="margin-top:0; font-size:16px; color: var(--accent-2);">各行政區備取概況</h3>
         <table class="dist-stats-table">
           <thead>
-            <tr><th>行政區</th><th style="text-align:right;">人數</th><th style="text-align:right;">占比</th></tr>
+            <tr>
+                <th class="dist-col-name">行政區</th>
+                <th class="dist-col-num">人數</th>
+                <th class="dist-col-pct">占比</th>
+            </tr>
           </thead>
           <tbody id="district-stats-body">
             </tbody>
@@ -414,7 +425,6 @@ def render_dashboard(
         return y >= 2;
     }
 
-    // 💡 修改：全區統計增加「占比」計算
     function calculateGlobalStats() {
         let totalCap = 0;
         let globalUniqueChildren = new Set();
@@ -456,14 +466,13 @@ def render_dashboard(
             
             sortedDistricts.forEach(d => {
                 const count = districtUniqueMap[d].size;
-                // 💡 計算占比：該區人數 / 全市總人數
                 const percentage = totalUniqueCount > 0 ? ((count / totalUniqueCount) * 100).toFixed(1) : 0;
                 
                 const row = `
                     <tr>
-                        <td class="dist-name">${d}</td>
-                        <td class="dist-count">${count} 人</td>
-                        <td class="dist-pct">${percentage}%</td>
+                        <td class="dist-name dist-col-name">${d}</td>
+                        <td class="dist-count dist-col-num">${count} 人</td>
+                        <td class="dist-pct dist-col-pct">${percentage}%</td>
                     </tr>`;
                 distBody.insertAdjacentHTML('beforeend', row);
             });
