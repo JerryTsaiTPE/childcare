@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>新北市幼兒園招生日期計算機（115學年度）</title>
+  <title>新北市幼兒園招生日期計算機（BETA）</title>
   <style>
     :root {
       --bg: #07111f;
@@ -75,6 +75,16 @@
     .pill.bad { color: #ffc6c6; border-color: rgba(255,123,123,.45); background: rgba(255,123,123,.12); }
     .note { padding: 14px 16px; border-radius: 14px; background: #091522; border: 1px solid #18324d; line-height: 1.75; color: #d9ebff; }
     .list { margin: 10px 0 0; padding-left: 20px; line-height: 1.8; }
+    
+    /* 針對「對應的報名日期與提醒區間」放大字體與增加間距 */
+    #public-schedule ul.list, #private-schedule ul.list {
+      font-size: 17px; /* 放大字體 */
+      color: #d9ebff;  /* 調亮文字顏色，增加對比 */
+    }
+    #public-schedule ul.list li, #private-schedule ul.list li {
+      margin-bottom: 8px; /* 增加項目間的距離 */
+    }
+
     .footer { color: var(--muted); font-size: 13px; margin-top: 18px; text-align: center; }
     .source-list a { color: var(--accent); text-decoration: none; }
     .source-list a:hover { text-decoration: underline; }
@@ -88,7 +98,7 @@
   <div class="wrap">
     <section class="hero">
       <div>
-        <h1>新北市幼兒園招生日期計算機</h1>
+        <h1>新北市幼兒園招生日期計算機 (BETA)</h1>
         <div class="sub">依 115 學年度新北市公開資料整理：<br>公立／非營利有全市統一時程；私立／準公共則以各園簡章為準，但仍受教育局公告的日期區間限制。</div>
       </div>
       <div class="sub" style="text-align:right;">版本：115 學年度<br>目的：輸入生日後，自動判斷可報名類型與提醒區間</div>
@@ -256,7 +266,6 @@
       return `${y}/${String(m).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
     }
 
-    // 【修改點 1】年齡格式增加空格，若尚未出生則顯示提示
     function formatBirthdayCompact(birthStr, refStr) {
       const parts = getAgeParts(birthStr, refStr);
       if (!parts) return '—';
@@ -487,7 +496,6 @@
       }).join('');
     }
 
-    // 【修改點 2】目前年齡固定以「今天」為基準進行推算
     function renderCurrentBirthday(birth) {
       const target = $('birthday-current');
       if (!target) return;
@@ -502,7 +510,6 @@
       target.innerHTML = `目前生日：<b>${formatDate(birth)}</b>　｜　年齡基準：<b>${config.label} ${formatDate(config.referenceDate)}</b>　｜　目前年齡：<b>${formatBirthdayCompact(birth, todayIso)}</b>`;
     }
 
-    // 【修改點 3】優先關注項目的查詢基準只保留學年度名稱，去除了日期括號
     function renderModeSection(birth) {
       const mode = buildAutoMode(birth);
       const summary = $('mode-summary');
@@ -598,7 +605,6 @@
         `;
       }
 
-      // 【修改點 4】age-summary 中的年齡顯示，配合學年度名稱，並刪除（約X歲X個月）
       if (ageSummary) {
         ageSummary.innerHTML = `生日：<b>${formatDate(birth)}</b><br>查詢基準：<b>${config.label} ${formatDate(config.referenceDate)}</b><br>${config.label}入學時年齡：<b>${compactAge}</b><br>${public3 ? '<span class="pill ok">公立／非營利 3 歲班</span>' : ''}${privateEligible ? '<span class="pill ok">私立／準公共</span>' : ''}${public2 ? '<span class="pill warn">公立／非營利 2 歲班</span>' : ''}`;
       }
