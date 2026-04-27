@@ -1240,5 +1240,57 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T09:15:11+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      58,
+      59
+    ],
+    "added": [
+      {
+        "name": "林O桐",
+        "birthday": "2026-01-23",
+        "category": "一般市民",
+        "current_index": 58
+      },
+      {
+        "name": "黃O瑜",
+        "birthday": "2026-04-22",
+        "category": "一般市民",
+        "current_index": 59
+      }
+    ],
+    "added_details": [
+      {
+        "name": "林O桐",
+        "birthday": "2026-01-23",
+        "category": "一般市民",
+        "current_index": 58
+      },
+      {
+        "name": "黃O瑜",
+        "birthday": "2026-04-22",
+        "category": "一般市民",
+        "current_index": 59
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 57,
+    "current_waiting_count": 59,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 58 號"
+    ],
+    "change_kind": "grow"
   }
 ]
