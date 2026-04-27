@@ -2214,5 +2214,33 @@
     "removed_details": [],
     "added_details": [],
     "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-27",
+    "fetched_at": "2026-04-27T18:15:02+08:00",
+    "waiting_count": 85,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "24 號離開名單",
+      "25 → 24（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 25,
+      "current_index": 24,
+      "name": "賴O瑄",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "駱O嘉",
+        "birthday": "2025-07-23",
+        "category": "一般市民",
+        "previous_index": 24
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": []
   }
 ]
