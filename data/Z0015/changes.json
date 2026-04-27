@@ -1378,5 +1378,57 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-27T15:15:08+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      115,
+      116
+    ],
+    "added": [
+      {
+        "name": "洪O絮",
+        "birthday": "2026-04-04",
+        "category": "一般市民",
+        "current_index": 115
+      },
+      {
+        "name": "張O宸",
+        "birthday": "2025-07-21",
+        "category": "一般市民",
+        "current_index": 116
+      }
+    ],
+    "added_details": [
+      {
+        "name": "洪O絮",
+        "birthday": "2026-04-04",
+        "category": "一般市民",
+        "current_index": 115
+      },
+      {
+        "name": "張O宸",
+        "birthday": "2025-07-21",
+        "category": "一般市民",
+        "current_index": 116
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 114,
+    "current_waiting_count": 116,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 115 號"
+    ],
+    "change_kind": "grow"
   }
 ]
