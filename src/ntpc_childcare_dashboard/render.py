@@ -71,6 +71,15 @@ def render_dashboard(
     .close-btn { background: transparent; border: none; color: var(--muted); font-size: 24px; cursor: pointer; transition: 0.2s; padding: 0; line-height: 1;}
     .close-btn:hover { color: var(--danger); transform: scale(1.1); }
     .slide-panel-content { padding: 24px; overflow-y: auto; flex-grow: 1; display: grid; gap: 16px; align-content: flex-start; }
+    
+    /* 💡 新增：行政區統計清單樣式 */
+    .dist-stats-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(0,0,0,0.2); border-radius: 12px; overflow: hidden; }
+    .dist-stats-table th, .dist-stats-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .dist-stats-table th { font-size: 13px; color: var(--muted); background: rgba(255,255,255,0.02); }
+    .dist-stats-table td { font-size: 15px; }
+    .dist-stats-table tr:last-child td { border-bottom: none; }
+    .dist-name { font-weight: bold; color: var(--accent-2); }
+    .dist-count { text-align: right; font-weight: bold; font-family: Consolas, monospace; }
 
     .tabs { display: flex; gap: 10px; margin-bottom: 18px; overflow-x: auto; padding-bottom: 4px; }
     .tab-btn { border: 1px solid var(--border); background: var(--tab-bg); color: var(--muted); border-radius: 999px; padding: 10px 16px; cursor: pointer; white-space: nowrap; flex: 0 0 auto; transition: 0.2s; }
@@ -156,13 +165,24 @@ def render_dashboard(
         <div class="value" id="global-org-count" style="color: var(--accent);">--</div>
       </div>
       <div class="card">
-        <div class="metric">中心核定總名額 <span style="font-size:12px">(加總)</span></div>
+        <div class="metric">公托總核定名額 <span style="font-size:12px">(加總)</span></div>
         <div class="value" id="global-cap-count">--</div>
       </div>
       <div class="card" style="border: 1px solid var(--danger);">
         <div class="metric">目前排隊備取總人數 <span style="font-size:12px; color:var(--danger)">(已去除重複)</span></div>
         <div class="value" id="global-unique-waitlist">--</div>
         <div class="sub" style="margin-top: 8px; font-size: 13px;">※ 比對條件：<br>「姓名 + 生日 + 報名身分別」完全相同者，視為同一幼兒，僅計算 1 人。</div>
+      </div>
+      
+      <div class="panel" style="padding: 15px; background: transparent; border-color: var(--border);">
+        <h3 style="margin-top:0; font-size:16px; color: var(--accent-2);">各行政區備取概況 (人頭數)</h3>
+        <table class="dist-stats-table">
+          <thead>
+            <tr><th>行政區</th><th style="text-align:right;">備取人數</th></tr>
+          </thead>
+          <tbody id="district-stats-body">
+            </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -394,13 +414,18 @@ def render_dashboard(
         return y >= 2;
     }
 
+    // 💡 修改：計算全區統計，並加入各區備取細節
     function calculateGlobalStats() {
         let totalCap = 0;
-        let uniqueChildren = new Set();
+        let globalUniqueChildren = new Set();
+        let districtUniqueMap = {}; // { "板橋區": Set(), ... }
 
         orgIds.forEach(id => {
             const snap = allData[id].snapshot;
             if(!snap) return;
+            
+            const dist = snap.org.distdesc || '其他地區';
+            if (!districtUniqueMap[dist]) districtUniqueMap[dist] = new Set();
             
             let cap = parseInt(snap.org.capnum, 10);
             if (!isNaN(cap)) totalCap += cap;
@@ -408,7 +433,8 @@ def render_dashboard(
             if (snap.entries) {
                 snap.entries.forEach(entry => {
                     const key = `${entry.encname}|${entry.cbirthday}|${entry.displaydesc || ''}`;
-                    uniqueChildren.add(key);
+                    globalUniqueChildren.add(key);
+                    districtUniqueMap[dist].add(key);
                 });
             }
         });
@@ -419,7 +445,21 @@ def render_dashboard(
         
         if (goEl) goEl.textContent = orgIds.length + ' 間';
         if (gcEl) gcEl.textContent = totalCap + ' 名';
-        if (guEl) guEl.textContent = '約 ' + uniqueChildren.size + ' 人';
+        if (guEl) guEl.textContent = '約 ' + globalUniqueChildren.size + ' 人';
+
+        // 💡 渲染行政區清單
+        const distBody = $('district-stats-body');
+        if (distBody) {
+            distBody.innerHTML = '';
+            // 排序行政區 (依人數由多到少)
+            const sortedDistricts = Object.keys(districtUniqueMap).sort((a, b) => districtUniqueMap[b].size - districtUniqueMap[a].size);
+            
+            sortedDistricts.forEach(d => {
+                const count = districtUniqueMap[d].size;
+                const row = `<tr><td class="dist-name">${d}</td><td class="dist-count">${count} 人</td></tr>`;
+                distBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
     }
 
     function toggleStatsPanel() {
@@ -685,12 +725,8 @@ def render_dashboard(
 
             initDateSelector();
             
-            // 💡 修改：總覽區的近一週走勢，只取最後 7 筆資料
             drawChart('history-chart', getDailyHistory().slice(-7), 'date');
-            
-            // 💡 新增：歷史區的近一個月走勢，取最後 30 筆資料
             drawChart('monthly-chart', getDailyHistory().slice(-30), 'date');
-            
             renderHourlyChart();
             
         } catch(err) {
@@ -800,7 +836,6 @@ def render_dashboard(
             html += `<text x="${x}" y="${height - 10}" fill="#9bb2c8" font-size="11" text-anchor="middle">${labelText}</text>`;
         }
         
-        // 💡 修改：精準截斷時間字串，移除時區資訊 (例如 +08:00 或 Z)
         const fullTime = p.fetched_at.substring(0, 19).replace('T', ' ');
         const tooltipHtml = `${fullTime}<br><span style='color:${color}; font-size:16px; font-weight:bold;'>${p.waiting_count} 人</span>`;
         
