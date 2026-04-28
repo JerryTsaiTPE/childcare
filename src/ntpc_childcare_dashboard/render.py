@@ -167,7 +167,7 @@ def render_dashboard(
     <div class="slide-panel-content">
       <div class="card">
         <div class="metric">公托中心總數</div>
-        <div class="value" id="global-org-count" style="color: var(--accent);">--</div>
+        <div class="value" id="global-org-count">--</div>
       </div>
       <div class="card">
         <div class="metric">公托總核定名額 <span style="font-size:12px">(加總)</span></div>
