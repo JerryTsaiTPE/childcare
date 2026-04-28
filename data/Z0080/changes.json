@@ -2247,5 +2247,70 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-28T10:15:11+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      42,
+      43,
+      44
+    ],
+    "added": [
+      {
+        "name": "黃O瑜",
+        "birthday": "2026-04-22",
+        "category": "一般市民",
+        "current_index": 42
+      },
+      {
+        "name": "謝O晞",
+        "birthday": "2024-10-01",
+        "category": "一般市民",
+        "current_index": 43
+      },
+      {
+        "name": "鄭O安",
+        "birthday": "2026-04-23",
+        "category": "一般市民",
+        "current_index": 44
+      }
+    ],
+    "added_details": [
+      {
+        "name": "黃O瑜",
+        "birthday": "2026-04-22",
+        "category": "一般市民",
+        "current_index": 42
+      },
+      {
+        "name": "謝O晞",
+        "birthday": "2024-10-01",
+        "category": "一般市民",
+        "current_index": 43
+      },
+      {
+        "name": "鄭O安",
+        "birthday": "2026-04-23",
+        "category": "一般市民",
+        "current_index": 44
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 41,
+    "current_waiting_count": 44,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 42 號"
+    ],
+    "change_kind": "grow"
   }
 ]
