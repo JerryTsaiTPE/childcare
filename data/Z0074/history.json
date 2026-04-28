@@ -1736,5 +1736,23 @@
     "enroll_delta": 0,
     "prev_enroll": 173,
     "curr_enroll": 173
+  },
+  {
+    "date": "2026-04-28",
+    "fetched_at": "2026-04-28T23:15:09+08:00",
+    "waiting_count": 60,
+    "last_month_enrolled": 3,
+    "changed": false,
+    "change_kind": "stable",
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 173,
+    "curr_enroll": 173
   }
 ]
