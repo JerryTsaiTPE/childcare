@@ -504,7 +504,6 @@ def render_dashboard(
             latest.likely_withdrawn_previous_indexes = latest.likely_withdrawn_previous_indexes || [];
             latest.moved = latest.moved || [];
             
-            // 💡 優化：使用後端提供的 enroll_delta 進行絕對精準的比對
             if (latest.fetched_at && latest.removed_previous_indexes.length > 0) {
                 const matchingHistory = historyData.find(h => h.fetched_at === latest.fetched_at);
                 if (matchingHistory && matchingHistory.removed_details) {
@@ -512,7 +511,6 @@ def render_dashboard(
                     let strictAdmitted = [];
                     let strictWithdrawn = [];
                     
-                    // 取得入托變化人數 (如果沒有此屬性代表是舊資料，Fallback設為0由下方處理)
                     let enrollDelta = matchingHistory.hasOwnProperty('enroll_delta') ? matchingHistory.enroll_delta : 0;
                     let useFallback = !matchingHistory.hasOwnProperty('enroll_delta');
 
@@ -526,19 +524,16 @@ def render_dashboard(
                         }
                     });
                     
-                    // 依照原序號(名次)排序，序號越小代表越有資格遞補
                     nonAgeOuts.sort((a, b) => a.previous_index - b.previous_index);
                     
                     nonAgeOuts.forEach((rd, idx) => {
                         if (useFallback) {
-                            // 舊版邏輯：用前20名瞎猜
                             if ((latest.likely_admitted_previous_indexes || []).includes(rd.previous_index) || rd.previous_index <= 20) {
                                 strictAdmitted.push(rd.previous_index);
                             } else {
                                 strictWithdrawn.push(rd.previous_index);
                             }
                         } else {
-                            // 💡 新版精準邏輯：排序前 N 名就是真正被遞補進去的人
                             if (idx < enrollDelta) {
                                 strictAdmitted.push(rd.previous_index);
                             } else {
@@ -713,7 +708,6 @@ def render_dashboard(
                     if (item.removed_details && item.removed_details.length > 0) {
                         detailsHtml += '<div style="margin-top:10px;"><table class="panel-table" style="font-size:13px;"><thead><tr><th>原序號</th><th>兒童姓名</th><th>當時歲數</th><th>身分別</th><th>狀態</th><th style="color:var(--accent)">目前其他候補</th></tr></thead><tbody>';
                         
-                        // 💡 優化：歷史紀錄時間軸的精準入托判斷
                         let enrollDelta = item.hasOwnProperty('enroll_delta') ? item.enroll_delta : 0;
                         let useFallback = !item.hasOwnProperty('enroll_delta');
                         
@@ -763,13 +757,28 @@ def render_dashboard(
                         detailsHtml += '</tbody></table></div>';
                     }
 
+                    // 💡 新增：在歷史紀錄標題列顯示入托人數變化 (從 X 到 Y)
+                    let enrollDeltaHtml = '';
+                    if (item.hasOwnProperty('enroll_delta') && item.enroll_delta !== 0) {
+                        let deltaColor = item.enroll_delta > 0 ? 'var(--ok)' : 'var(--danger)';
+                        if (item.hasOwnProperty('prev_enroll') && item.hasOwnProperty('curr_enroll')) {
+                            enrollDeltaHtml = `<div style="color:${deltaColor}; font-weight:bold; border-left: 2px solid ${deltaColor}; padding-left: 8px; margin-left: 4px;">入托數：${item.prev_enroll} → ${item.curr_enroll} 人</div>`;
+                        } else {
+                            let deltaSign = item.enroll_delta > 0 ? '+' : '';
+                            enrollDeltaHtml = `<div style="color:${deltaColor}; font-weight:bold; border-left: 2px solid ${deltaColor}; padding-left: 8px; margin-left: 4px;">入托變化：${deltaSign}${item.enroll_delta} 人</div>`;
+                        }
+                    }
+
                     const linesArray = item.summary_lines || ['名單無變動'];
                     const lines = linesArray.map((line) => `<li>${line}</li>`).join('');
                     let highlight = item.highlight_shift ? `<div class="timeline-highlight">代表性變動：${item.highlight_shift.previous_index} → ${item.highlight_shift.current_index}（${item.highlight_shift.name}）</div>` : '';
                     card.innerHTML = `
                         <div class="timeline-meta">
                             <div>${fmt.format(new Date(item.fetched_at))}</div>
-                            <div style="color:var(--accent-2)">總數：${item.waiting_count} 人</div>
+                            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                                <div style="color:var(--accent-2)">候補總數：${item.waiting_count} 人</div>
+                                ${enrollDeltaHtml}
+                            </div>
                         </div>
                         <ul class="timeline-lines">${lines}</ul>
                         ${highlight}${detailsHtml}

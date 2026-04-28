@@ -136,7 +136,7 @@ def main() -> int:
         if not isinstance(previous_snapshot, dict): previous_snapshot = {}
         previous_entries = previous_snapshot.get('entries', [])
 
-        # 💡 新增：精確計算本次與上次「入托總數」的變化量 (Delta)
+        # 計算本次與上次「入托總數」的變化量 (Delta) 與前後數值
         prev_enroll = 0
         if previous_snapshot and 'org' in previous_snapshot and 'enroll_count' in previous_snapshot['org']:
             try:
@@ -161,8 +161,10 @@ def main() -> int:
             current_count=snapshot['waiting_count'],
         )
         
-        # 💡 新增：將變化量塞入變動紀錄中，交給前端處理
+        # 💡 將變化量與前後數值都塞入變動紀錄中
         change_record['enroll_delta'] = enroll_delta
+        change_record['prev_enroll'] = prev_enroll
+        change_record['curr_enroll'] = curr_enroll
 
         history = load_json(history_path, [])
         if not isinstance(history, list): history = []

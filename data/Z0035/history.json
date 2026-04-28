@@ -3432,5 +3432,27 @@
     "removed_details": [],
     "added_details": [],
     "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-28",
+    "fetched_at": "2026-04-28T15:38:31+08:00",
+    "waiting_count": 41,
+    "last_month_enrolled": 3,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 41 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "廖O曦",
+        "birthday": "2024-11-22",
+        "category": "優先收托",
+        "current_index": 41
+      }
+    ],
+    "likely_age_out_previous_indexes": []
   }
 ]
