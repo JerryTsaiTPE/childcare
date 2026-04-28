@@ -2128,5 +2128,38 @@
     "enroll_delta": 0,
     "prev_enroll": 115,
     "curr_enroll": 115
+  },
+  {
+    "date": "2026-04-29",
+    "fetched_at": "2026-04-29T01:15:06+08:00",
+    "waiting_count": 70,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "13 號離開名單",
+      "14 → 13（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 14,
+      "current_index": 13,
+      "name": "陳O融",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "陳O錡",
+        "birthday": "2024-04-29",
+        "category": "優先收托",
+        "previous_index": 13
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [
+      13
+    ],
+    "enroll_delta": 0,
+    "prev_enroll": 115,
+    "curr_enroll": 115
   }
 ]
