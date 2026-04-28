@@ -319,10 +319,10 @@ def render_dashboard(
 
     <section id="tab-all-list" class="tab-panel">
       <div class="panel">
-        <h2>所有名單 <span class="sub" style="font-size:14px; font-weight:normal; margin-left:10px; color:var(--danger);">※ 紅色字體代表該幼兒已滿兩歲或距滿兩歲不到 14 天，即將被系統自動取消候補。</span></h2>
+        <h2>所有名單 <span class="sub" style="font-size:14px; font-weight:normal; margin-left:10px; color:var(--danger);">※ 紅色字體代表該幼兒距滿兩歲不到 14 天，即將被系統自動取消候補。</span></h2>
         
         <div class="sub" style="margin-bottom: 15px; color: var(--muted); border-left: 3px solid var(--accent); padding-left: 10px; font-size: 13px;">
-          如果同步候補超過一家公托屬於正常現象，去識別化容易導致同名同生日，依規定一人同時只能候補兩間。
+          如果[同步候補]顯示超過一家公托，是因去識別化導致同名同生日(或雙胞胎姓名相似)，依規定一人同時只能申請備取兩間。
         </div>
 
         <div class="control-row" style="margin-bottom:15px;">
