@@ -524,7 +524,7 @@ def render_dashboard(
                 });
                 laEl.innerHTML = htmlStr;
             } else {
-                laEl.innerHTML = '<span style="color:var(--muted)">近期尚無入托紀錄</span>';
+                laEl.innerHTML = '<span style="color:var(--muted)">等待中..</span>';
             }
         }
     }
@@ -758,7 +758,7 @@ def render_dashboard(
                     }
 
                     if (item.removed_details && item.removed_details.length > 0) {
-                        detailsHtml += '<div style="margin-top:10px;"><table class="panel-table" style="font-size:13px;"><thead><tr><th>原序號</th><th>兒童姓名</th><th>當時歲數</th><th>身分別</th><th>狀態</th><th style="color:var(--accent)">目前其他候補</th></tr></thead><tbody>';
+                        detailsHtml += '<div style="margin-top:10px;"><table class="panel-table" style="font-size:13px;"><thead><tr><th>原序號</th><th>兒童姓名</th><th>當時歲數</th><th>身分別</th><th>狀態</th><th style="color:var(--accent)">同步候補(目前)</th></tr></thead><tbody>';
                         
                         let enrollDelta = item.hasOwnProperty('enroll_delta') ? item.enroll_delta : 0;
                         let useFallback = !item.hasOwnProperty('enroll_delta');
@@ -822,12 +822,12 @@ def render_dashboard(
 
                     const linesArray = item.summary_lines || ['名單無變動'];
                     const lines = linesArray.map((line) => `<li>${line}</li>`).join('');
-                    let highlight = item.highlight_shift ? `<div class="timeline-highlight">代表性變動：${item.highlight_shift.previous_index} → ${item.highlight_shift.current_index}（${item.highlight_shift.name}）</div>` : '';
+                    let highlight = item.highlight_shift ? `<div class="timeline-highlight">排序變動：${item.highlight_shift.previous_index} → ${item.highlight_shift.current_index}（${item.highlight_shift.name}）</div>` : '';
                     card.innerHTML = `
                         <div class="timeline-meta">
                             <div>${fmt.format(new Date(item.fetched_at))}</div>
                             <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-                                <div style="color:var(--accent-2)">候補總數：${item.waiting_count} 人</div>
+                                <div style="color:var(--accent-2)">當下候補總數：${item.waiting_count} 人</div>
                                 ${enrollDeltaHtml}
                             </div>
                         </div>
