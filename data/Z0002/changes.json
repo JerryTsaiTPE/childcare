@@ -2991,5 +2991,62 @@
       "2 → 1（只顯示第一個代表性變動）"
     ],
     "change_kind": "shrink"
+  },
+  {
+    "fetched_at": "2026-04-28T14:50:52+08:00",
+    "removed_previous_indexes": [
+      90
+    ],
+    "removed": [
+      {
+        "name": "譚O喬",
+        "birthday": "2025-12-18",
+        "category": "一般市民",
+        "previous_index": 90
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "譚O喬",
+        "birthday": "2025-12-18",
+        "category": "一般市民",
+        "previous_index": 90
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "洪O希",
+        "birthday": "2026-02-23",
+        "category": "一般市民",
+        "previous_index": 91,
+        "current_index": 90,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 91,
+    "current_waiting_count": 90,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      90
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 91,
+      "current_index": 90,
+      "name": "洪O希",
+      "delta": -1
+    },
+    "summary_lines": [
+      "90 號離開名單",
+      "91 → 90（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 0
   }
 ]

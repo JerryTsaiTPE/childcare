@@ -27,7 +27,6 @@ from ntpc_childcare_dashboard.tracker import (
     parse_standby_payload,
 )
 
-# 💡 升級版：支援 [區域] 標籤與行內 #註解 的讀取邏輯
 def get_target_orgs():
     org_file = ROOT / 'scripts' / 'org_ids.txt'
     if not org_file.exists():
@@ -37,10 +36,8 @@ def get_target_orgs():
     with open(org_file, 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
-            # 略過空行、全行註解、以及 [區域] 標籤
             if not line or line.startswith('#') or line.startswith('['):
                 continue
-            # 處理行內註解，例如 "Z0014 #淡水淡海"，只取 # 前面的部分
             org_id = line.split('#')[0].strip()
             if org_id:
                 orgs.append(org_id)
@@ -99,9 +96,7 @@ def main() -> int:
         print(f"獲取公托清單失敗: {e}")
         org_info_map = {}
 
-    # 💡 載入網頁說明快取
     info_cache = load_json(CACHE_FILE, {})
-
     all_org_data = {} 
 
     for org_id in TARGET_ORGS:
@@ -116,7 +111,6 @@ def main() -> int:
 
         org_info = org_info_map.get(org_id, {"orgid": org_id, "orgname": "未知中心", "orgshort": org_id, "distdesc": "未知"})
 
-        # --- 步驟 1: 高速抓取 API 的 JSON 數據 ---
         api_standby = f'https://lovebaby.sw.ntpc.gov.tw/webapi/NpsApply/GetStandbyList?orgid={org_id}'
         try:
             standby_payload = fetch_json(api_standby)
@@ -124,7 +118,6 @@ def main() -> int:
             print(f"   ⚠️ 抓取 {org_id} API 失敗，略過。")
             continue
 
-        # --- 步驟 2: 從快取讀取網頁文字 (瞬間完成) ---
         cached_org_info = info_cache.get(org_id, {})
         center_memo = cached_org_info.get("related_info_text", "尚未抓取中心說明，請手動執行一次 run_slow_scraper.bat")
         center_validity = cached_org_info.get("validity_text", "未知 (需執行快取更新)")
@@ -143,6 +136,23 @@ def main() -> int:
         if not isinstance(previous_snapshot, dict): previous_snapshot = {}
         previous_entries = previous_snapshot.get('entries', [])
 
+        # 💡 新增：精確計算本次與上次「入托總數」的變化量 (Delta)
+        prev_enroll = 0
+        if previous_snapshot and 'org' in previous_snapshot and 'enroll_count' in previous_snapshot['org']:
+            try:
+                prev_enroll = int(previous_snapshot['org']['enroll_count'])
+            except:
+                pass
+                
+        curr_enroll = 0
+        if 'org' in snapshot and 'enroll_count' in snapshot['org']:
+            try:
+                curr_enroll = int(snapshot['org']['enroll_count'])
+            except:
+                pass
+                
+        enroll_delta = curr_enroll - prev_enroll if previous_snapshot else 0
+
         diff = diff_snapshots(previous_entries, snapshot['entries'])
         change_record = build_change_record(
             fetched_at=fetched_at,
@@ -150,6 +160,9 @@ def main() -> int:
             previous_count=(previous_snapshot or {}).get('waiting_count'),
             current_count=snapshot['waiting_count'],
         )
+        
+        # 💡 新增：將變化量塞入變動紀錄中，交給前端處理
+        change_record['enroll_delta'] = enroll_delta
 
         history = load_json(history_path, [])
         if not isinstance(history, list): history = []
@@ -187,14 +200,10 @@ def main() -> int:
         print("沒有成功抓取任何中心資料，終止執行。")
         return 1
 
-    # ==========================================
-    # 🔍 全域交叉比對重複登記邏輯 (包含身分別)
-    # ==========================================
     global_map = {}
     for oid, data in all_org_data.items():
         o_name = data['snapshot']['org']['orgshort']
         for entry in data['snapshot']['entries']:
-            # 💡 在這裡加上 displaydesc 作為比對條件
             key = (entry['encname'], entry['cbirthday'], entry.get('displaydesc', '')) 
             if key not in global_map: 
                 global_map[key] = []
@@ -202,7 +211,6 @@ def main() -> int:
 
     for oid, data in all_org_data.items():
         for entry in data['snapshot']['entries']:
-            # 💡 在這裡也加上 displaydesc
             key = (entry['encname'], entry['cbirthday'], entry.get('displaydesc', ''))
             others = [m for m in global_map[key] if m['org_id'] != oid]
             entry['sync_list'] = [f"{o['org_name']}({o['index']})" for o in others]

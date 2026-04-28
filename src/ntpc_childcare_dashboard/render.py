@@ -72,12 +72,10 @@ def render_dashboard(
     .close-btn:hover { color: var(--danger); transform: scale(1.1); }
     .slide-panel-content { padding: 24px; overflow-y: auto; flex-grow: 1; display: grid; gap: 16px; align-content: flex-start; }
     
-    /* 💡 優化：行政區統計清單樣式 (修復對齊問題) */
     .dist-stats-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(0,0,0,0.2); border-radius: 12px; overflow: hidden; table-layout: fixed; }
     .dist-stats-table th, .dist-stats-table td { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .dist-stats-table th { font-size: 12px; color: var(--muted); background: rgba(255,255,255,0.02); text-transform: uppercase; letter-spacing: 1px; }
     
-    /* 欄位寬度與對齊控制 */
     .dist-col-name { text-align: left; width: 40%; }
     .dist-col-num { text-align: right; width: 35%; }
     .dist-col-pct { text-align: right; width: 25%; }
@@ -229,8 +227,8 @@ def render_dashboard(
         <div class="card"><div class="metric">中心核定名額 / 已入托</div><div class="value" id="capacity"></div></div>
         <div class="card"><div class="metric">上月入托人數</div><div class="value" id="lastnum"></div></div>
         <div class="card"><div class="metric">近一次離開名單人數</div><div class="value small" id="removed-count"></div><div class="sub" id="removed-summary"></div></div>
-        <div class="card"><div class="metric">推測遞補/入托</div><div class="value small" id="admitted-count"></div><div class="sub" id="admitted-summary"></div></div>
-        <div class="card"><div class="metric">推測自行取消候補</div><div class="value small" id="withdrawn-count"></div><div class="sub" id="withdrawn-summary"></div></div>
+        <div class="card"><div class="metric">精準判斷：遞補入托</div><div class="value small" id="admitted-count"></div><div class="sub" id="admitted-summary"></div></div>
+        <div class="card"><div class="metric">精準判斷：自行取消候補</div><div class="value small" id="withdrawn-count"></div><div class="sub" id="withdrawn-summary"></div></div>
         <div class="card"><div class="metric">屆齡取消</div><div class="value small" id="age-out-count"></div><div class="sub" id="age-out-summary"></div></div>
         <div class="card"><div class="metric">近一次影響人數</div><div class="value small" id="moved-count"></div><div class="sub" id="moved-summary"></div></div>
       </section>
@@ -259,7 +257,7 @@ def render_dashboard(
               <div class="chips" id="removed-chips"></div>
             </div>
             <div class="list-block">
-              <h3>推測為遞補入托 (20號內)</h3>
+              <h3>遞補入托</h3>
               <div class="chips" id="admitted-chips"></div>
             </div>
             <div class="list-block">
@@ -267,7 +265,7 @@ def render_dashboard(
               <div class="chips" id="age-out-chips"></div>
             </div>
             <div class="list-block">
-              <h3>推測為自行取消 (20號外)</h3>
+              <h3>自行取消候補</h3>
               <div class="chips" id="withdrawn-chips"></div>
             </div>
             <div class="list-block">
@@ -506,6 +504,7 @@ def render_dashboard(
             latest.likely_withdrawn_previous_indexes = latest.likely_withdrawn_previous_indexes || [];
             latest.moved = latest.moved || [];
             
+            // 💡 優化：使用後端提供的 enroll_delta 進行絕對精準的比對
             if (latest.fetched_at && latest.removed_previous_indexes.length > 0) {
                 const matchingHistory = historyData.find(h => h.fetched_at === latest.fetched_at);
                 if (matchingHistory && matchingHistory.removed_details) {
@@ -513,15 +512,38 @@ def render_dashboard(
                     let strictAdmitted = [];
                     let strictWithdrawn = [];
                     
+                    // 取得入托變化人數 (如果沒有此屬性代表是舊資料，Fallback設為0由下方處理)
+                    let enrollDelta = matchingHistory.hasOwnProperty('enroll_delta') ? matchingHistory.enroll_delta : 0;
+                    let useFallback = !matchingHistory.hasOwnProperty('enroll_delta');
+
+                    let nonAgeOuts = [];
+                    
                     matchingHistory.removed_details.forEach(rd => {
                         if (isStrictlyTwo(rd.birthday, matchingHistory.fetched_at)) {
                             strictAgeOut.push(rd.previous_index);
-                        } 
-                        else if ((latest.likely_admitted_previous_indexes || []).includes(rd.previous_index) || rd.previous_index <= 20) {
-                            strictAdmitted.push(rd.previous_index);
-                        } 
-                        else {
-                            strictWithdrawn.push(rd.previous_index);
+                        } else {
+                            nonAgeOuts.push(rd);
+                        }
+                    });
+                    
+                    // 依照原序號(名次)排序，序號越小代表越有資格遞補
+                    nonAgeOuts.sort((a, b) => a.previous_index - b.previous_index);
+                    
+                    nonAgeOuts.forEach((rd, idx) => {
+                        if (useFallback) {
+                            // 舊版邏輯：用前20名瞎猜
+                            if ((latest.likely_admitted_previous_indexes || []).includes(rd.previous_index) || rd.previous_index <= 20) {
+                                strictAdmitted.push(rd.previous_index);
+                            } else {
+                                strictWithdrawn.push(rd.previous_index);
+                            }
+                        } else {
+                            // 💡 新版精準邏輯：排序前 N 名就是真正被遞補進去的人
+                            if (idx < enrollDelta) {
+                                strictAdmitted.push(rd.previous_index);
+                            } else {
+                                strictWithdrawn.push(rd.previous_index);
+                            }
                         }
                     });
                     
@@ -690,14 +712,38 @@ def render_dashboard(
 
                     if (item.removed_details && item.removed_details.length > 0) {
                         detailsHtml += '<div style="margin-top:10px;"><table class="panel-table" style="font-size:13px;"><thead><tr><th>原序號</th><th>兒童姓名</th><th>當時歲數</th><th>身分別</th><th>狀態</th><th style="color:var(--accent)">目前其他候補</th></tr></thead><tbody>';
+                        
+                        // 💡 優化：歷史紀錄時間軸的精準入托判斷
+                        let enrollDelta = item.hasOwnProperty('enroll_delta') ? item.enroll_delta : 0;
+                        let useFallback = !item.hasOwnProperty('enroll_delta');
+                        
+                        let nonAgeOuts = [];
+                        item.removed_details.forEach(rd => {
+                            if (!isStrictlyTwo(rd.birthday, item.fetched_at)) {
+                                nonAgeOuts.push(rd);
+                            }
+                        });
+                        nonAgeOuts.sort((a, b) => a.previous_index - b.previous_index);
+
                         item.removed_details.forEach(rd => {
                             const age = getAgeString(rd.birthday, item.fetched_at);
-                            let type = '推測自行取消';
+                            let type = '自行取消';
+                            
                             if (isStrictlyTwo(rd.birthday, item.fetched_at)) {
                                 type = '<span style="color:var(--danger)">屆齡取消</span>';
-                            } else if ((item.likely_admitted_previous_indexes || []).includes(rd.previous_index) || rd.previous_index <= 20) {
-                                type = '<span style="color:var(--ok)">推測遞補入托</span>';
+                            } else {
+                                if (useFallback) {
+                                    if ((item.likely_admitted_previous_indexes || []).includes(rd.previous_index) || rd.previous_index <= 20) {
+                                        type = '<span style="color:var(--ok)">遞補入托</span>';
+                                    }
+                                } else {
+                                    let rank = nonAgeOuts.findIndex(x => x.previous_index === rd.previous_index);
+                                    if (rank !== -1 && rank < enrollDelta) {
+                                        type = '<span style="color:var(--ok)">遞補入托</span>';
+                                    }
+                                }
                             }
+                            
                             let syncOrgs = [];
                             orgIds.forEach(oid => {
                                 if (oid !== currentOrgId) {

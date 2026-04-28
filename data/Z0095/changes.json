@@ -5290,5 +5290,45 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-28T14:50:47+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      47
+    ],
+    "added": [
+      {
+        "name": "曹O安",
+        "birthday": "2025-12-10",
+        "category": "一般市民",
+        "current_index": 47
+      }
+    ],
+    "added_details": [
+      {
+        "name": "曹O安",
+        "birthday": "2025-12-10",
+        "category": "一般市民",
+        "current_index": 47
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 46,
+    "current_waiting_count": 47,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 47 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0
   }
 ]
