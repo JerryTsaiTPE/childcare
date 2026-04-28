@@ -1527,5 +1527,27 @@
     "removed_details": [],
     "added_details": [],
     "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-28",
+    "fetched_at": "2026-04-28T16:15:07+08:00",
+    "waiting_count": 74,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 74 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "魏O宇",
+        "birthday": "2025-11-07",
+        "category": "一般市民",
+        "current_index": 74
+      }
+    ],
+    "likely_age_out_previous_indexes": []
   }
 ]
