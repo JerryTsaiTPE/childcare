@@ -3363,5 +3363,31 @@
     "enroll_delta": 0,
     "prev_enroll": 195,
     "curr_enroll": 195
+  },
+  {
+    "fetched_at": "2026-04-29T05:15:04+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 62,
+    "current_waiting_count": 62,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable",
+    "enroll_delta": 0,
+    "prev_enroll": 195,
+    "curr_enroll": 195
   }
 ]
