@@ -173,7 +173,7 @@ def render_dashboard(
         </div>
       </div>
 
-      <div class="card" style="background: rgba(19, 49, 77, 0.4); border-color: var(--accent);">
+      <div class="card">
         <div class="metric">公托中心總數</div>
         <div class="value" id="global-org-count" style="color: var(--accent);">--</div>
       </div>
@@ -184,7 +184,7 @@ def render_dashboard(
       <div class="card" style="border: 1px solid var(--danger);">
         <div class="metric">目前排隊備取總人數 <span style="font-size:12px; color:var(--danger)">(已去除重複)</span></div>
         <div class="value" id="global-unique-waitlist">--</div>
-        <div class="sub" style="margin-top: 8px; font-size: 13px;">※ 比對條件：<br>「姓名 + 生日 + 報名身分別」完全相同者，視為同一幼兒，僅計算 1 人。</div>
+        <div class="sub" style="margin-top: 8px; font-size: 13px;">※ 不計入重複登記：<br>「姓名 + 生日 + 報名身分別」完全相同者，視為同一幼兒，僅計算 1 人。</div>
       </div>
       
       <div class="panel" style="padding: 15px; background: transparent; border-color: var(--border);">
@@ -235,15 +235,15 @@ def render_dashboard(
         <div class="card"><div class="metric">中心核定名額 / 已入托</div><div class="value" id="capacity"></div></div>
         <div class="card"><div class="metric">上月入托人數</div><div class="value" id="lastnum"></div></div>
         <div class="card"><div class="metric">近一次離開名單人數</div><div class="value small" id="removed-count"></div><div class="sub" id="removed-summary"></div></div>
-        <div class="card"><div class="metric">精準判斷：遞補入托</div><div class="value small" id="admitted-count"></div><div class="sub" id="admitted-summary"></div></div>
-        <div class="card"><div class="metric">精準判斷：自行取消候補</div><div class="value small" id="withdrawn-count"></div><div class="sub" id="withdrawn-summary"></div></div>
+        <div class="card"><div class="metric">遞補入托</div><div class="value small" id="admitted-count"></div><div class="sub" id="admitted-summary"></div></div>
+        <div class="card"><div class="metric">自行取消候補</div><div class="value small" id="withdrawn-count"></div><div class="sub" id="withdrawn-summary"></div></div>
         <div class="card"><div class="metric">屆齡取消</div><div class="value small" id="age-out-count"></div><div class="sub" id="age-out-summary"></div></div>
         <div class="card"><div class="metric">近一次影響人數</div><div class="value small" id="moved-count"></div><div class="sub" id="moved-summary"></div></div>
       </section>
 
       <section class="panels">
         <div class="panel chart-box">
-          <h2>📈 近一週備取總數 <span class="sub" style="font-size:13px; font-weight:normal;">(顯示每日最後狀態)</span></h2>
+          <h2>📈 近一週備取總數</h2>
           <svg id="history-chart" width="100%" height="300"></svg>
         </div>
         <div class="panel">
@@ -288,7 +288,7 @@ def render_dashboard(
           </div>
         </div>
         <div class="panel">
-          <h2>前 20 名備取名單 <span class="sub" style="font-size:13px; font-weight:normal; margin-left:8px;">(紅色為已屆齡or14天內屆齡者)</span></h2>
+          <h2>前 20 名備取名單 <span class="sub" style="font-size:13px; font-weight:normal; margin-left:8px;">(紅色為14天內屆齡者)</span></h2>
           <div class="table-wrap">
             <table class="panel-table">
               <thead><tr><th>序號</th><th>姓名</th><th>出生日期</th><th>目前歲數</th><th>身分別</th><th style="color:var(--accent)">同步候補</th></tr></thead>
@@ -312,7 +312,7 @@ def render_dashboard(
 
     <section id="tab-hourly-detail" class="tab-panel">
       <div class="panel chart-box" style="margin-bottom: 18px;">
-        <h2>📅 近一個月走勢 <span class="sub" style="font-size:13px; font-weight:normal;">(顯示每日最後狀態)</span></h2>
+        <h2>📅 近一個月走勢</h2>
         <svg id="monthly-chart" width="100%" height="300"></svg>
       </div>
       <div class="panel chart-box">
@@ -327,10 +327,10 @@ def render_dashboard(
 
     <section id="tab-all-list" class="tab-panel">
       <div class="panel">
-        <h2>所有名單 <span class="sub" style="font-size:14px; font-weight:normal; margin-left:10px; color:var(--danger);">※ 紅色字體代表該幼兒已滿兩歲或距滿兩歲不到 14 天，即將被系統自動取消候補。</span></h2>
+        <h2>所有名單 <span class="sub" style="font-size:14px; font-weight:normal; margin-left:10px; color:var(--danger);">※ 紅色字體代表該幼兒距滿兩歲不到 14 天，即將被系統自動取消候補。</span></h2>
         
         <div class="sub" style="margin-bottom: 15px; color: var(--muted); border-left: 3px solid var(--accent); padding-left: 10px; font-size: 13px;">
-          如果同步候補超過一家公托屬於正常現象，去識別化容易導致同名同生日，依規定一人同時只能候補兩間。
+          如果[同步候補]超過一家公托，是去識別化名單容易導致同名同生日(或是雙胞台姓名近似)，依規定一人同時只能登記備取兩間。
         </div>
 
         <div class="control-row" style="margin-bottom:15px;">
