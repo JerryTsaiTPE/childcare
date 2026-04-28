@@ -330,7 +330,7 @@ def render_dashboard(
         <h2>所有名單 <span class="sub" style="font-size:14px; font-weight:normal; margin-left:10px; color:var(--danger);">※ 紅色字體代表該幼兒距滿兩歲不到 14 天，即將被系統自動取消候補。</span></h2>
         
         <div class="sub" style="margin-bottom: 15px; color: var(--muted); border-left: 3px solid var(--accent); padding-left: 10px; font-size: 13px;">
-          如果[同步候補]超過一家公托，是去識別化名單容易導致同名同生日(或是雙胞台姓名近似)，依規定一人同時只能登記備取兩間。
+          如果 [同步候補] 超過一家公托，是去識別化名單容易導致同名同生日(或是雙胞台姓名近似)，依規定一人同時只能登記備取兩間。
         </div>
 
         <div class="control-row" style="margin-bottom:15px;">
@@ -524,7 +524,7 @@ def render_dashboard(
                 });
                 laEl.innerHTML = htmlStr;
             } else {
-                laEl.innerHTML = '<span style="color:var(--muted)">等待中..</span>';
+                laEl.innerHTML = '<span style="color:var(--muted)">等待遞補中..</span>';
             }
         }
     }
