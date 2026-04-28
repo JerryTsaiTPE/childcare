@@ -1423,5 +1423,33 @@
     "removed_details": [],
     "added_details": [],
     "likely_age_out_previous_indexes": []
+  },
+  {
+    "date": "2026-04-28",
+    "fetched_at": "2026-04-28T14:15:09+08:00",
+    "waiting_count": 70,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "19 號離開名單",
+      "20 → 19（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 20,
+      "current_index": 19,
+      "name": "陳O安",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "趙O甯",
+        "birthday": "2025-05-17",
+        "category": "優先收托",
+        "previous_index": 19
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": []
   }
 ]
