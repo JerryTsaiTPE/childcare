@@ -165,7 +165,7 @@ def render_dashboard(
       <button id="btn-close-stats" class="close-btn" title="關閉">✖</button>
     </div>
     <div class="slide-panel-content">
-      <div class="card" style="background: rgba(19, 49, 77, 0.4); border-color: var(--accent);">
+      <div class="card">
         <div class="metric">公托中心總數</div>
         <div class="value" id="global-org-count" style="color: var(--accent);">--</div>
       </div>
@@ -176,7 +176,7 @@ def render_dashboard(
       <div class="card" style="border: 1px solid var(--danger);">
         <div class="metric">目前排隊備取總人數 <span style="font-size:12px; color:var(--danger)">(已去除重複)</span></div>
         <div class="value" id="global-unique-waitlist">--</div>
-        <div class="sub" style="margin-top: 8px; font-size: 13px;">※ 比對條件：<br>「姓名 + 生日 + 報名身分別」完全相同者，視為同一幼兒，僅計算 1 人。</div>
+        <div class="sub" style="margin-top: 8px; font-size: 13px;">※ 不含重複登記人數：<br>「姓名 + 生日 + 報名身分別」完全相同者，視為同一幼兒，僅計算 1 人。</div>
       </div>
       
       <div class="panel" style="padding: 15px; background: transparent; border-color: var(--border);">
@@ -227,8 +227,8 @@ def render_dashboard(
         <div class="card"><div class="metric">中心核定名額 / 已入托</div><div class="value" id="capacity"></div></div>
         <div class="card"><div class="metric">上月入托人數</div><div class="value" id="lastnum"></div></div>
         <div class="card"><div class="metric">近一次離開名單人數</div><div class="value small" id="removed-count"></div><div class="sub" id="removed-summary"></div></div>
-        <div class="card"><div class="metric">精準判斷：遞補入托</div><div class="value small" id="admitted-count"></div><div class="sub" id="admitted-summary"></div></div>
-        <div class="card"><div class="metric">精準判斷：自行取消候補</div><div class="value small" id="withdrawn-count"></div><div class="sub" id="withdrawn-summary"></div></div>
+        <div class="card"><div class="metric">遞補入托</div><div class="value small" id="admitted-count"></div><div class="sub" id="admitted-summary"></div></div>
+        <div class="card"><div class="metric">自行取消候補</div><div class="value small" id="withdrawn-count"></div><div class="sub" id="withdrawn-summary"></div></div>
         <div class="card"><div class="metric">屆齡取消</div><div class="value small" id="age-out-count"></div><div class="sub" id="age-out-summary"></div></div>
         <div class="card"><div class="metric">近一次影響人數</div><div class="value small" id="moved-count"></div><div class="sub" id="moved-summary"></div></div>
       </section>
