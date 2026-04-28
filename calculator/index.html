@@ -462,15 +462,24 @@
       const countdown = config.countdown;
       const today = new Date();
       const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      
+      // 【修改點】移除了「私立／準公共開始密切注意簡章」
       const cards = [
         ['公立／非營利缺額公告', countdown.publicNotice],
         ['公立／非營利網路登記開始', countdown.publicStart],
         ['公立／非營利網路登記結束', countdown.publicEnd],
-        ['私立／準公共開始密切注意簡章', countdown.privateWatch],
         ['私立／準公共可登記最早日', countdown.privateStart],
         ['私立／準公共登記截止', countdown.privateEnd],
         [`${config.label}開學／銜接日`, countdown.schoolStart]
       ];
+      
+      if (birth) {
+        const parts = getAgeParts(birth, config.referenceDate);
+        if (parts) {
+          cards.push(['滿 2 歲日', addYearsUTC(parts.birth, 2).toISOString().slice(0, 10)]);
+          cards.push(['滿 3 歲日', addYearsUTC(parts.birth, 3).toISOString().slice(0, 10)]);
+        }
+      }
       
       const publicStart = countDaysFromToday(countdown.publicStart);
       const publicEnd = countDaysFromToday(countdown.publicEnd);
