@@ -165,9 +165,17 @@ def render_dashboard(
       <button id="btn-close-stats" class="close-btn" title="關閉">✖</button>
     </div>
     <div class="slide-panel-content">
-      <div class="card">
+      
+      <div class="card" style="border: 1px solid var(--accent-2); background: rgba(142, 247, 194, 0.05);">
+        <div class="metric" style="color: var(--accent-2); font-weight:bold; font-size: 14px;">🎉 最新遞補入托動態</div>
+        <div id="latest-admission-info" style="font-size: 15px; line-height: 1.6; margin-top: 8px;">
+          <span style="color:var(--muted)">載入中...</span>
+        </div>
+      </div>
+
+      <div class="card" style="background: rgba(19, 49, 77, 0.4); border-color: var(--accent);">
         <div class="metric">公托中心總數</div>
-        <div class="value" id="global-org-count">--</div>
+        <div class="value" id="global-org-count" style="color: var(--accent);">--</div>
       </div>
       <div class="card">
         <div class="metric">公托總核定名額 <span style="font-size:12px">(加總)</span></div>
@@ -176,7 +184,7 @@ def render_dashboard(
       <div class="card" style="border: 1px solid var(--danger);">
         <div class="metric">目前排隊備取總人數 <span style="font-size:12px; color:var(--danger)">(已去除重複)</span></div>
         <div class="value" id="global-unique-waitlist">--</div>
-        <div class="sub" style="margin-top: 8px; font-size: 13px;">※ 不含重複登記人數：<br>「姓名 + 生日 + 報名身分別」完全相同者，視為同一幼兒，僅計算 1 人。</div>
+        <div class="sub" style="margin-top: 8px; font-size: 13px;">※ 比對條件：<br>「姓名 + 生日 + 報名身分別」完全相同者，視為同一幼兒，僅計算 1 人。</div>
       </div>
       
       <div class="panel" style="padding: 15px; background: transparent; border-color: var(--border);">
@@ -227,8 +235,8 @@ def render_dashboard(
         <div class="card"><div class="metric">中心核定名額 / 已入托</div><div class="value" id="capacity"></div></div>
         <div class="card"><div class="metric">上月入托人數</div><div class="value" id="lastnum"></div></div>
         <div class="card"><div class="metric">近一次離開名單人數</div><div class="value small" id="removed-count"></div><div class="sub" id="removed-summary"></div></div>
-        <div class="card"><div class="metric">遞補入托</div><div class="value small" id="admitted-count"></div><div class="sub" id="admitted-summary"></div></div>
-        <div class="card"><div class="metric">自行取消候補</div><div class="value small" id="withdrawn-count"></div><div class="sub" id="withdrawn-summary"></div></div>
+        <div class="card"><div class="metric">精準判斷：遞補入托</div><div class="value small" id="admitted-count"></div><div class="sub" id="admitted-summary"></div></div>
+        <div class="card"><div class="metric">精準判斷：自行取消候補</div><div class="value small" id="withdrawn-count"></div><div class="sub" id="withdrawn-summary"></div></div>
         <div class="card"><div class="metric">屆齡取消</div><div class="value small" id="age-out-count"></div><div class="sub" id="age-out-summary"></div></div>
         <div class="card"><div class="metric">近一次影響人數</div><div class="value small" id="moved-count"></div><div class="sub" id="moved-summary"></div></div>
       </section>
@@ -319,10 +327,10 @@ def render_dashboard(
 
     <section id="tab-all-list" class="tab-panel">
       <div class="panel">
-        <h2>所有名單 <span class="sub" style="font-size:14px; font-weight:normal; margin-left:10px; color:var(--danger);">※ 紅色字體代表該幼兒距滿兩歲不到 14 天，即將被系統自動取消候補。</span></h2>
+        <h2>所有名單 <span class="sub" style="font-size:14px; font-weight:normal; margin-left:10px; color:var(--danger);">※ 紅色字體代表該幼兒已滿兩歲或距滿兩歲不到 14 天，即將被系統自動取消候補。</span></h2>
         
         <div class="sub" style="margin-bottom: 15px; color: var(--muted); border-left: 3px solid var(--accent); padding-left: 10px; font-size: 13px;">
-          如果[同步候補]顯示超過一家公托，是因去識別化導致同名同生日(或雙胞胎姓名相似)，依規定一人同時只能申請備取兩間。
+          如果同步候補超過一家公托屬於正常現象，去識別化容易導致同名同生日，依規定一人同時只能候補兩間。
         </div>
 
         <div class="control-row" style="margin-bottom:15px;">
@@ -427,6 +435,10 @@ def render_dashboard(
         let totalCap = 0;
         let globalUniqueChildren = new Set();
         let districtUniqueMap = {}; 
+        
+        // 💡 新增：用來記錄最新入托資訊的變數
+        let latestAdmissions = [];
+        let maxDateMs = 0;
 
         orgIds.forEach(id => {
             const snap = allData[id].snapshot;
@@ -445,6 +457,29 @@ def render_dashboard(
                     districtUniqueMap[dist].add(key);
                 });
             }
+            
+            // 💡 新增：掃描歷史紀錄，尋找最新的入托事件
+            const history = allData[id].history || [];
+            history.forEach(item => {
+                if (item.enroll_delta && item.enroll_delta > 0) {
+                    const timeMs = new Date(item.fetched_at).getTime();
+                    const orgName = snap.org.orgshort || id;
+                    if (timeMs > maxDateMs) {
+                        maxDateMs = timeMs;
+                        latestAdmissions = [{
+                            dateString: item.fetched_at,
+                            count: item.enroll_delta,
+                            orgName: orgName
+                        }];
+                    } else if (timeMs === maxDateMs) {
+                        latestAdmissions.push({
+                            dateString: item.fetched_at,
+                            count: item.enroll_delta,
+                            orgName: orgName
+                        });
+                    }
+                }
+            });
         });
 
         const totalUniqueCount = globalUniqueChildren.size;
@@ -474,6 +509,23 @@ def render_dashboard(
                     </tr>`;
                 distBody.insertAdjacentHTML('beforeend', row);
             });
+        }
+        
+        // 💡 新增：渲染最新入托動態卡片
+        const laEl = $('latest-admission-info');
+        if (laEl) {
+            if (latestAdmissions.length > 0) {
+                const dateObj = new Date(latestAdmissions[0].dateString);
+                const formattedDate = `${dateObj.getFullYear()}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${String(dateObj.getDate()).padStart(2, '0')} ${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
+                
+                let htmlStr = `<div style="margin-bottom:6px;"><span style="color:var(--muted)">時間：</span>${formattedDate}</div>`;
+                latestAdmissions.forEach(adm => {
+                    htmlStr += `<div style="margin-bottom:4px;"><span style="color:var(--muted)">中心：</span><span style="font-weight:bold; color:#fff;">${adm.orgName}</span> <span style="color:var(--ok); font-family:Consolas, monospace; margin-left:4px;">+${adm.count} 人</span></div>`;
+                });
+                laEl.innerHTML = htmlStr;
+            } else {
+                laEl.innerHTML = '<span style="color:var(--muted)">近期尚無入托紀錄</span>';
+            }
         }
     }
 
@@ -757,7 +809,6 @@ def render_dashboard(
                         detailsHtml += '</tbody></table></div>';
                     }
 
-                    // 💡 新增：在歷史紀錄標題列顯示入托人數變化 (從 X 到 Y)
                     let enrollDeltaHtml = '';
                     if (item.hasOwnProperty('enroll_delta') && item.enroll_delta !== 0) {
                         let deltaColor = item.enroll_delta > 0 ? 'var(--ok)' : 'var(--danger)';
