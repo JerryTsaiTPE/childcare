@@ -6175,5 +6175,57 @@
       "名單無變動"
     ],
     "change_kind": "stable"
+  },
+  {
+    "fetched_at": "2026-04-28T12:15:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      56,
+      57
+    ],
+    "added": [
+      {
+        "name": "溫O翔",
+        "birthday": "2025-11-11",
+        "category": "一般市民",
+        "current_index": 56
+      },
+      {
+        "name": "劉O",
+        "birthday": "2026-03-11",
+        "category": "一般市民",
+        "current_index": 57
+      }
+    ],
+    "added_details": [
+      {
+        "name": "溫O翔",
+        "birthday": "2025-11-11",
+        "category": "一般市民",
+        "current_index": 56
+      },
+      {
+        "name": "劉O",
+        "birthday": "2026-03-11",
+        "category": "一般市民",
+        "current_index": 57
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 55,
+    "current_waiting_count": 57,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 56 號"
+    ],
+    "change_kind": "grow"
   }
 ]
