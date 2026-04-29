@@ -1990,5 +1990,36 @@
     "enroll_delta": 0,
     "prev_enroll": 117,
     "curr_enroll": 117
+  },
+  {
+    "date": "2026-04-29",
+    "fetched_at": "2026-04-29T12:53:18+08:00",
+    "waiting_count": 76,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 75 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "施O樺",
+        "birthday": "2026-04-24",
+        "category": "一般市民",
+        "current_index": 75
+      },
+      {
+        "name": "吳O安",
+        "birthday": "2025-09-26",
+        "category": "一般市民",
+        "current_index": 76
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 117,
+    "curr_enroll": 117
   }
 ]

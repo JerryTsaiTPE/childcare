@@ -167,8 +167,8 @@ def render_dashboard(
     <div class="slide-panel-content">
       
       <div class="card" style="border: 1px solid var(--accent-2); background: rgba(142, 247, 194, 0.05);">
-        <div class="metric" style="color: var(--accent-2); font-weight:bold; font-size: 14px;">🎉 最新遞補入托動態</div>
-        <div id="latest-admission-info" style="font-size: 15px; line-height: 1.6; margin-top: 8px;">
+        <div class="metric" style="color: var(--accent-2); font-weight:bold; font-size: 14px;">🎉 近 24 小時遞補入托</div>
+        <div id="latest-admission-info" style="font-size: 15px; line-height: 1.6; margin-top: 12px;">
           <span style="color:var(--muted)">載入中...</span>
         </div>
       </div>
@@ -436,9 +436,17 @@ def render_dashboard(
         let globalUniqueChildren = new Set();
         let districtUniqueMap = {}; 
         
-        // 💡 新增：用來記錄最新入托資訊的變數
-        let latestAdmissions = [];
-        let maxDateMs = 0;
+        // 💡 修改：計算資料庫中最新時間基準，找出「近 24 小時」的範圍
+        let globalLatestMs = 0;
+        orgIds.forEach(id => {
+            const snap = allData[id].snapshot;
+            if(snap && snap.fetched_at) {
+                globalLatestMs = Math.max(globalLatestMs, new Date(snap.fetched_at).getTime());
+            }
+        });
+        const thresholdMs = globalLatestMs - (24 * 60 * 60 * 1000);
+        
+        let recentAdmissions = [];
 
         orgIds.forEach(id => {
             const snap = allData[id].snapshot;
@@ -458,29 +466,24 @@ def render_dashboard(
                 });
             }
             
-            // 💡 新增：掃描歷史紀錄，尋找最新的入托事件
+            // 💡 修改：將近 24 小時內有入托的人數加入清單
             const history = allData[id].history || [];
             history.forEach(item => {
                 if (item.enroll_delta && item.enroll_delta > 0) {
                     const timeMs = new Date(item.fetched_at).getTime();
-                    const orgName = snap.org.orgshort || id;
-                    if (timeMs > maxDateMs) {
-                        maxDateMs = timeMs;
-                        latestAdmissions = [{
-                            dateString: item.fetched_at,
-                            count: item.enroll_delta,
-                            orgName: orgName
-                        }];
-                    } else if (timeMs === maxDateMs) {
-                        latestAdmissions.push({
-                            dateString: item.fetched_at,
-                            count: item.enroll_delta,
-                            orgName: orgName
+                    if (timeMs >= thresholdMs) {
+                        recentAdmissions.push({
+                            timeMs: timeMs,
+                            orgName: snap.org.orgshort || id,
+                            count: item.enroll_delta
                         });
                     }
                 }
             });
         });
+        
+        // 💡 新增：將近 24 小時紀錄「由新到舊」排序
+        recentAdmissions.sort((a, b) => b.timeMs - a.timeMs);
 
         const totalUniqueCount = globalUniqueChildren.size;
 
@@ -511,20 +514,27 @@ def render_dashboard(
             });
         }
         
-        // 💡 新增：渲染最新入托動態卡片
+        // 💡 修改：渲染近 24 小時所有的入托清單
         const laEl = $('latest-admission-info');
         if (laEl) {
-            if (latestAdmissions.length > 0) {
-                const dateObj = new Date(latestAdmissions[0].dateString);
-                const formattedDate = `${dateObj.getFullYear()}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${String(dateObj.getDate()).padStart(2, '0')} ${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
-                
-                let htmlStr = `<div style="margin-bottom:6px;"><span style="color:var(--muted)">時間：</span>${formattedDate}</div>`;
-                latestAdmissions.forEach(adm => {
-                    htmlStr += `<div style="margin-bottom:4px;"><span style="color:var(--muted)">中心：</span><span style="font-weight:bold; color:#fff;">${adm.orgName}</span> <span style="color:var(--ok); font-family:Consolas, monospace; margin-left:4px;">+${adm.count} 人</span></div>`;
+            if (recentAdmissions.length > 0) {
+                let htmlStr = '';
+                recentAdmissions.forEach(adm => {
+                    const d = new Date(adm.timeMs);
+                    const timeStr = `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+                    
+                    htmlStr += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <div>
+                            <span style="color:var(--muted); font-size:13px; margin-right:8px;">${timeStr}</span>
+                            <span style="font-weight:bold; color:#fff;">${adm.orgName}</span>
+                        </div>
+                        <div style="color:var(--ok); font-family:Consolas, monospace; font-weight:bold;">+${adm.count} 人</div>
+                    </div>`;
                 });
                 laEl.innerHTML = htmlStr;
             } else {
-                laEl.innerHTML = '<span style="color:var(--muted)">等待遞補中..</span>';
+                laEl.innerHTML = '<span style="color:var(--muted)">近 24 小時無入托紀錄</span>';
             }
         }
     }

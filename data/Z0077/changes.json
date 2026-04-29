@@ -3082,5 +3082,60 @@
     "enroll_delta": 0,
     "prev_enroll": 117,
     "curr_enroll": 117
+  },
+  {
+    "fetched_at": "2026-04-29T12:53:18+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      75,
+      76
+    ],
+    "added": [
+      {
+        "name": "施O樺",
+        "birthday": "2026-04-24",
+        "category": "一般市民",
+        "current_index": 75
+      },
+      {
+        "name": "吳O安",
+        "birthday": "2025-09-26",
+        "category": "一般市民",
+        "current_index": 76
+      }
+    ],
+    "added_details": [
+      {
+        "name": "施O樺",
+        "birthday": "2026-04-24",
+        "category": "一般市民",
+        "current_index": 75
+      },
+      {
+        "name": "吳O安",
+        "birthday": "2025-09-26",
+        "category": "一般市民",
+        "current_index": 76
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 74,
+    "current_waiting_count": 76,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 75 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 117,
+    "curr_enroll": 117
   }
 ]
