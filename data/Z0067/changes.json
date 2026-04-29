@@ -6776,5 +6776,664 @@
     "enroll_delta": 0,
     "prev_enroll": 191,
     "curr_enroll": 191
+  },
+  {
+    "fetched_at": "2026-04-29T21:15:02+08:00",
+    "removed_previous_indexes": [
+      58
+    ],
+    "removed": [
+      {
+        "name": "洪O澔",
+        "birthday": "2024-10-21",
+        "category": "一般市民",
+        "previous_index": 58
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "洪O澔",
+        "birthday": "2024-10-21",
+        "category": "一般市民",
+        "previous_index": 58
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "黃O靜",
+        "birthday": "2025-09-07",
+        "category": "一般市民",
+        "previous_index": 59,
+        "current_index": 58,
+        "delta": -1
+      },
+      {
+        "name": "舒O宥",
+        "birthday": "2025-09-20",
+        "category": "一般市民",
+        "previous_index": 60,
+        "current_index": 59,
+        "delta": -1
+      },
+      {
+        "name": "張O妘",
+        "birthday": "2025-08-18",
+        "category": "一般市民",
+        "previous_index": 61,
+        "current_index": 60,
+        "delta": -1
+      },
+      {
+        "name": "鄭O妍",
+        "birthday": "2025-04-10",
+        "category": "優先收托",
+        "previous_index": 62,
+        "current_index": 61,
+        "delta": -1
+      },
+      {
+        "name": "黃O宸",
+        "birthday": "2025-09-15",
+        "category": "一般市民",
+        "previous_index": 63,
+        "current_index": 62,
+        "delta": -1
+      },
+      {
+        "name": "李O宇",
+        "birthday": "2024-09-30",
+        "category": "一般市民",
+        "previous_index": 64,
+        "current_index": 63,
+        "delta": -1
+      },
+      {
+        "name": "江O綝",
+        "birthday": "2025-08-19",
+        "category": "一般市民",
+        "previous_index": 65,
+        "current_index": 64,
+        "delta": -1
+      },
+      {
+        "name": "劉O希",
+        "birthday": "2025-09-20",
+        "category": "一般市民",
+        "previous_index": 66,
+        "current_index": 65,
+        "delta": -1
+      },
+      {
+        "name": "洪O昕",
+        "birthday": "2025-10-21",
+        "category": "一般市民",
+        "previous_index": 67,
+        "current_index": 66,
+        "delta": -1
+      },
+      {
+        "name": "蔡O希",
+        "birthday": "2025-04-12",
+        "category": "優先收托",
+        "previous_index": 68,
+        "current_index": 67,
+        "delta": -1
+      },
+      {
+        "name": "蔡O晞",
+        "birthday": "2024-12-12",
+        "category": "一般市民",
+        "previous_index": 69,
+        "current_index": 68,
+        "delta": -1
+      },
+      {
+        "name": "林O妍",
+        "birthday": "2025-05-11",
+        "category": "優先收托",
+        "previous_index": 70,
+        "current_index": 69,
+        "delta": -1
+      },
+      {
+        "name": "楊O晴",
+        "birthday": "2025-09-29",
+        "category": "一般市民",
+        "previous_index": 71,
+        "current_index": 70,
+        "delta": -1
+      },
+      {
+        "name": "藍O立",
+        "birthday": "2025-11-27",
+        "category": "一般市民",
+        "previous_index": 72,
+        "current_index": 71,
+        "delta": -1
+      },
+      {
+        "name": "陳O佑",
+        "birthday": "2025-11-26",
+        "category": "一般市民",
+        "previous_index": 73,
+        "current_index": 72,
+        "delta": -1
+      },
+      {
+        "name": "高O恩",
+        "birthday": "2025-09-08",
+        "category": "一般市民",
+        "previous_index": 74,
+        "current_index": 73,
+        "delta": -1
+      },
+      {
+        "name": "邱O瑜",
+        "birthday": "2024-09-03",
+        "category": "一般市民",
+        "previous_index": 75,
+        "current_index": 74,
+        "delta": -1
+      },
+      {
+        "name": "陳O妤",
+        "birthday": "2025-04-25",
+        "category": "一般市民",
+        "previous_index": 76,
+        "current_index": 75,
+        "delta": -1
+      },
+      {
+        "name": "陳O叡",
+        "birthday": "2025-12-14",
+        "category": "一般市民",
+        "previous_index": 77,
+        "current_index": 76,
+        "delta": -1
+      },
+      {
+        "name": "楊O曄",
+        "birthday": "2024-12-10",
+        "category": "一般市民",
+        "previous_index": 78,
+        "current_index": 77,
+        "delta": -1
+      },
+      {
+        "name": "蘇O智",
+        "birthday": "2025-12-24",
+        "category": "一般市民",
+        "previous_index": 79,
+        "current_index": 78,
+        "delta": -1
+      },
+      {
+        "name": "柯O玹",
+        "birthday": "2025-12-08",
+        "category": "一般市民",
+        "previous_index": 80,
+        "current_index": 79,
+        "delta": -1
+      },
+      {
+        "name": "蘇O然",
+        "birthday": "2025-12-19",
+        "category": "優先收托",
+        "previous_index": 81,
+        "current_index": 80,
+        "delta": -1
+      },
+      {
+        "name": "王O安",
+        "birthday": "2025-03-30",
+        "category": "一般市民",
+        "previous_index": 82,
+        "current_index": 81,
+        "delta": -1
+      },
+      {
+        "name": "吳O筠",
+        "birthday": "2025-12-13",
+        "category": "一般市民",
+        "previous_index": 83,
+        "current_index": 82,
+        "delta": -1
+      },
+      {
+        "name": "戴O翎",
+        "birthday": "2025-10-29",
+        "category": "一般市民",
+        "previous_index": 84,
+        "current_index": 83,
+        "delta": -1
+      },
+      {
+        "name": "蔡O樂",
+        "birthday": "2025-11-15",
+        "category": "一般市民",
+        "previous_index": 85,
+        "current_index": 84,
+        "delta": -1
+      },
+      {
+        "name": "吳O辰",
+        "birthday": "2025-01-21",
+        "category": "一般市民",
+        "previous_index": 86,
+        "current_index": 85,
+        "delta": -1
+      },
+      {
+        "name": "鄭O安",
+        "birthday": "2025-12-19",
+        "category": "一般市民",
+        "previous_index": 87,
+        "current_index": 86,
+        "delta": -1
+      },
+      {
+        "name": "鄭O睿",
+        "birthday": "2026-01-08",
+        "category": "一般市民",
+        "previous_index": 88,
+        "current_index": 87,
+        "delta": -1
+      },
+      {
+        "name": "詹O翔",
+        "birthday": "2025-08-12",
+        "category": "優先收托",
+        "previous_index": 89,
+        "current_index": 88,
+        "delta": -1
+      },
+      {
+        "name": "朱O綸",
+        "birthday": "2025-12-29",
+        "category": "一般市民",
+        "previous_index": 90,
+        "current_index": 89,
+        "delta": -1
+      },
+      {
+        "name": "何O妘",
+        "birthday": "2025-02-25",
+        "category": "一般市民",
+        "previous_index": 91,
+        "current_index": 90,
+        "delta": -1
+      },
+      {
+        "name": "林O辰",
+        "birthday": "2026-01-07",
+        "category": "一般市民",
+        "previous_index": 92,
+        "current_index": 91,
+        "delta": -1
+      },
+      {
+        "name": "施O希",
+        "birthday": "2025-01-19",
+        "category": "一般市民",
+        "previous_index": 93,
+        "current_index": 92,
+        "delta": -1
+      },
+      {
+        "name": "彭O玥",
+        "birthday": "2024-11-27",
+        "category": "一般市民",
+        "previous_index": 94,
+        "current_index": 93,
+        "delta": -1
+      },
+      {
+        "name": "楊O睿",
+        "birthday": "2025-12-26",
+        "category": "一般市民",
+        "previous_index": 95,
+        "current_index": 94,
+        "delta": -1
+      },
+      {
+        "name": "林O朔",
+        "birthday": "2025-01-18",
+        "category": "一般市民",
+        "previous_index": 96,
+        "current_index": 95,
+        "delta": -1
+      },
+      {
+        "name": "蒲O潔",
+        "birthday": "2025-02-21",
+        "category": "一般市民",
+        "previous_index": 97,
+        "current_index": 96,
+        "delta": -1
+      },
+      {
+        "name": "楊O霏",
+        "birthday": "2025-08-26",
+        "category": "一般市民",
+        "previous_index": 98,
+        "current_index": 97,
+        "delta": -1
+      },
+      {
+        "name": "蔡O庭",
+        "birthday": "2024-07-24",
+        "category": "一般市民",
+        "previous_index": 99,
+        "current_index": 98,
+        "delta": -1
+      },
+      {
+        "name": "洪O翔",
+        "birthday": "2026-01-03",
+        "category": "一般市民",
+        "previous_index": 100,
+        "current_index": 99,
+        "delta": -1
+      },
+      {
+        "name": "黃O育",
+        "birthday": "2025-01-01",
+        "category": "一般市民",
+        "previous_index": 101,
+        "current_index": 100,
+        "delta": -1
+      },
+      {
+        "name": "蔡O里",
+        "birthday": "2025-09-04",
+        "category": "一般市民",
+        "previous_index": 102,
+        "current_index": 101,
+        "delta": -1
+      },
+      {
+        "name": "王O升",
+        "birthday": "2026-02-20",
+        "category": "一般市民",
+        "previous_index": 103,
+        "current_index": 102,
+        "delta": -1
+      },
+      {
+        "name": "曾O晧",
+        "birthday": "2025-10-10",
+        "category": "一般市民",
+        "previous_index": 104,
+        "current_index": 103,
+        "delta": -1
+      },
+      {
+        "name": "丁O鑠",
+        "birthday": "2025-06-04",
+        "category": "一般市民",
+        "previous_index": 105,
+        "current_index": 104,
+        "delta": -1
+      },
+      {
+        "name": "李O儀",
+        "birthday": "2025-07-23",
+        "category": "一般市民",
+        "previous_index": 106,
+        "current_index": 105,
+        "delta": -1
+      },
+      {
+        "name": "李O薫",
+        "birthday": "2024-10-07",
+        "category": "一般市民",
+        "previous_index": 107,
+        "current_index": 106,
+        "delta": -1
+      },
+      {
+        "name": "陳O菲",
+        "birthday": "2026-02-05",
+        "category": "優先收托",
+        "previous_index": 108,
+        "current_index": 107,
+        "delta": -1
+      },
+      {
+        "name": "曾O喬",
+        "birthday": "2025-10-10",
+        "category": "一般市民",
+        "previous_index": 109,
+        "current_index": 108,
+        "delta": -1
+      },
+      {
+        "name": "董O澄",
+        "birthday": "2025-03-07",
+        "category": "一般市民",
+        "previous_index": 110,
+        "current_index": 109,
+        "delta": -1
+      },
+      {
+        "name": "許O涵",
+        "birthday": "2024-12-12",
+        "category": "一般市民",
+        "previous_index": 111,
+        "current_index": 110,
+        "delta": -1
+      },
+      {
+        "name": "林O",
+        "birthday": "2025-06-10",
+        "category": "一般市民",
+        "previous_index": 112,
+        "current_index": 111,
+        "delta": -1
+      },
+      {
+        "name": "張O嘉",
+        "birthday": "2025-12-22",
+        "category": "一般市民",
+        "previous_index": 113,
+        "current_index": 112,
+        "delta": -1
+      },
+      {
+        "name": "徐O淮",
+        "birthday": "2024-11-28",
+        "category": "一般市民",
+        "previous_index": 114,
+        "current_index": 113,
+        "delta": -1
+      },
+      {
+        "name": "黃O芸",
+        "birthday": "2024-11-06",
+        "category": "一般市民",
+        "previous_index": 115,
+        "current_index": 114,
+        "delta": -1
+      },
+      {
+        "name": "林O安",
+        "birthday": "2025-05-07",
+        "category": "一般市民",
+        "previous_index": 116,
+        "current_index": 115,
+        "delta": -1
+      },
+      {
+        "name": "吳O駒",
+        "birthday": "2024-09-17",
+        "category": "一般市民",
+        "previous_index": 117,
+        "current_index": 116,
+        "delta": -1
+      },
+      {
+        "name": "高O辰",
+        "birthday": "2024-09-12",
+        "category": "優先收托",
+        "previous_index": 118,
+        "current_index": 117,
+        "delta": -1
+      },
+      {
+        "name": "陳O聖",
+        "birthday": "2024-10-08",
+        "category": "一般市民",
+        "previous_index": 119,
+        "current_index": 118,
+        "delta": -1
+      },
+      {
+        "name": "郭O陞",
+        "birthday": "2026-02-10",
+        "category": "一般市民",
+        "previous_index": 120,
+        "current_index": 119,
+        "delta": -1
+      },
+      {
+        "name": "簡O珩",
+        "birthday": "2025-12-24",
+        "category": "一般市民",
+        "previous_index": 121,
+        "current_index": 120,
+        "delta": -1
+      },
+      {
+        "name": "林O翔",
+        "birthday": "2025-07-01",
+        "category": "一般市民",
+        "previous_index": 122,
+        "current_index": 121,
+        "delta": -1
+      },
+      {
+        "name": "喬O妍",
+        "birthday": "2026-01-02",
+        "category": "一般市民",
+        "previous_index": 123,
+        "current_index": 122,
+        "delta": -1
+      },
+      {
+        "name": "曾O辰",
+        "birthday": "2026-03-26",
+        "category": "一般市民",
+        "previous_index": 124,
+        "current_index": 123,
+        "delta": -1
+      },
+      {
+        "name": "謝O桐",
+        "birthday": "2025-07-30",
+        "category": "一般市民",
+        "previous_index": 125,
+        "current_index": 124,
+        "delta": -1
+      },
+      {
+        "name": "陳O安",
+        "birthday": "2026-03-06",
+        "category": "一般市民",
+        "previous_index": 126,
+        "current_index": 125,
+        "delta": -1
+      },
+      {
+        "name": "李O銘",
+        "birthday": "2024-09-28",
+        "category": "優先收托",
+        "previous_index": 127,
+        "current_index": 126,
+        "delta": -1
+      },
+      {
+        "name": "曾O妡",
+        "birthday": "2025-05-23",
+        "category": "一般市民",
+        "previous_index": 128,
+        "current_index": 127,
+        "delta": -1
+      },
+      {
+        "name": "黃O嵩",
+        "birthday": "2026-02-02",
+        "category": "優先收托",
+        "previous_index": 129,
+        "current_index": 128,
+        "delta": -1
+      },
+      {
+        "name": "藍O心",
+        "birthday": "2025-06-22",
+        "category": "一般市民",
+        "previous_index": 130,
+        "current_index": 129,
+        "delta": -1
+      },
+      {
+        "name": "林O實",
+        "birthday": "2024-11-18",
+        "category": "一般市民",
+        "previous_index": 131,
+        "current_index": 130,
+        "delta": -1
+      },
+      {
+        "name": "陳O晴",
+        "birthday": "2026-04-23",
+        "category": "一般市民",
+        "previous_index": 132,
+        "current_index": 131,
+        "delta": -1
+      },
+      {
+        "name": "蘇O宇",
+        "birthday": "2026-02-17",
+        "category": "一般市民",
+        "previous_index": 133,
+        "current_index": 132,
+        "delta": -1
+      },
+      {
+        "name": "徐O瑜",
+        "birthday": "2026-02-21",
+        "category": "一般市民",
+        "previous_index": 134,
+        "current_index": 133,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 134,
+    "current_waiting_count": 133,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      58
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 59,
+      "current_index": 58,
+      "name": "黃O靜",
+      "delta": -1
+    },
+    "summary_lines": [
+      "58 號離開名單",
+      "59 → 58（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 0,
+    "prev_enroll": 191,
+    "curr_enroll": 191
   }
 ]
