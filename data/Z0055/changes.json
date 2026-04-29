@@ -3807,5 +3807,47 @@
     "enroll_delta": 0,
     "prev_enroll": 388,
     "curr_enroll": 388
+  },
+  {
+    "fetched_at": "2026-04-29T16:35:57+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      52
+    ],
+    "added": [
+      {
+        "name": "洪O宸",
+        "birthday": "2026-04-06",
+        "category": "一般市民",
+        "current_index": 52
+      }
+    ],
+    "added_details": [
+      {
+        "name": "洪O宸",
+        "birthday": "2026-04-06",
+        "category": "一般市民",
+        "current_index": 52
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 51,
+    "current_waiting_count": 52,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 52 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 388,
+    "curr_enroll": 388
   }
 ]
