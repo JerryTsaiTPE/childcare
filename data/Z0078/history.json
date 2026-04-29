@@ -1924,5 +1924,36 @@
     "enroll_delta": 0,
     "prev_enroll": 232,
     "curr_enroll": 232
+  },
+  {
+    "date": "2026-04-29",
+    "fetched_at": "2026-04-29T09:15:07+08:00",
+    "waiting_count": 75,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 74 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "魏O宇",
+        "birthday": "2025-11-07",
+        "category": "一般市民",
+        "current_index": 74
+      },
+      {
+        "name": "施O樺",
+        "birthday": "2026-04-24",
+        "category": "一般市民",
+        "current_index": 75
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 232,
+    "curr_enroll": 232
   }
 ]

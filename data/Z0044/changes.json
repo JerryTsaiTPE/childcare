@@ -7020,5 +7020,47 @@
     "enroll_delta": 0,
     "prev_enroll": 361,
     "curr_enroll": 361
+  },
+  {
+    "fetched_at": "2026-04-29T09:15:03+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      58
+    ],
+    "added": [
+      {
+        "name": "楊O盛",
+        "birthday": "2026-02-08",
+        "category": "一般市民",
+        "current_index": 58
+      }
+    ],
+    "added_details": [
+      {
+        "name": "楊O盛",
+        "birthday": "2026-02-08",
+        "category": "一般市民",
+        "current_index": 58
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 57,
+    "current_waiting_count": 58,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 58 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 361,
+    "curr_enroll": 361
   }
 ]
