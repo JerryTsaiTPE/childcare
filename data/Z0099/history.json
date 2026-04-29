@@ -2264,5 +2264,38 @@
     "enroll_delta": 0,
     "prev_enroll": 125,
     "curr_enroll": 125
+  },
+  {
+    "date": "2026-04-30",
+    "fetched_at": "2026-04-30T01:15:04+08:00",
+    "waiting_count": 81,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "42 號離開名單",
+      "43 → 42（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 43,
+      "current_index": 42,
+      "name": "吳O璟",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "吳O菲",
+        "birthday": "2024-04-30",
+        "category": "優先收托",
+        "previous_index": 42
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [
+      42
+    ],
+    "enroll_delta": 0,
+    "prev_enroll": 125,
+    "curr_enroll": 125
   }
 ]
