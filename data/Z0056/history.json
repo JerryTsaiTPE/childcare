@@ -2416,5 +2416,36 @@
     "enroll_delta": 0,
     "prev_enroll": 213,
     "curr_enroll": 213
+  },
+  {
+    "date": "2026-04-29",
+    "fetched_at": "2026-04-29T15:15:04+08:00",
+    "waiting_count": 110,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "74 號離開名單",
+      "75 → 74（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 75,
+      "current_index": 74,
+      "name": "林O羽",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "張O翟",
+        "birthday": "2025-03-13",
+        "category": "一般市民",
+        "previous_index": 74
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 213,
+    "curr_enroll": 213
   }
 ]

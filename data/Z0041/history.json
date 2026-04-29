@@ -2073,5 +2073,36 @@
     "enroll_delta": 0,
     "prev_enroll": 260,
     "curr_enroll": 260
+  },
+  {
+    "date": "2026-04-29",
+    "fetched_at": "2026-04-29T15:15:13+08:00",
+    "waiting_count": 139,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "4 號離開名單",
+      "5 → 4（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 5,
+      "current_index": 4,
+      "name": "長OO晴",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "余O曦",
+        "birthday": "2024-11-12",
+        "category": "一般市民",
+        "previous_index": 4
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 260,
+    "curr_enroll": 260
   }
 ]

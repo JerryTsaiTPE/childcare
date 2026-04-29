@@ -6256,5 +6256,60 @@
     "enroll_delta": 0,
     "prev_enroll": 249,
     "curr_enroll": 249
+  },
+  {
+    "fetched_at": "2026-04-29T15:15:03+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      45,
+      46
+    ],
+    "added": [
+      {
+        "name": "胡O芯",
+        "birthday": "2026-03-11",
+        "category": "一般市民",
+        "current_index": 45
+      },
+      {
+        "name": "郭O群",
+        "birthday": "2026-03-04",
+        "category": "一般市民",
+        "current_index": 46
+      }
+    ],
+    "added_details": [
+      {
+        "name": "胡O芯",
+        "birthday": "2026-03-11",
+        "category": "一般市民",
+        "current_index": 45
+      },
+      {
+        "name": "郭O群",
+        "birthday": "2026-03-04",
+        "category": "一般市民",
+        "current_index": 46
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 44,
+    "current_waiting_count": 46,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 45 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 249,
+    "curr_enroll": 249
   }
 ]
