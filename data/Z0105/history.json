@@ -3901,5 +3901,36 @@
     "enroll_delta": 0,
     "prev_enroll": 183,
     "curr_enroll": 183
+  },
+  {
+    "date": "2026-04-29",
+    "fetched_at": "2026-04-29T12:15:02+08:00",
+    "waiting_count": 50,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 49 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "胡O芯",
+        "birthday": "2026-03-11",
+        "category": "一般市民",
+        "current_index": 49
+      },
+      {
+        "name": "郭O群",
+        "birthday": "2026-03-04",
+        "category": "一般市民",
+        "current_index": 50
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 183,
+    "curr_enroll": 183
   }
 ]

@@ -1991,5 +1991,36 @@
     "enroll_delta": 0,
     "prev_enroll": 395,
     "curr_enroll": 395
+  },
+  {
+    "date": "2026-04-29",
+    "fetched_at": "2026-04-29T12:15:09+08:00",
+    "waiting_count": 89,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "1 號離開名單",
+      "2 → 1（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 2,
+      "current_index": 1,
+      "name": "邱O襄",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "吳O謙",
+        "birthday": "2025-07-07",
+        "category": "一般市民",
+        "previous_index": 1
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 395,
+    "curr_enroll": 395
   }
 ]

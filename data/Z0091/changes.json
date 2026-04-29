@@ -3583,5 +3583,60 @@
     "enroll_delta": 0,
     "prev_enroll": 155,
     "curr_enroll": 155
+  },
+  {
+    "fetched_at": "2026-04-29T12:15:06+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      57,
+      58
+    ],
+    "added": [
+      {
+        "name": "黃O佑",
+        "birthday": "2026-04-19",
+        "category": "一般市民",
+        "current_index": 57
+      },
+      {
+        "name": "蔣O德",
+        "birthday": "2026-02-21",
+        "category": "一般市民",
+        "current_index": 58
+      }
+    ],
+    "added_details": [
+      {
+        "name": "黃O佑",
+        "birthday": "2026-04-19",
+        "category": "一般市民",
+        "current_index": 57
+      },
+      {
+        "name": "蔣O德",
+        "birthday": "2026-02-21",
+        "category": "一般市民",
+        "current_index": 58
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 56,
+    "current_waiting_count": 58,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 57 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 155,
+    "curr_enroll": 155
   }
 ]
