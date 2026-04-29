@@ -2097,5 +2097,36 @@
     "enroll_delta": 0,
     "prev_enroll": 102,
     "curr_enroll": 102
+  },
+  {
+    "date": "2026-04-29",
+    "fetched_at": "2026-04-29T16:13:55+08:00",
+    "waiting_count": 124,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "8 號離開名單",
+      "9 → 8（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 9,
+      "current_index": 8,
+      "name": "黃O晞",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "陳O寧",
+        "birthday": "2025-05-28",
+        "category": "優先收托",
+        "previous_index": 8
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 1,
+    "prev_enroll": 102,
+    "curr_enroll": 103
   }
 ]

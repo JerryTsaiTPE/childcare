@@ -204,6 +204,22 @@ def render_dashboard(
     </div>
   </div>
 
+  <div id="links-overlay" class="overlay"></div>
+  <div id="links-panel" class="slide-panel">
+    <div class="slide-panel-header">
+      <h2>🔗 相關連結</h2>
+      <button id="btn-close-links" class="close-btn" title="關閉">✖</button>
+    </div>
+    <div class="slide-panel-content">
+      <div class="card" style="border: 1px solid var(--border); transition: 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="window.open('https://jerrytsaitpe.github.io/childcare/calculator/', '_blank')">
+        <div style="color: var(--accent); font-weight:bold; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+          🧮 幼兒園招生日期計算機 ↗
+        </div>
+        <div class="sub" style="margin-top: 8px; font-size: 13px;">快速計算幼兒入學年齡與對應學年度，幫助家長提早規劃入學時程。</div>
+      </div>
+    </div>
+  </div>
+
   <div class="wrap">
     <section class="hero">
       <div>
@@ -217,6 +233,8 @@ def render_dashboard(
           <button id="btn-favorite" class="fav-btn" title="將目前中心設為預設"><span class="star">☆</span> 設為預設</button>
           
           <button id="btn-city-stats" class="fav-btn" style="padding: 10px 14px; border-radius: 8px;" title="查看全新北市統計">📊 全區統計</button>
+          
+          <button id="btn-links" class="fav-btn" style="padding: 10px 14px; border-radius: 8px;" title="相關連結">🔗 相關連結</button>
         </div>
         <div class="pill" id="org-pill">載入中...</div>
       </div>
@@ -436,7 +454,6 @@ def render_dashboard(
         let globalUniqueChildren = new Set();
         let districtUniqueMap = {}; 
         
-        // 💡 修改：計算資料庫中最新時間基準，找出「近 24 小時」的範圍
         let globalLatestMs = 0;
         orgIds.forEach(id => {
             const snap = allData[id].snapshot;
@@ -466,7 +483,6 @@ def render_dashboard(
                 });
             }
             
-            // 💡 修改：將近 24 小時內有入托的人數加入清單
             const history = allData[id].history || [];
             history.forEach(item => {
                 if (item.enroll_delta && item.enroll_delta > 0) {
@@ -482,7 +498,6 @@ def render_dashboard(
             });
         });
         
-        // 💡 新增：將近 24 小時紀錄「由新到舊」排序
         recentAdmissions.sort((a, b) => b.timeMs - a.timeMs);
 
         const totalUniqueCount = globalUniqueChildren.size;
@@ -514,7 +529,6 @@ def render_dashboard(
             });
         }
         
-        // 💡 修改：渲染近 24 小時所有的入托清單
         const laEl = $('latest-admission-info');
         if (laEl) {
             if (recentAdmissions.length > 0) {
@@ -548,6 +562,14 @@ def render_dashboard(
         
         statsPanel.classList.toggle('active');
         statsOverlay.classList.toggle('active');
+    }
+    
+    // 💡 新增：切換相關連結面板
+    function toggleLinksPanel() {
+        const linksPanel = $('links-panel');
+        const linksOverlay = $('links-overlay');
+        linksPanel.classList.toggle('active');
+        linksOverlay.classList.toggle('active');
     }
 
     function renderCurrentOrg() {
@@ -1071,6 +1093,14 @@ def render_dashboard(
             if (statsBtn) statsBtn.addEventListener('click', toggleStatsPanel);
             if (closeStatsBtn) closeStatsBtn.addEventListener('click', toggleStatsPanel);
             if (statsOverlay) statsOverlay.addEventListener('click', toggleStatsPanel);
+            
+            // 💡 新增：綁定相關連結面板的事件
+            const linksBtn = $('btn-links');
+            const closeLinksBtn = $('btn-close-links');
+            const linksOverlay = $('links-overlay');
+            if (linksBtn) linksBtn.addEventListener('click', toggleLinksPanel);
+            if (closeLinksBtn) closeLinksBtn.addEventListener('click', toggleLinksPanel);
+            if (linksOverlay) linksOverlay.addEventListener('click', toggleLinksPanel);
 
             const tooltip = $('chart-tooltip');
             document.addEventListener('mouseover', (e) => {
