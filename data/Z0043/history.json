@@ -2740,5 +2740,36 @@
     "enroll_delta": 0,
     "prev_enroll": 227,
     "curr_enroll": 227
+  },
+  {
+    "date": "2026-05-01",
+    "fetched_at": "2026-05-01T02:15:09+08:00",
+    "waiting_count": 152,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "152 號離開名單",
+      "153 → 152（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 153,
+      "current_index": 152,
+      "name": "丁O允",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "洪O絮",
+        "birthday": "2026-04-04",
+        "category": "一般市民",
+        "previous_index": 152
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 227,
+    "curr_enroll": 227
   }
 ]

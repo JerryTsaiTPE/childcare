@@ -5558,5 +5558,64 @@
     "enroll_delta": 0,
     "prev_enroll": 227,
     "curr_enroll": 227
+  },
+  {
+    "fetched_at": "2026-05-01T02:15:09+08:00",
+    "removed_previous_indexes": [
+      152
+    ],
+    "removed": [
+      {
+        "name": "洪O絮",
+        "birthday": "2026-04-04",
+        "category": "一般市民",
+        "previous_index": 152
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "洪O絮",
+        "birthday": "2026-04-04",
+        "category": "一般市民",
+        "previous_index": 152
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "丁O允",
+        "birthday": "2025-12-05",
+        "category": "一般市民",
+        "previous_index": 153,
+        "current_index": 152,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 153,
+    "current_waiting_count": 152,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      152
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 153,
+      "current_index": 152,
+      "name": "丁O允",
+      "delta": -1
+    },
+    "summary_lines": [
+      "152 號離開名單",
+      "153 → 152（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 0,
+    "prev_enroll": 227,
+    "curr_enroll": 227
   }
 ]
