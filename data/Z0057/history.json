@@ -2484,5 +2484,36 @@
     "enroll_delta": 0,
     "prev_enroll": 218,
     "curr_enroll": 218
+  },
+  {
+    "date": "2026-04-30",
+    "fetched_at": "2026-04-30T12:15:04+08:00",
+    "waiting_count": 91,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "71 號離開名單",
+      "72 → 71（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 72,
+      "current_index": 71,
+      "name": "林O燕",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "王O妍",
+        "birthday": "2026-02-25",
+        "category": "一般市民",
+        "previous_index": 71
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 218,
+    "curr_enroll": 218
   }
 ]
