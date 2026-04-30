@@ -2434,5 +2434,30 @@
     "enroll_delta": 0,
     "prev_enroll": 103,
     "curr_enroll": 103
+  },
+  {
+    "date": "2026-04-30",
+    "fetched_at": "2026-04-30T09:15:09+08:00",
+    "waiting_count": 125,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 125 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "賴O頤",
+        "birthday": "2026-03-11",
+        "category": "一般市民",
+        "current_index": 125
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 103,
+    "curr_enroll": 103
   }
 ]
