@@ -7101,5 +7101,47 @@
     "enroll_delta": 0,
     "prev_enroll": 260,
     "curr_enroll": 260
+  },
+  {
+    "fetched_at": "2026-04-30T15:15:03+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      41
+    ],
+    "added": [
+      {
+        "name": "蔡O橙",
+        "birthday": "2026-04-09",
+        "category": "一般市民",
+        "current_index": 41
+      }
+    ],
+    "added_details": [
+      {
+        "name": "蔡O橙",
+        "birthday": "2026-04-09",
+        "category": "一般市民",
+        "current_index": 41
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 40,
+    "current_waiting_count": 41,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 41 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 260,
+    "curr_enroll": 260
   }
 ]
