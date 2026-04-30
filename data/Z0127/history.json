@@ -3084,5 +3084,38 @@
     "enroll_delta": 0,
     "prev_enroll": 50,
     "curr_enroll": 50
+  },
+  {
+    "date": "2026-05-01",
+    "fetched_at": "2026-05-01T01:15:07+08:00",
+    "waiting_count": 147,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "30 號離開名單",
+      "31 → 30（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 31,
+      "current_index": 30,
+      "name": "藍O洧",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "陳O",
+        "birthday": "2024-05-01",
+        "category": "一般市民",
+        "previous_index": 30
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [
+      30
+    ],
+    "enroll_delta": 0,
+    "prev_enroll": 50,
+    "curr_enroll": 50
   }
 ]
