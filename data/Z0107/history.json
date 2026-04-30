@@ -2603,5 +2603,36 @@
     "enroll_delta": 0,
     "prev_enroll": 103,
     "curr_enroll": 103
+  },
+  {
+    "date": "2026-04-30",
+    "fetched_at": "2026-04-30T18:15:11+08:00",
+    "waiting_count": 124,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "33 號離開名單",
+      "34 → 33（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 34,
+      "current_index": 33,
+      "name": "游O睿",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "沈O綾",
+        "birthday": "2025-01-05",
+        "category": "一般市民",
+        "previous_index": 33
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 103,
+    "curr_enroll": 103
   }
 ]
