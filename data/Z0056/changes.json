@@ -6621,5 +6621,60 @@
     "enroll_delta": 0,
     "prev_enroll": 213,
     "curr_enroll": 213
+  },
+  {
+    "fetched_at": "2026-04-30T16:15:04+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      111,
+      112
+    ],
+    "added": [
+      {
+        "name": "張O晨",
+        "birthday": "2025-01-08",
+        "category": "一般市民",
+        "current_index": 111
+      },
+      {
+        "name": "蕭O紓",
+        "birthday": "2025-05-24",
+        "category": "一般市民",
+        "current_index": 112
+      }
+    ],
+    "added_details": [
+      {
+        "name": "張O晨",
+        "birthday": "2025-01-08",
+        "category": "一般市民",
+        "current_index": 111
+      },
+      {
+        "name": "蕭O紓",
+        "birthday": "2025-05-24",
+        "category": "一般市民",
+        "current_index": 112
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 110,
+    "current_waiting_count": 112,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 111 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 213,
+    "curr_enroll": 213
   }
 ]
