@@ -4350,5 +4350,104 @@
     "enroll_delta": 0,
     "prev_enroll": 108,
     "curr_enroll": 108
+  },
+  {
+    "fetched_at": "2026-05-01T11:15:07+08:00",
+    "removed_previous_indexes": [
+      21
+    ],
+    "removed": [
+      {
+        "name": "高O希",
+        "birthday": "2025-11-06",
+        "category": "一般市民",
+        "previous_index": 21
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "高O希",
+        "birthday": "2025-11-06",
+        "category": "一般市民",
+        "previous_index": 21
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "蔡O霖",
+        "birthday": "2024-08-13",
+        "category": "一般市民",
+        "previous_index": 22,
+        "current_index": 21,
+        "delta": -1
+      },
+      {
+        "name": "張O熙",
+        "birthday": "2025-11-24",
+        "category": "一般市民",
+        "previous_index": 23,
+        "current_index": 22,
+        "delta": -1
+      },
+      {
+        "name": "張O睿",
+        "birthday": "2025-11-24",
+        "category": "一般市民",
+        "previous_index": 24,
+        "current_index": 23,
+        "delta": -1
+      },
+      {
+        "name": "鄒O玥",
+        "birthday": "2025-06-13",
+        "category": "一般市民",
+        "previous_index": 25,
+        "current_index": 24,
+        "delta": -1
+      },
+      {
+        "name": "陳O硯",
+        "birthday": "2026-04-18",
+        "category": "一般市民",
+        "previous_index": 26,
+        "current_index": 25,
+        "delta": -1
+      },
+      {
+        "name": "陳O安",
+        "birthday": "2026-02-02",
+        "category": "一般市民",
+        "previous_index": 27,
+        "current_index": 26,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 27,
+    "current_waiting_count": 26,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      21
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 22,
+      "current_index": 21,
+      "name": "蔡O霖",
+      "delta": -1
+    },
+    "summary_lines": [
+      "21 號離開名單",
+      "22 → 21（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 0,
+    "prev_enroll": 108,
+    "curr_enroll": 108
   }
 ]
