@@ -2925,5 +2925,36 @@
     "enroll_delta": 0,
     "prev_enroll": 292,
     "curr_enroll": 292
+  },
+  {
+    "date": "2026-05-01",
+    "fetched_at": "2026-05-01T13:15:14+08:00",
+    "waiting_count": 66,
+    "last_month_enrolled": 3,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "40 號離開名單",
+      "41 → 40（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 41,
+      "current_index": 40,
+      "name": "何O希",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "陳O之",
+        "birthday": "2025-12-23",
+        "category": "一般市民",
+        "previous_index": 40
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 292,
+    "curr_enroll": 292
   }
 ]
