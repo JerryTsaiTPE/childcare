@@ -3187,5 +3187,45 @@
     "enroll_delta": 0,
     "prev_enroll": 103,
     "curr_enroll": 103
+  },
+  {
+    "date": "2026-05-02",
+    "fetched_at": "2026-05-02T01:15:10+08:00",
+    "waiting_count": 121,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "24 等 2 筆序號離開名單",
+      "25 → 24（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 25,
+      "current_index": 24,
+      "name": "陳O羽",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "曾O傑",
+        "birthday": "2024-05-02",
+        "category": "優先收托",
+        "previous_index": 24
+      },
+      {
+        "name": "洪O杰",
+        "birthday": "2024-05-02",
+        "category": "一般市民",
+        "previous_index": 30
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [
+      24,
+      30
+    ],
+    "enroll_delta": 0,
+    "prev_enroll": 103,
+    "curr_enroll": 103
   }
 ]
