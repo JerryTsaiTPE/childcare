@@ -5102,5 +5102,36 @@
     "enroll_delta": 0,
     "prev_enroll": 123,
     "curr_enroll": 123
+  },
+  {
+    "date": "2026-05-03",
+    "fetched_at": "2026-05-03T15:15:02+08:00",
+    "waiting_count": 83,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "62 號離開名單",
+      "63 → 62（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 63,
+      "current_index": 62,
+      "name": "黃O芯",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "施O逸",
+        "birthday": "2025-12-02",
+        "category": "一般市民",
+        "previous_index": 62
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 123,
+    "curr_enroll": 123
   }
 ]
