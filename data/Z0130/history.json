@@ -7143,5 +7143,36 @@
     "enroll_delta": 0,
     "prev_enroll": 43,
     "curr_enroll": 43
+  },
+  {
+    "date": "2026-05-03",
+    "fetched_at": "2026-05-03T13:15:02+08:00",
+    "waiting_count": 267,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "250 號離開名單",
+      "251 → 250（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 251,
+      "current_index": 250,
+      "name": "林O森",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "林O安",
+        "birthday": "2025-05-07",
+        "category": "一般市民",
+        "previous_index": 250
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 43,
+    "curr_enroll": 43
   }
 ]
