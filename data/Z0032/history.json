@@ -3712,5 +3712,30 @@
     "enroll_delta": 0,
     "prev_enroll": 436,
     "curr_enroll": 436
+  },
+  {
+    "date": "2026-05-03",
+    "fetched_at": "2026-05-03T09:15:07+08:00",
+    "waiting_count": 89,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 89 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "孔O芯",
+        "birthday": "2024-12-17",
+        "category": "一般市民",
+        "current_index": 89
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 436,
+    "curr_enroll": 436
   }
 ]
