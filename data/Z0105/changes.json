@@ -9251,5 +9251,66 @@
     "enroll_delta": 0,
     "prev_enroll": 183,
     "curr_enroll": 183
+  },
+  {
+    "fetched_at": "2026-05-04T12:15:02+08:00",
+    "removed_previous_indexes": [
+      48
+    ],
+    "removed": [
+      {
+        "name": "侯O諺",
+        "birthday": "2026-04-15",
+        "category": "一般市民",
+        "previous_index": 48
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "侯O諺",
+        "birthday": "2026-04-15",
+        "category": "一般市民",
+        "previous_index": 48
+      }
+    ],
+    "added_current_indexes": [
+      48
+    ],
+    "added": [
+      {
+        "name": "侯O諺",
+        "birthday": "2025-05-09",
+        "category": "一般市民",
+        "current_index": 48
+      }
+    ],
+    "added_details": [
+      {
+        "name": "侯O諺",
+        "birthday": "2025-05-09",
+        "category": "一般市民",
+        "current_index": 48
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 50,
+    "current_waiting_count": 50,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      48
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "48 號離開名單",
+      "新增候補出現在 48 號"
+    ],
+    "change_kind": "mixed",
+    "enroll_delta": 0,
+    "prev_enroll": 183,
+    "curr_enroll": 183
   }
 ]

@@ -6232,5 +6232,99 @@
     "enroll_delta": 0,
     "prev_enroll": 239,
     "curr_enroll": 239
+  },
+  {
+    "fetched_at": "2026-05-04T12:15:10+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      77,
+      78,
+      79,
+      80,
+      81
+    ],
+    "added": [
+      {
+        "name": "朱O瑩",
+        "birthday": "2024-08-09",
+        "category": "一般市民",
+        "current_index": 77
+      },
+      {
+        "name": "張O婷",
+        "birthday": "2025-05-14",
+        "category": "優先收托",
+        "current_index": 78
+      },
+      {
+        "name": "黃O笙",
+        "birthday": "2025-05-25",
+        "category": "優先收托",
+        "current_index": 79
+      },
+      {
+        "name": "洪O甯",
+        "birthday": "2025-09-04",
+        "category": "一般市民",
+        "current_index": 80
+      },
+      {
+        "name": "楊O緹",
+        "birthday": "2026-04-24",
+        "category": "一般市民",
+        "current_index": 81
+      }
+    ],
+    "added_details": [
+      {
+        "name": "朱O瑩",
+        "birthday": "2024-08-09",
+        "category": "一般市民",
+        "current_index": 77
+      },
+      {
+        "name": "張O婷",
+        "birthday": "2025-05-14",
+        "category": "優先收托",
+        "current_index": 78
+      },
+      {
+        "name": "黃O笙",
+        "birthday": "2025-05-25",
+        "category": "優先收托",
+        "current_index": 79
+      },
+      {
+        "name": "洪O甯",
+        "birthday": "2025-09-04",
+        "category": "一般市民",
+        "current_index": 80
+      },
+      {
+        "name": "楊O緹",
+        "birthday": "2026-04-24",
+        "category": "一般市民",
+        "current_index": 81
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 76,
+    "current_waiting_count": 81,
+    "net_waiting_count_change": 5,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 5 筆候補，最前面出現在 77 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 239,
+    "curr_enroll": 239
   }
 ]

@@ -4183,5 +4183,54 @@
     "enroll_delta": 0,
     "prev_enroll": 239,
     "curr_enroll": 239
+  },
+  {
+    "date": "2026-05-04",
+    "fetched_at": "2026-05-04T12:15:10+08:00",
+    "waiting_count": 81,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增 5 筆候補，最前面出現在 77 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "朱O瑩",
+        "birthday": "2024-08-09",
+        "category": "一般市民",
+        "current_index": 77
+      },
+      {
+        "name": "張O婷",
+        "birthday": "2025-05-14",
+        "category": "優先收托",
+        "current_index": 78
+      },
+      {
+        "name": "黃O笙",
+        "birthday": "2025-05-25",
+        "category": "優先收托",
+        "current_index": 79
+      },
+      {
+        "name": "洪O甯",
+        "birthday": "2025-09-04",
+        "category": "一般市民",
+        "current_index": 80
+      },
+      {
+        "name": "楊O緹",
+        "birthday": "2026-04-24",
+        "category": "一般市民",
+        "current_index": 81
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 239,
+    "curr_enroll": 239
   }
 ]

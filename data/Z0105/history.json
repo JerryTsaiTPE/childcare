@@ -6146,5 +6146,38 @@
     "enroll_delta": 0,
     "prev_enroll": 183,
     "curr_enroll": 183
+  },
+  {
+    "date": "2026-05-04",
+    "fetched_at": "2026-05-04T12:15:02+08:00",
+    "waiting_count": 50,
+    "last_month_enrolled": 1,
+    "changed": true,
+    "change_kind": "mixed",
+    "summary_lines": [
+      "48 號離開名單",
+      "新增候補出現在 48 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [
+      {
+        "name": "侯O諺",
+        "birthday": "2026-04-15",
+        "category": "一般市民",
+        "previous_index": 48
+      }
+    ],
+    "added_details": [
+      {
+        "name": "侯O諺",
+        "birthday": "2025-05-09",
+        "category": "一般市民",
+        "current_index": 48
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 183,
+    "curr_enroll": 183
   }
 ]

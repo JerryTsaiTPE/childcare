@@ -7787,5 +7787,47 @@
     "enroll_delta": 0,
     "prev_enroll": 395,
     "curr_enroll": 395
+  },
+  {
+    "fetched_at": "2026-05-04T12:15:10+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      90
+    ],
+    "added": [
+      {
+        "name": "葉O儀",
+        "birthday": "2026-04-03",
+        "category": "一般市民",
+        "current_index": 90
+      }
+    ],
+    "added_details": [
+      {
+        "name": "葉O儀",
+        "birthday": "2026-04-03",
+        "category": "一般市民",
+        "current_index": 90
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 89,
+    "current_waiting_count": 90,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 90 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 395,
+    "curr_enroll": 395
   }
 ]
