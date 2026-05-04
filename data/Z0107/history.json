@@ -4217,5 +4217,30 @@
     "enroll_delta": 0,
     "prev_enroll": 103,
     "curr_enroll": 103
+  },
+  {
+    "date": "2026-05-04",
+    "fetched_at": "2026-05-04T09:15:11+08:00",
+    "waiting_count": 122,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 122 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "王O宇",
+        "birthday": "2026-04-17",
+        "category": "一般市民",
+        "current_index": 122
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 103,
+    "curr_enroll": 103
   }
 ]
