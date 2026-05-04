@@ -4308,5 +4308,36 @@
     "enroll_delta": 0,
     "prev_enroll": 188,
     "curr_enroll": 188
+  },
+  {
+    "date": "2026-05-04",
+    "fetched_at": "2026-05-04T17:15:12+08:00",
+    "waiting_count": 120,
+    "last_month_enrolled": 3,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 119 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "簡O晴",
+        "birthday": "2024-09-12",
+        "category": "一般市民",
+        "current_index": 119
+      },
+      {
+        "name": "葉O辰",
+        "birthday": "2026-03-26",
+        "category": "一般市民",
+        "current_index": 120
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 188,
+    "curr_enroll": 188
   }
 ]
