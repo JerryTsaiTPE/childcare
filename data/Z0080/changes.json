@@ -6401,5 +6401,73 @@
     "enroll_delta": 0,
     "prev_enroll": 177,
     "curr_enroll": 177
+  },
+  {
+    "fetched_at": "2026-05-04T10:15:13+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      45,
+      46,
+      47
+    ],
+    "added": [
+      {
+        "name": "鄭O晴",
+        "birthday": "2024-08-18",
+        "category": "優先收托",
+        "current_index": 45
+      },
+      {
+        "name": "趙O宇",
+        "birthday": "2025-01-17",
+        "category": "一般市民",
+        "current_index": 46
+      },
+      {
+        "name": "廖O赫",
+        "birthday": "2025-07-04",
+        "category": "一般市民",
+        "current_index": 47
+      }
+    ],
+    "added_details": [
+      {
+        "name": "鄭O晴",
+        "birthday": "2024-08-18",
+        "category": "優先收托",
+        "current_index": 45
+      },
+      {
+        "name": "趙O宇",
+        "birthday": "2025-01-17",
+        "category": "一般市民",
+        "current_index": 46
+      },
+      {
+        "name": "廖O赫",
+        "birthday": "2025-07-04",
+        "category": "一般市民",
+        "current_index": 47
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 44,
+    "current_waiting_count": 47,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 45 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 177,
+    "curr_enroll": 177
   }
 ]

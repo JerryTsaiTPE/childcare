@@ -6629,5 +6629,86 @@
     "enroll_delta": 0,
     "prev_enroll": 373,
     "curr_enroll": 373
+  },
+  {
+    "fetched_at": "2026-05-04T10:15:05+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      73,
+      74,
+      75,
+      76
+    ],
+    "added": [
+      {
+        "name": "林O安",
+        "birthday": "2026-02-05",
+        "category": "一般市民",
+        "current_index": 73
+      },
+      {
+        "name": "洪O穎",
+        "birthday": "2024-10-15",
+        "category": "優先收托",
+        "current_index": 74
+      },
+      {
+        "name": "陳O安",
+        "birthday": "2026-03-25",
+        "category": "一般市民",
+        "current_index": 75
+      },
+      {
+        "name": "丁O浠",
+        "birthday": "2026-04-22",
+        "category": "一般市民",
+        "current_index": 76
+      }
+    ],
+    "added_details": [
+      {
+        "name": "林O安",
+        "birthday": "2026-02-05",
+        "category": "一般市民",
+        "current_index": 73
+      },
+      {
+        "name": "洪O穎",
+        "birthday": "2024-10-15",
+        "category": "優先收托",
+        "current_index": 74
+      },
+      {
+        "name": "陳O安",
+        "birthday": "2026-03-25",
+        "category": "一般市民",
+        "current_index": 75
+      },
+      {
+        "name": "丁O浠",
+        "birthday": "2026-04-22",
+        "category": "一般市民",
+        "current_index": 76
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 72,
+    "current_waiting_count": 76,
+    "net_waiting_count_change": 4,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 4 筆候補，最前面出現在 73 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 373,
+    "curr_enroll": 373
   }
 ]
