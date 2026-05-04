@@ -4265,5 +4265,36 @@
     "enroll_delta": 0,
     "prev_enroll": 227,
     "curr_enroll": 227
+  },
+  {
+    "date": "2026-05-04",
+    "fetched_at": "2026-05-04T14:15:10+08:00",
+    "waiting_count": 151,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "12 號離開名單",
+      "13 → 12（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 13,
+      "current_index": 12,
+      "name": "楊O喆",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "陳O澄",
+        "birthday": "2024-08-28",
+        "category": "一般市民",
+        "previous_index": 12
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 227,
+    "curr_enroll": 227
   }
 ]

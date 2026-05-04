@@ -6950,5 +6950,47 @@
     "enroll_delta": 0,
     "prev_enroll": 292,
     "curr_enroll": 292
+  },
+  {
+    "fetched_at": "2026-05-04T14:15:13+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      67
+    ],
+    "added": [
+      {
+        "name": "官O鎮",
+        "birthday": "2026-02-05",
+        "category": "一般市民",
+        "current_index": 67
+      }
+    ],
+    "added_details": [
+      {
+        "name": "官O鎮",
+        "birthday": "2026-02-05",
+        "category": "一般市民",
+        "current_index": 67
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 66,
+    "current_waiting_count": 67,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 67 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 292,
+    "curr_enroll": 292
   }
 ]
