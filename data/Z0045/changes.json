@@ -8331,5 +8331,73 @@
     "enroll_delta": 0,
     "prev_enroll": 226,
     "curr_enroll": 226
+  },
+  {
+    "fetched_at": "2026-05-04T11:15:05+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      129,
+      130,
+      131
+    ],
+    "added": [
+      {
+        "name": "黃O勳",
+        "birthday": "2026-04-17",
+        "category": "一般市民",
+        "current_index": 129
+      },
+      {
+        "name": "林O澄",
+        "birthday": "2026-04-26",
+        "category": "一般市民",
+        "current_index": 130
+      },
+      {
+        "name": "余O妡",
+        "birthday": "2026-02-17",
+        "category": "一般市民",
+        "current_index": 131
+      }
+    ],
+    "added_details": [
+      {
+        "name": "黃O勳",
+        "birthday": "2026-04-17",
+        "category": "一般市民",
+        "current_index": 129
+      },
+      {
+        "name": "林O澄",
+        "birthday": "2026-04-26",
+        "category": "一般市民",
+        "current_index": 130
+      },
+      {
+        "name": "余O妡",
+        "birthday": "2026-02-17",
+        "category": "一般市民",
+        "current_index": 131
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 128,
+    "current_waiting_count": 131,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 129 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 226,
+    "curr_enroll": 226
   }
 ]
