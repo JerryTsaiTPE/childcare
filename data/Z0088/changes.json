@@ -10711,5 +10711,80 @@
     "enroll_delta": 0,
     "prev_enroll": 124,
     "curr_enroll": 124
+  },
+  {
+    "fetched_at": "2026-05-05T01:15:02+08:00",
+    "removed_previous_indexes": [
+      79
+    ],
+    "removed": [
+      {
+        "name": "張O茜",
+        "birthday": "2025-07-29",
+        "category": "一般市民",
+        "previous_index": 79
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "張O茜",
+        "birthday": "2025-07-29",
+        "category": "一般市民",
+        "previous_index": 79
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "廖O洋",
+        "birthday": "2026-03-31",
+        "category": "一般市民",
+        "previous_index": 80,
+        "current_index": 79,
+        "delta": -1
+      },
+      {
+        "name": "彭O晞",
+        "birthday": "2024-08-12",
+        "category": "一般市民",
+        "previous_index": 81,
+        "current_index": 80,
+        "delta": -1
+      },
+      {
+        "name": "林O宸",
+        "birthday": "2026-02-28",
+        "category": "一般市民",
+        "previous_index": 82,
+        "current_index": 81,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 82,
+    "current_waiting_count": 81,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      79
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 80,
+      "current_index": 79,
+      "name": "廖O洋",
+      "delta": -1
+    },
+    "summary_lines": [
+      "79 號離開名單",
+      "80 → 79（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 0,
+    "prev_enroll": 124,
+    "curr_enroll": 124
   }
 ]
