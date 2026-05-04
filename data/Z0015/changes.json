@@ -6287,5 +6287,73 @@
     "enroll_delta": 0,
     "prev_enroll": 222,
     "curr_enroll": 222
+  },
+  {
+    "fetched_at": "2026-05-04T13:15:09+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      117,
+      118,
+      119
+    ],
+    "added": [
+      {
+        "name": "李O榛",
+        "birthday": "2026-04-25",
+        "category": "一般市民",
+        "current_index": 117
+      },
+      {
+        "name": "洪O佑",
+        "birthday": "2026-04-22",
+        "category": "優先收托",
+        "current_index": 118
+      },
+      {
+        "name": "簡O釉",
+        "birthday": "2026-01-01",
+        "category": "一般市民",
+        "current_index": 119
+      }
+    ],
+    "added_details": [
+      {
+        "name": "李O榛",
+        "birthday": "2026-04-25",
+        "category": "一般市民",
+        "current_index": 117
+      },
+      {
+        "name": "洪O佑",
+        "birthday": "2026-04-22",
+        "category": "優先收托",
+        "current_index": 118
+      },
+      {
+        "name": "簡O釉",
+        "birthday": "2026-01-01",
+        "category": "一般市民",
+        "current_index": 119
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 116,
+    "current_waiting_count": 119,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 117 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 222,
+    "curr_enroll": 222
   }
 ]

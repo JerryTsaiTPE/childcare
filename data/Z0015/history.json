@@ -4214,5 +4214,42 @@
     "enroll_delta": 0,
     "prev_enroll": 222,
     "curr_enroll": 222
+  },
+  {
+    "date": "2026-05-04",
+    "fetched_at": "2026-05-04T13:15:09+08:00",
+    "waiting_count": 119,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 117 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "李O榛",
+        "birthday": "2026-04-25",
+        "category": "一般市民",
+        "current_index": 117
+      },
+      {
+        "name": "洪O佑",
+        "birthday": "2026-04-22",
+        "category": "優先收托",
+        "current_index": 118
+      },
+      {
+        "name": "簡O釉",
+        "birthday": "2026-01-01",
+        "category": "一般市民",
+        "current_index": 119
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 222,
+    "curr_enroll": 222
   }
 ]

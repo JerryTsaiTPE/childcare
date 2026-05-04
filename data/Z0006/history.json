@@ -4228,5 +4228,36 @@
     "enroll_delta": 1,
     "prev_enroll": 354,
     "curr_enroll": 355
+  },
+  {
+    "date": "2026-05-04",
+    "fetched_at": "2026-05-04T13:15:07+08:00",
+    "waiting_count": 95,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "27 號離開名單",
+      "28 → 27（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 28,
+      "current_index": 27,
+      "name": "朱O英",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "蔡OOF",
+        "birthday": "2025-06-05",
+        "category": "一般市民",
+        "previous_index": 27
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 1,
+    "prev_enroll": 355,
+    "curr_enroll": 356
   }
 ]
