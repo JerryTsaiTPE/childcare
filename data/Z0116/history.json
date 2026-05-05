@@ -6943,5 +6943,36 @@
     "enroll_delta": 0,
     "prev_enroll": 100,
     "curr_enroll": 100
+  },
+  {
+    "date": "2026-05-05",
+    "fetched_at": "2026-05-05T10:15:02+08:00",
+    "waiting_count": 147,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 146 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "陳O妘",
+        "birthday": "2025-06-02",
+        "category": "一般市民",
+        "current_index": 146
+      },
+      {
+        "name": "施O逸",
+        "birthday": "2025-12-02",
+        "category": "一般市民",
+        "current_index": 147
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 100,
+    "curr_enroll": 100
   }
 ]

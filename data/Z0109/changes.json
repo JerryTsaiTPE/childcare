@@ -7982,5 +7982,49 @@
     "enroll_delta": 0,
     "prev_enroll": 114,
     "curr_enroll": 114
+  },
+  {
+    "fetched_at": "2026-05-05T10:15:06+08:00",
+    "removed_previous_indexes": [
+      83
+    ],
+    "removed": [
+      {
+        "name": "連O棋",
+        "birthday": "2026-03-18",
+        "category": "優先收托",
+        "previous_index": 83
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "連O棋",
+        "birthday": "2026-03-18",
+        "category": "優先收托",
+        "previous_index": 83
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 83,
+    "current_waiting_count": 82,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      83
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "83 號離開名單"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 1,
+    "prev_enroll": 114,
+    "curr_enroll": 115
   }
 ]

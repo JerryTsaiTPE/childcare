@@ -7883,5 +7883,47 @@
     "enroll_delta": 0,
     "prev_enroll": 175,
     "curr_enroll": 175
+  },
+  {
+    "fetched_at": "2026-05-05T10:15:12+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      68
+    ],
+    "added": [
+      {
+        "name": "黃O齊",
+        "birthday": "2025-05-10",
+        "category": "優先收托",
+        "current_index": 68
+      }
+    ],
+    "added_details": [
+      {
+        "name": "黃O齊",
+        "birthday": "2025-05-10",
+        "category": "優先收托",
+        "current_index": 68
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 67,
+    "current_waiting_count": 68,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 68 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 175,
+    "curr_enroll": 175
   }
 ]

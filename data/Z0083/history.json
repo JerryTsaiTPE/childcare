@@ -4620,5 +4620,30 @@
     "enroll_delta": 0,
     "prev_enroll": 175,
     "curr_enroll": 175
+  },
+  {
+    "date": "2026-05-05",
+    "fetched_at": "2026-05-05T10:15:12+08:00",
+    "waiting_count": 68,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 68 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "黃O齊",
+        "birthday": "2025-05-10",
+        "category": "優先收托",
+        "current_index": 68
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 175,
+    "curr_enroll": 175
   }
 ]
