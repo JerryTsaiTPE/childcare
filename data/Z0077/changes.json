@@ -7251,5 +7251,47 @@
     "enroll_delta": 0,
     "prev_enroll": 117,
     "curr_enroll": 117
+  },
+  {
+    "fetched_at": "2026-05-05T18:15:08+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      79
+    ],
+    "added": [
+      {
+        "name": "黃O澄",
+        "birthday": "2026-03-28",
+        "category": "一般市民",
+        "current_index": 79
+      }
+    ],
+    "added_details": [
+      {
+        "name": "黃O澄",
+        "birthday": "2026-03-28",
+        "category": "一般市民",
+        "current_index": 79
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 78,
+    "current_waiting_count": 79,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 79 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 117,
+    "curr_enroll": 117
   }
 ]
