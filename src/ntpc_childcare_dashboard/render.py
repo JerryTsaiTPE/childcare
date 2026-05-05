@@ -577,7 +577,6 @@ def render_dashboard(
         statsOverlay.classList.toggle('active');
     }
     
-    // 💡 新增：切換相關連結面板
     function toggleLinksPanel() {
         const linksPanel = $('links-panel');
         const linksOverlay = $('links-overlay');
@@ -931,11 +930,40 @@ def render_dashboard(
       });
     }
 
+    // --- [修改重點] 讓過濾後的歷史資料依然能顯示連續的日期與小時走勢圖 ---
     function getDailyHistory() {
-        const dailyMap = {};
-        historyData.forEach(p => { dailyMap[p.fetched_at.split('T')[0]] = p; });
+        if (!historyData || historyData.length === 0) return [];
+        const firstDateStr = historyData[0].fetched_at.split('T')[0];
+        const lastDateStr = historyData[historyData.length - 1].fetched_at.split('T')[0];
+        
+        let curr = new Date(firstDateStr + 'T12:00:00');
+        let end = new Date(lastDateStr + 'T12:00:00');
         const vals = [];
-        for (let k in dailyMap) vals.push(dailyMap[k]);
+        
+        while (curr <= end) {
+            const yyyy = curr.getFullYear();
+            const mm = String(curr.getMonth() + 1).padStart(2, '0');
+            const dd = String(curr.getDate()).padStart(2, '0');
+            const dStr = `${yyyy}-${mm}-${dd}`;
+            
+            // 尋找當日最後一筆紀錄，如果沒有就沿用之前的狀態
+            const targetTime = `${dStr}T23:59:59`;
+            let currentCount = historyData[0].waiting_count;
+            for (let j = 0; j < historyData.length; j++) {
+                if (historyData[j].fetched_at <= targetTime) {
+                    currentCount = historyData[j].waiting_count;
+                } else {
+                    break;
+                }
+            }
+            
+            vals.push({
+                fetched_at: `${dStr}T23:59:59`,
+                waiting_count: currentCount
+            });
+            
+            curr.setDate(curr.getDate() + 1);
+        }
         return vals;
     }
 
@@ -943,15 +971,47 @@ def render_dashboard(
         const selector = $('date-selector');
         if(!selector) return;
         selector.innerHTML = '';
-        const rawDates = historyData.map(p => p.fetched_at.split('T')[0]);
-        const uniqueDates = [];
-        rawDates.forEach(d => { if(uniqueDates.indexOf(d) === -1) uniqueDates.push(d); });
+        
+        // 確保連續的每一天都能被選取，即使那一天沒有任何變動
+        const daily = getDailyHistory();
+        const uniqueDates = daily.map(p => p.fetched_at.split('T')[0]);
         uniqueDates.reverse().forEach(d => {
             const opt = document.createElement('option');
             opt.value = opt.textContent = d;
             selector.appendChild(opt);
         });
     }
+    
+    function renderHourlyChart() {
+        const dateSel = $('date-selector');
+        if(!dateSel) return;
+        const date = dateSel.value;
+        if(!date) return;
+        
+        const dayPoints = [];
+        // 強制產生 00:00 ~ 23:00 共 24 個整點資料點
+        for (let i = 0; i <= 23; i++) {
+            const hh = String(i).padStart(2, '0');
+            const targetTime = `${date}T${hh}:59:59`;
+            
+            // 找出該時間點之前「最新的一筆紀錄」狀態來補齊線圖
+            let currentCount = historyData.length > 0 ? historyData[0].waiting_count : 0;
+            for (let j = 0; j < historyData.length; j++) {
+                if (historyData[j].fetched_at <= targetTime) {
+                    currentCount = historyData[j].waiting_count;
+                } else {
+                    break; // 因資料有照時間排序，超過目標時間就跳出
+                }
+            }
+            
+            dayPoints.push({
+                fetched_at: `${date}T${hh}:00:00`,
+                waiting_count: currentCount
+            });
+        }
+        drawChart('hourly-chart', dayPoints, 'time');
+    }
+    // -------------------------------------------------------------------------
 
     function drawChart(svgId, points, labelMode) {
       const svg = $(svgId);
@@ -1001,15 +1061,6 @@ def render_dashboard(
       });
       
       svg.innerHTML = html;
-    }
-
-    function renderHourlyChart() {
-        const dateSel = $('date-selector');
-        if(!dateSel) return;
-        const date = dateSel.value;
-        if(!date) return;
-        const dayPoints = historyData.filter(p => p.fetched_at.startsWith(date));
-        drawChart('hourly-chart', dayPoints, 'time');
     }
 
     function renderRelatedInfo(text) {
@@ -1096,7 +1147,6 @@ def render_dashboard(
             if (closeStatsBtn) closeStatsBtn.addEventListener('click', toggleStatsPanel);
             if (statsOverlay) statsOverlay.addEventListener('click', toggleStatsPanel);
             
-            // 💡 新增：綁定相關連結面板的事件
             const linksBtn = $('btn-links');
             const closeLinksBtn = $('btn-close-links');
             const linksOverlay = $('links-overlay');
