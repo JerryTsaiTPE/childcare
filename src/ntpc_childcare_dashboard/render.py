@@ -18,19 +18,14 @@ def render_dashboard(
 ) -> str:
     safe_title = "新北市公托候補追蹤Dashboard"
 
-    # --- [修改重點] 新增過濾邏輯：去除無變動的歷史紀錄以縮減 HTML 檔案大小 ---
+    # --- [保留重點] 過濾無效歷史紀錄，並保留最新一筆供走勢圖連線 ---
     for org_id, org_data in all_data.items():
         if "history" in org_data:
             history = org_data["history"]
             if history:
-                # 1. 僅保留 changed 為 True (有變動) 的紀錄
                 filtered_history = [item for item in history if item.get("changed", False)]
-                
-                # 2. 確保走勢圖能連線到最新時間點：
-                # 如果過濾後的最後一筆不是實際的最新一筆，就把最新的一筆加回去做為端點
                 if not filtered_history or filtered_history[-1].get("fetched_at") != history[-1].get("fetched_at"):
                     filtered_history.append(history[-1])
-                    
                 org_data["history"] = filtered_history
     # -------------------------------------------------------------------------
 
@@ -474,7 +469,7 @@ def render_dashboard(
                 globalLatestMs = Math.max(globalLatestMs, new Date(snap.fetched_at).getTime());
             }
         });
-        const thresholdMs = globalLatestMs - (48 * 60 * 60 * 1000); // 改為近 48 小時
+        const thresholdMs = globalLatestMs - (48 * 60 * 60 * 1000); 
         
         let recentAdmissions = [];
 
@@ -779,10 +774,14 @@ def render_dashboard(
             const timeline = $('history-timeline');
             if (timeline) {
                 timeline.innerHTML = '';
-                if (!historyData.length) {
-                  timeline.innerHTML = '<div class="timeline-item">尚無歷史紀錄</div>';
+                
+                // 💡 [修改重點] 針對歷史紀錄時間軸的專屬過濾，隱藏 changed 為 false 的無變動紀錄
+                const visibleHistory = historyData.filter(item => item.changed);
+                
+                if (!visibleHistory.length) {
+                  timeline.innerHTML = '<div class="timeline-item">尚無變動紀錄</div>';
                 } else {
-                  const revHistory = [].concat(historyData).reverse();
+                  const revHistory = [].concat(visibleHistory).reverse();
                   revHistory.forEach((item) => {
                     const card = document.createElement('div');
                     card.className = 'timeline-item';
@@ -946,7 +945,6 @@ def render_dashboard(
       });
     }
 
-    // --- [修改重點] 讓過濾後的歷史資料依然能顯示連續的日期與小時走勢圖 ---
     function getDailyHistory() {
         if (!historyData || historyData.length === 0) return [];
         const firstDateStr = historyData[0].fetched_at.split('T')[0];
@@ -962,7 +960,6 @@ def render_dashboard(
             const dd = String(curr.getDate()).padStart(2, '0');
             const dStr = `${yyyy}-${mm}-${dd}`;
             
-            // 尋找當日最後一筆紀錄，如果沒有就沿用之前的狀態
             const targetTime = `${dStr}T23:59:59`;
             let currentCount = historyData[0].waiting_count;
             for (let j = 0; j < historyData.length; j++) {
@@ -988,7 +985,6 @@ def render_dashboard(
         if(!selector) return;
         selector.innerHTML = '';
         
-        // 確保連續的每一天都能被選取，即使那一天沒有任何變動
         const daily = getDailyHistory();
         const uniqueDates = daily.map(p => p.fetched_at.split('T')[0]);
         uniqueDates.reverse().forEach(d => {
@@ -1005,18 +1001,16 @@ def render_dashboard(
         if(!date) return;
         
         const dayPoints = [];
-        // 強制產生 00:00 ~ 23:00 共 24 個整點資料點
         for (let i = 0; i <= 23; i++) {
             const hh = String(i).padStart(2, '0');
             const targetTime = `${date}T${hh}:59:59`;
             
-            // 找出該時間點之前「最新的一筆紀錄」狀態來補齊線圖
             let currentCount = historyData.length > 0 ? historyData[0].waiting_count : 0;
             for (let j = 0; j < historyData.length; j++) {
                 if (historyData[j].fetched_at <= targetTime) {
                     currentCount = historyData[j].waiting_count;
                 } else {
-                    break; // 因資料有照時間排序，超過目標時間就跳出
+                    break; 
                 }
             }
             
@@ -1027,7 +1021,6 @@ def render_dashboard(
         }
         drawChart('hourly-chart', dayPoints, 'time');
     }
-    // -------------------------------------------------------------------------
 
     function drawChart(svgId, points, labelMode) {
       const svg = $(svgId);

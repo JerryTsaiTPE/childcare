@@ -8058,5 +8058,176 @@
     "enroll_delta": 0,
     "prev_enroll": 150,
     "curr_enroll": 150
+  },
+  {
+    "fetched_at": "2026-05-05T22:15:12+08:00",
+    "removed_previous_indexes": [
+      92
+    ],
+    "removed": [
+      {
+        "name": "邱O淩",
+        "birthday": "2025-09-19",
+        "category": "一般市民",
+        "previous_index": 92
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "邱O淩",
+        "birthday": "2025-09-19",
+        "category": "一般市民",
+        "previous_index": 92
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "吳O妍",
+        "birthday": "2025-09-28",
+        "category": "一般市民",
+        "previous_index": 93,
+        "current_index": 92,
+        "delta": -1
+      },
+      {
+        "name": "陳O橙",
+        "birthday": "2026-02-28",
+        "category": "一般市民",
+        "previous_index": 94,
+        "current_index": 93,
+        "delta": -1
+      },
+      {
+        "name": "蔡O宸",
+        "birthday": "2026-03-18",
+        "category": "一般市民",
+        "previous_index": 95,
+        "current_index": 94,
+        "delta": -1
+      },
+      {
+        "name": "郭O萱",
+        "birthday": "2026-02-08",
+        "category": "一般市民",
+        "previous_index": 96,
+        "current_index": 95,
+        "delta": -1
+      },
+      {
+        "name": "李O樂",
+        "birthday": "2026-03-02",
+        "category": "一般市民",
+        "previous_index": 97,
+        "current_index": 96,
+        "delta": -1
+      },
+      {
+        "name": "王O晞",
+        "birthday": "2026-02-26",
+        "category": "一般市民",
+        "previous_index": 98,
+        "current_index": 97,
+        "delta": -1
+      },
+      {
+        "name": "劉O渘",
+        "birthday": "2024-10-07",
+        "category": "一般市民",
+        "previous_index": 99,
+        "current_index": 98,
+        "delta": -1
+      },
+      {
+        "name": "謝O琋",
+        "birthday": "2025-01-07",
+        "category": "優先收托",
+        "previous_index": 100,
+        "current_index": 99,
+        "delta": -1
+      },
+      {
+        "name": "劉O騰",
+        "birthday": "2024-12-16",
+        "category": "一般市民",
+        "previous_index": 101,
+        "current_index": 100,
+        "delta": -1
+      },
+      {
+        "name": "蔡O澤",
+        "birthday": "2025-08-07",
+        "category": "一般市民",
+        "previous_index": 102,
+        "current_index": 101,
+        "delta": -1
+      },
+      {
+        "name": "洪O媗",
+        "birthday": "2025-03-30",
+        "category": "一般市民",
+        "previous_index": 103,
+        "current_index": 102,
+        "delta": -1
+      },
+      {
+        "name": "陳O妡",
+        "birthday": "2026-04-01",
+        "category": "一般市民",
+        "previous_index": 104,
+        "current_index": 103,
+        "delta": -1
+      },
+      {
+        "name": "丁O允",
+        "birthday": "2025-12-05",
+        "category": "一般市民",
+        "previous_index": 105,
+        "current_index": 104,
+        "delta": -1
+      },
+      {
+        "name": "魏O洋",
+        "birthday": "2025-08-02",
+        "category": "一般市民",
+        "previous_index": 106,
+        "current_index": 105,
+        "delta": -1
+      },
+      {
+        "name": "楊O緹",
+        "birthday": "2026-04-24",
+        "category": "一般市民",
+        "previous_index": 107,
+        "current_index": 106,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 107,
+    "current_waiting_count": 106,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      92
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 93,
+      "current_index": 92,
+      "name": "吳O妍",
+      "delta": -1
+    },
+    "summary_lines": [
+      "92 號離開名單",
+      "93 → 92（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 0,
+    "prev_enroll": 150,
+    "curr_enroll": 150
   }
 ]
