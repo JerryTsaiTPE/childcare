@@ -18,6 +18,22 @@ def render_dashboard(
 ) -> str:
     safe_title = "新北市公托候補追蹤Dashboard"
 
+    # --- [修改重點] 新增過濾邏輯：去除無變動的歷史紀錄以縮減 HTML 檔案大小 ---
+    for org_id, org_data in all_data.items():
+        if "history" in org_data:
+            history = org_data["history"]
+            if history:
+                # 1. 僅保留 changed 為 True (有變動) 的紀錄
+                filtered_history = [item for item in history if item.get("changed", False)]
+                
+                # 2. 確保走勢圖能連線到最新時間點：
+                # 如果過濾後的最後一筆不是實際的最新一筆，就把最新的一筆加回去做為端點
+                if not filtered_history or filtered_history[-1].get("fetched_at") != history[-1].get("fetched_at"):
+                    filtered_history.append(history[-1])
+                    
+                org_data["history"] = filtered_history
+    # -------------------------------------------------------------------------
+
     payload = {
         "all_data": all_data
     }
@@ -119,7 +135,6 @@ def render_dashboard(
     .chip { padding: 7px 10px; border-radius: 999px; background: #13273d; border: 1px solid #214361; font-size: 13px; }
     .timeline { display: grid; gap: 14px; }
     .timeline-item { padding: 18px; border-radius: 16px; background: rgba(16, 30, 48, 0.88); border: 1px solid var(--border); }
-    .timeline-item.stable-hidden { display: none; }
     .timeline-meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; color: var(--muted); }
     .timeline-lines { margin: 0; padding-left: 20px; line-height: 1.8; }
     .timeline-highlight { margin-top: 10px; color: var(--accent-2); }
@@ -140,7 +155,6 @@ def render_dashboard(
     .rule { white-space: pre-wrap; line-height: 1.8; color: #d9ebff; background: #091522; padding: 18px; border-radius: 14px; border: 1px solid #18324d; }
     .info-stack { display: grid; gap: 16px; }
     .history-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-    .toggle { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); }
     .footer { color: var(--muted); font-size: 13px; margin-top: 16px; text-align: center; }
     @media (max-width: 980px) { .panels { grid-template-columns: 1fr; } }
     @media (max-width: 720px) { .hero { flex-direction: column; align-items: flex-start; gap: 20px; } .org-switch-wrapper { align-items: flex-start; width: 100%; } .org-controls { justify-content: flex-start; width: 100%; } .org-select { flex-grow: 1; width: auto; } }
@@ -382,7 +396,6 @@ def render_dashboard(
         <h2>歷史紀錄</h2>
         <div class="history-toolbar">
           <div class="sub">紀錄每次更新的變動；若整串名次都往前，僅顯示第一個作為代表。</div>
-          <label class="toggle"><input id="toggle-stable" type="checkbox" /> 顯示無變動紀錄</label>
         </div>
         <div id="history-timeline" class="timeline"></div>
       </div>
@@ -868,7 +881,6 @@ def render_dashboard(
                     `;
                     timeline.appendChild(card);
                   });
-                  updateStableVisibility();
                 }
             }
 
@@ -916,16 +928,6 @@ def render_dashboard(
         const className = daysOld >= 716 ? ' class="aging-out"' : ''; 
         const syncText = (e.sync_list && e.sync_list.length > 0) ? e.sync_list.join(', ') : '—';
         target.insertAdjacentHTML('beforeend', `<tr${className}><td>${e.index}</td><td>${e.encname}</td><td>${e.cbirthday}</td><td>${ageStr}</td><td>${e.displaydesc}</td><td style="color:var(--accent-2)">${syncText}</td></tr>`);
-      });
-    }
-
-    function updateStableVisibility() {
-      const stableToggle = $('toggle-stable');
-      const isChecked = stableToggle ? stableToggle.checked : false;
-      document.querySelectorAll('.timeline-item').forEach((node) => {
-        if(node.dataset.changeKind === 'stable') {
-           node.classList.toggle('stable-hidden', !isChecked);
-        }
       });
     }
 
@@ -1137,8 +1139,7 @@ def render_dashboard(
             if(sortDirEl) sortDirEl.addEventListener('change', renderAllListTable);
             const dateSelEl = $('date-selector');
             if(dateSelEl) dateSelEl.addEventListener('change', renderHourlyChart);
-            const stableToggleEl = $('toggle-stable');
-            if(stableToggleEl) stableToggleEl.addEventListener('change', updateStableVisibility);
+            
             document.querySelectorAll('.tab-btn').forEach((button) => {
               button.addEventListener('click', () => {
                 const tab = button.dataset.tab;

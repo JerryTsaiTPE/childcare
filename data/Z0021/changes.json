@@ -9874,5 +9874,47 @@
     "enroll_delta": 0,
     "prev_enroll": 228,
     "curr_enroll": 228
+  },
+  {
+    "fetched_at": "2026-05-05T17:14:07+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      107
+    ],
+    "added": [
+      {
+        "name": "林O宣",
+        "birthday": "2025-10-13",
+        "category": "優先收托",
+        "current_index": 107
+      }
+    ],
+    "added_details": [
+      {
+        "name": "林O宣",
+        "birthday": "2025-10-13",
+        "category": "優先收托",
+        "current_index": 107
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 106,
+    "current_waiting_count": 107,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 107 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 228,
+    "curr_enroll": 228
   }
 ]

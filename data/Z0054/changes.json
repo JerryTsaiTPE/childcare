@@ -7415,5 +7415,73 @@
     "enroll_delta": 0,
     "prev_enroll": 289,
     "curr_enroll": 289
+  },
+  {
+    "fetched_at": "2026-05-05T17:14:17+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      131,
+      132,
+      133
+    ],
+    "added": [
+      {
+        "name": "楊O帆",
+        "birthday": "2025-08-12",
+        "category": "一般市民",
+        "current_index": 131
+      },
+      {
+        "name": "陳O禾",
+        "birthday": "2026-03-22",
+        "category": "一般市民",
+        "current_index": 132
+      },
+      {
+        "name": "詹O辰",
+        "birthday": "2025-11-08",
+        "category": "一般市民",
+        "current_index": 133
+      }
+    ],
+    "added_details": [
+      {
+        "name": "楊O帆",
+        "birthday": "2025-08-12",
+        "category": "一般市民",
+        "current_index": 131
+      },
+      {
+        "name": "陳O禾",
+        "birthday": "2026-03-22",
+        "category": "一般市民",
+        "current_index": 132
+      },
+      {
+        "name": "詹O辰",
+        "birthday": "2025-11-08",
+        "category": "一般市民",
+        "current_index": 133
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 130,
+    "current_waiting_count": 133,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 131 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 289,
+    "curr_enroll": 289
   }
 ]

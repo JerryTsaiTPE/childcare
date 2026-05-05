@@ -4770,5 +4770,42 @@
     "enroll_delta": 0,
     "prev_enroll": 289,
     "curr_enroll": 289
+  },
+  {
+    "date": "2026-05-05",
+    "fetched_at": "2026-05-05T17:14:17+08:00",
+    "waiting_count": 133,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 131 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "楊O帆",
+        "birthday": "2025-08-12",
+        "category": "一般市民",
+        "current_index": 131
+      },
+      {
+        "name": "陳O禾",
+        "birthday": "2026-03-22",
+        "category": "一般市民",
+        "current_index": 132
+      },
+      {
+        "name": "詹O辰",
+        "birthday": "2025-11-08",
+        "category": "一般市民",
+        "current_index": 133
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 289,
+    "curr_enroll": 289
   }
 ]
