@@ -5328,5 +5328,38 @@
     "enroll_delta": 0,
     "prev_enroll": 452,
     "curr_enroll": 452
+  },
+  {
+    "date": "2026-05-06",
+    "fetched_at": "2026-05-06T01:15:05+08:00",
+    "waiting_count": 138,
+    "last_month_enrolled": 4,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "19 號離開名單",
+      "20 → 19（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 20,
+      "current_index": 19,
+      "name": "陳O緒",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "賴O維",
+        "birthday": "2024-05-06",
+        "category": "一般市民",
+        "previous_index": 19
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [
+      19
+    ],
+    "enroll_delta": 0,
+    "prev_enroll": 452,
+    "curr_enroll": 452
   }
 ]
