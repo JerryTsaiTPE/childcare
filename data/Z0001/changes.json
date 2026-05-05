@@ -7021,5 +7021,47 @@
     "enroll_delta": 0,
     "prev_enroll": 323,
     "curr_enroll": 323
+  },
+  {
+    "fetched_at": "2026-05-05T14:15:13+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      62
+    ],
+    "added": [
+      {
+        "name": "詹O辰",
+        "birthday": "2025-11-08",
+        "category": "一般市民",
+        "current_index": 62
+      }
+    ],
+    "added_details": [
+      {
+        "name": "詹O辰",
+        "birthday": "2025-11-08",
+        "category": "一般市民",
+        "current_index": 62
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 61,
+    "current_waiting_count": 62,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 62 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 323,
+    "curr_enroll": 323
   }
 ]

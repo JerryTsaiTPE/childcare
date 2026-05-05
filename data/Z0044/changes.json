@@ -11900,5 +11900,60 @@
     "enroll_delta": 0,
     "prev_enroll": 362,
     "curr_enroll": 362
+  },
+  {
+    "fetched_at": "2026-05-05T14:15:03+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      57,
+      58
+    ],
+    "added": [
+      {
+        "name": "游O晶",
+        "birthday": "2024-06-13",
+        "category": "一般市民",
+        "current_index": 57
+      },
+      {
+        "name": "田O安",
+        "birthday": "2026-03-07",
+        "category": "一般市民",
+        "current_index": 58
+      }
+    ],
+    "added_details": [
+      {
+        "name": "游O晶",
+        "birthday": "2024-06-13",
+        "category": "一般市民",
+        "current_index": 57
+      },
+      {
+        "name": "田O安",
+        "birthday": "2026-03-07",
+        "category": "一般市民",
+        "current_index": 58
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 56,
+    "current_waiting_count": 58,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 57 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 362,
+    "curr_enroll": 362
   }
 ]

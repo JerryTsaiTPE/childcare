@@ -7,19 +7,6 @@
     "added": [],
     "moved": [],
     "changed": false,
-    "baseline": true,
-    "previous_waiting_count": 266,
-    "current_waiting_count": 266,
-    "net_waiting_count_change": 0
-  },
-  {
-    "fetched_at": "2026-04-21T13:14:48+08:00",
-    "removed_previous_indexes": [],
-    "removed": [],
-    "added_current_indexes": [],
-    "added": [],
-    "moved": [],
-    "changed": false,
     "baseline": false,
     "previous_waiting_count": 266,
     "current_waiting_count": 266,
@@ -21613,6 +21600,129 @@
     "summary_lines": [
       "74 號離開名單",
       "75 → 74（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 0,
+    "prev_enroll": 43,
+    "curr_enroll": 43
+  },
+  {
+    "fetched_at": "2026-05-05T14:15:02+08:00",
+    "removed_previous_indexes": [
+      261
+    ],
+    "removed": [
+      {
+        "name": "許O瑄",
+        "birthday": "2024-09-23",
+        "category": "優先收托",
+        "previous_index": 261
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "許O瑄",
+        "birthday": "2024-09-23",
+        "category": "優先收托",
+        "previous_index": 261
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "蕭O希",
+        "birthday": "2026-03-17",
+        "category": "一般市民",
+        "previous_index": 262,
+        "current_index": 261,
+        "delta": -1
+      },
+      {
+        "name": "洪O涵",
+        "birthday": "2025-12-15",
+        "category": "一般市民",
+        "previous_index": 263,
+        "current_index": 262,
+        "delta": -1
+      },
+      {
+        "name": "林O辰",
+        "birthday": "2026-01-01",
+        "category": "一般市民",
+        "previous_index": 264,
+        "current_index": 263,
+        "delta": -1
+      },
+      {
+        "name": "洪O澔",
+        "birthday": "2024-10-21",
+        "category": "一般市民",
+        "previous_index": 265,
+        "current_index": 264,
+        "delta": -1
+      },
+      {
+        "name": "郭O瑤",
+        "birthday": "2024-09-11",
+        "category": "一般市民",
+        "previous_index": 266,
+        "current_index": 265,
+        "delta": -1
+      },
+      {
+        "name": "陳O妘",
+        "birthday": "2025-06-02",
+        "category": "一般市民",
+        "previous_index": 267,
+        "current_index": 266,
+        "delta": -1
+      },
+      {
+        "name": "葉O儀",
+        "birthday": "2026-04-03",
+        "category": "一般市民",
+        "previous_index": 268,
+        "current_index": 267,
+        "delta": -1
+      },
+      {
+        "name": "陳O恒",
+        "birthday": "2025-09-14",
+        "category": "一般市民",
+        "previous_index": 269,
+        "current_index": 268,
+        "delta": -1
+      },
+      {
+        "name": "劉O暘",
+        "birthday": "2024-11-17",
+        "category": "一般市民",
+        "previous_index": 270,
+        "current_index": 269,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 270,
+    "current_waiting_count": 269,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      261
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 262,
+      "current_index": 261,
+      "name": "蕭O希",
+      "delta": -1
+    },
+    "summary_lines": [
+      "261 號離開名單",
+      "262 → 261（只顯示第一個代表性變動）"
     ],
     "change_kind": "shrink",
     "enroll_delta": 0,
