@@ -7195,5 +7195,47 @@
     "enroll_delta": 0,
     "prev_enroll": 45,
     "curr_enroll": 45
+  },
+  {
+    "fetched_at": "2026-05-05T08:15:09+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      116
+    ],
+    "added": [
+      {
+        "name": "王O淵",
+        "birthday": "2024-12-07",
+        "category": "一般市民",
+        "current_index": 116
+      }
+    ],
+    "added_details": [
+      {
+        "name": "王O淵",
+        "birthday": "2024-12-07",
+        "category": "一般市民",
+        "current_index": 116
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 115,
+    "current_waiting_count": 116,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 116 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 45,
+    "curr_enroll": 45
   }
 ]
