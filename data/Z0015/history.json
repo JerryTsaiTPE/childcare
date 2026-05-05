@@ -4763,5 +4763,30 @@
     "enroll_delta": 0,
     "prev_enroll": 223,
     "curr_enroll": 223
+  },
+  {
+    "date": "2026-05-05",
+    "fetched_at": "2026-05-05T15:15:10+08:00",
+    "waiting_count": 118,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 118 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "郭O語",
+        "birthday": "2025-05-05",
+        "category": "一般市民",
+        "current_index": 118
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 223,
+    "curr_enroll": 223
   }
 ]

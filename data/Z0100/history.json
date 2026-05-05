@@ -4753,5 +4753,36 @@
     "enroll_delta": 0,
     "prev_enroll": 188,
     "curr_enroll": 188
+  },
+  {
+    "date": "2026-05-05",
+    "fetched_at": "2026-05-05T15:15:12+08:00",
+    "waiting_count": 122,
+    "last_month_enrolled": 3,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 121 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "李O霏",
+        "birthday": "2025-10-21",
+        "category": "優先收托",
+        "current_index": 121
+      },
+      {
+        "name": "張O樂",
+        "birthday": "2024-11-02",
+        "category": "一般市民",
+        "current_index": 122
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 188,
+    "curr_enroll": 188
   }
 ]

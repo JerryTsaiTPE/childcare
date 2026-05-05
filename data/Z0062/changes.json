@@ -7827,5 +7827,73 @@
     "enroll_delta": 0,
     "prev_enroll": 188,
     "curr_enroll": 188
+  },
+  {
+    "fetched_at": "2026-05-05T15:15:05+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      103,
+      104,
+      105
+    ],
+    "added": [
+      {
+        "name": "張O睿",
+        "birthday": "2025-05-22",
+        "category": "一般市民",
+        "current_index": 103
+      },
+      {
+        "name": "郭O侑",
+        "birthday": "2024-08-26",
+        "category": "一般市民",
+        "current_index": 104
+      },
+      {
+        "name": "藍O允",
+        "birthday": "2025-08-26",
+        "category": "一般市民",
+        "current_index": 105
+      }
+    ],
+    "added_details": [
+      {
+        "name": "張O睿",
+        "birthday": "2025-05-22",
+        "category": "一般市民",
+        "current_index": 103
+      },
+      {
+        "name": "郭O侑",
+        "birthday": "2024-08-26",
+        "category": "一般市民",
+        "current_index": 104
+      },
+      {
+        "name": "藍O允",
+        "birthday": "2025-08-26",
+        "category": "一般市民",
+        "current_index": 105
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 102,
+    "current_waiting_count": 105,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 103 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 188,
+    "curr_enroll": 188
   }
 ]

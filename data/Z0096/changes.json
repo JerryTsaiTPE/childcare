@@ -12787,5 +12787,73 @@
     "enroll_delta": 0,
     "prev_enroll": 143,
     "curr_enroll": 143
+  },
+  {
+    "fetched_at": "2026-05-05T15:15:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      119,
+      120,
+      121
+    ],
+    "added": [
+      {
+        "name": "曹O樂",
+        "birthday": "2025-01-06",
+        "category": "一般市民",
+        "current_index": 119
+      },
+      {
+        "name": "蔡O霏",
+        "birthday": "2025-01-18",
+        "category": "一般市民",
+        "current_index": 120
+      },
+      {
+        "name": "林O銓",
+        "birthday": "2024-10-29",
+        "category": "優先收托",
+        "current_index": 121
+      }
+    ],
+    "added_details": [
+      {
+        "name": "曹O樂",
+        "birthday": "2025-01-06",
+        "category": "一般市民",
+        "current_index": 119
+      },
+      {
+        "name": "蔡O霏",
+        "birthday": "2025-01-18",
+        "category": "一般市民",
+        "current_index": 120
+      },
+      {
+        "name": "林O銓",
+        "birthday": "2024-10-29",
+        "category": "優先收托",
+        "current_index": 121
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 118,
+    "current_waiting_count": 121,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 119 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 143,
+    "curr_enroll": 143
   }
 ]
