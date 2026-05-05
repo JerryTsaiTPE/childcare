@@ -181,7 +181,7 @@ def render_dashboard(
     <div class="slide-panel-content">
       
       <div class="card" style="border: 1px solid var(--accent-2); background: rgba(142, 247, 194, 0.05);">
-        <div class="metric" style="color: var(--accent-2); font-weight:bold; font-size: 14px;">🎉 近 24 小時遞補入托</div>
+        <div class="metric" style="color: var(--accent-2); font-weight:bold; font-size: 14px;">🎉 近 48 小時遞補入托</div>
         <div id="latest-admission-info" style="font-size: 15px; line-height: 1.6; margin-top: 12px;">
           <span style="color:var(--muted)">載入中...</span>
         </div>
@@ -474,7 +474,7 @@ def render_dashboard(
                 globalLatestMs = Math.max(globalLatestMs, new Date(snap.fetched_at).getTime());
             }
         });
-        const thresholdMs = globalLatestMs - (24 * 60 * 60 * 1000);
+        const thresholdMs = globalLatestMs - (48 * 60 * 60 * 1000); // 改為近 48 小時
         
         let recentAdmissions = [];
 
@@ -561,7 +561,7 @@ def render_dashboard(
                 });
                 laEl.innerHTML = htmlStr;
             } else {
-                laEl.innerHTML = '<span style="color:var(--muted)">近 24 小時無入托紀錄</span>';
+                laEl.innerHTML = '<span style="color:var(--muted)">近 48 小時無入托紀錄</span>';
             }
         }
     }
@@ -790,13 +790,29 @@ def render_dashboard(
                     
                     let detailsHtml = '';
                     if (item.added_details && item.added_details.length > 0) {
-                        detailsHtml += '<div style="margin-top:10px; margin-bottom:15px;"><table class="panel-table" style="font-size:13px; border-left: 3px solid var(--accent);"><thead><tr><th>新序號</th><th>兒童姓名</th><th>目前歲數</th><th>身分別</th><th>狀態</th></tr></thead><tbody>';
+                        detailsHtml += '<div style="margin-top:10px; margin-bottom:15px;"><table class="panel-table" style="font-size:13px; border-left: 3px solid var(--accent);"><thead><tr><th>新序號</th><th>兒童姓名</th><th>目前歲數</th><th>身分別</th><th>狀態</th><th style="color:var(--accent)">同步候補(目前)</th></tr></thead><tbody>';
                         item.added_details.forEach(ad => {
                             const age = getAgeString(ad.birthday || ad.cbirthday, item.fetched_at);
                             const categoryStr = ad.category || ad.displaydesc || '—';
                             const name = ad.name || ad.encname || '未知';
                             const idx = ad.current_index || ad.index || '?';
-                            detailsHtml += `<tr><td>${idx}</td><td>${name}</td><td>${age}</td><td>${categoryStr}</td><td><span style="color:var(--accent)">新增候補</span></td></tr>`;
+                            
+                            let syncOrgs = [];
+                            orgIds.forEach(oid => {
+                                if (oid !== currentOrgId) {
+                                    const otherSnapshot = allData[oid].snapshot;
+                                    if (otherSnapshot && otherSnapshot.entries) {
+                                        const searchBirthday = ad.birthday || ad.cbirthday;
+                                        const found = otherSnapshot.entries.find(e => e.encname === name && e.cbirthday === searchBirthday && e.displaydesc === categoryStr);
+                                        if (found) {
+                                            syncOrgs.push(`${otherSnapshot.org.orgshort}(${found.index})`);
+                                        }
+                                    }
+                                }
+                            });
+                            const syncText = syncOrgs.length > 0 ? syncOrgs.join(', ') : '—';
+                            
+                            detailsHtml += `<tr><td>${idx}</td><td>${name}</td><td>${age}</td><td>${categoryStr}</td><td><span style="color:var(--accent)">新增候補</span></td><td style="color:var(--accent-2)">${syncText}</td></tr>`;
                         });
                         detailsHtml += '</tbody></table></div>';
                     }
