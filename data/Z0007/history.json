@@ -5175,5 +5175,36 @@
     "enroll_delta": 0,
     "prev_enroll": 389,
     "curr_enroll": 389
+  },
+  {
+    "date": "2026-05-06",
+    "fetched_at": "2026-05-06T11:15:13+08:00",
+    "waiting_count": 87,
+    "last_month_enrolled": 2,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "65 號離開名單",
+      "66 → 65（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 66,
+      "current_index": 65,
+      "name": "潘O辰",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "李O芯",
+        "birthday": "2025-10-17",
+        "category": "一般市民",
+        "previous_index": 65
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 389,
+    "curr_enroll": 389
   }
 ]

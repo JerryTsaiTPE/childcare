@@ -5152,5 +5152,36 @@
     "enroll_delta": 0,
     "prev_enroll": 123,
     "curr_enroll": 123
+  },
+  {
+    "date": "2026-05-06",
+    "fetched_at": "2026-05-06T11:15:05+08:00",
+    "waiting_count": 50,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "24 號離開名單",
+      "25 → 24（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 25,
+      "current_index": 24,
+      "name": "張O維",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "王O宸",
+        "birthday": "2025-08-30",
+        "category": "一般市民",
+        "previous_index": 24
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 123,
+    "curr_enroll": 123
   }
 ]

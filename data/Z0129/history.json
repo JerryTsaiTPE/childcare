@@ -5139,5 +5139,62 @@
     "enroll_delta": 0,
     "prev_enroll": 29,
     "curr_enroll": 29
+  },
+  {
+    "date": "2026-05-06",
+    "fetched_at": "2026-05-06T11:15:13+08:00",
+    "waiting_count": 70,
+    "last_month_enrolled": 10,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "65 號離開名單",
+      "新增 4 筆候補，最前面出現在 67 號",
+      "66 → 65（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 66,
+      "current_index": 65,
+      "name": "王O恩",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "張O宇",
+        "birthday": "2025-02-18",
+        "category": "優先收托",
+        "previous_index": 65
+      }
+    ],
+    "added_details": [
+      {
+        "name": "徐O恩",
+        "birthday": "2025-07-12",
+        "category": "優先收托",
+        "current_index": 67
+      },
+      {
+        "name": "曾O霓",
+        "birthday": "2024-10-18",
+        "category": "一般市民",
+        "current_index": 68
+      },
+      {
+        "name": "曾O翎",
+        "birthday": "2024-10-18",
+        "category": "一般市民",
+        "current_index": 69
+      },
+      {
+        "name": "劉O昕",
+        "birthday": "2025-12-29",
+        "category": "一般市民",
+        "current_index": 70
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 5,
+    "prev_enroll": 29,
+    "curr_enroll": 34
   }
 ]
