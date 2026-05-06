@@ -1,28 +1,5 @@
 [
   {
-    "fetched_at": "2026-04-22T02:03:02+08:00",
-    "removed_previous_indexes": [],
-    "removed": [],
-    "removed_details": [],
-    "added_current_indexes": [],
-    "added": [],
-    "added_details": [],
-    "moved": [],
-    "changed": false,
-    "baseline": false,
-    "previous_waiting_count": 265,
-    "current_waiting_count": 265,
-    "net_waiting_count_change": 0,
-    "likely_age_out_previous_indexes": [],
-    "likely_withdrawn_previous_indexes": [],
-    "likely_admitted_previous_indexes": [],
-    "highlight_shift": null,
-    "summary_lines": [
-      "名單無變動"
-    ],
-    "change_kind": "stable"
-  },
-  {
     "fetched_at": "2026-04-22T03:03:02+08:00",
     "removed_previous_indexes": [],
     "removed": [],
@@ -23278,6 +23255,32 @@
   },
   {
     "fetched_at": "2026-05-07T02:15:01+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 267,
+    "current_waiting_count": 267,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable",
+    "enroll_delta": 0,
+    "prev_enroll": 43,
+    "curr_enroll": 43
+  },
+  {
+    "fetched_at": "2026-05-07T03:15:01+08:00",
     "removed_previous_indexes": [],
     "removed": [],
     "removed_details": [],
