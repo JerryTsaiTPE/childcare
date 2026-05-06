@@ -10251,5 +10251,73 @@
     "enroll_delta": 0,
     "prev_enroll": 150,
     "curr_enroll": 150
+  },
+  {
+    "fetched_at": "2026-05-06T18:15:11+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      105,
+      106,
+      107
+    ],
+    "added": [
+      {
+        "name": "郭O恩",
+        "birthday": "2025-03-12",
+        "category": "一般市民",
+        "current_index": 105
+      },
+      {
+        "name": "黃O易",
+        "birthday": "2025-11-10",
+        "category": "一般市民",
+        "current_index": 106
+      },
+      {
+        "name": "廖O暘",
+        "birthday": "2026-03-19",
+        "category": "一般市民",
+        "current_index": 107
+      }
+    ],
+    "added_details": [
+      {
+        "name": "郭O恩",
+        "birthday": "2025-03-12",
+        "category": "一般市民",
+        "current_index": 105
+      },
+      {
+        "name": "黃O易",
+        "birthday": "2025-11-10",
+        "category": "一般市民",
+        "current_index": 106
+      },
+      {
+        "name": "廖O暘",
+        "birthday": "2026-03-19",
+        "category": "一般市民",
+        "current_index": 107
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 104,
+    "current_waiting_count": 107,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 105 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 150,
+    "curr_enroll": 150
   }
 ]
