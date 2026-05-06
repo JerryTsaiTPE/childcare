@@ -5592,5 +5592,44 @@
     "enroll_delta": 0,
     "prev_enroll": 74,
     "curr_enroll": 74
+  },
+  {
+    "date": "2026-05-06",
+    "fetched_at": "2026-05-06T16:15:04+08:00",
+    "waiting_count": 36,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "reorder",
+    "summary_lines": [
+      "1 號離開名單",
+      "新增候補出現在 36 號",
+      "2 → 1（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 2,
+      "current_index": 1,
+      "name": "黃O崴",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "張O煖",
+        "birthday": "2024-07-31",
+        "category": "一般市民",
+        "previous_index": 1
+      }
+    ],
+    "added_details": [
+      {
+        "name": "呂O辰",
+        "birthday": "2025-08-12",
+        "category": "一般市民",
+        "current_index": 36
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 74,
+    "curr_enroll": 74
   }
 ]
