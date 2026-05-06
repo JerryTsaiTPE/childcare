@@ -18,14 +18,22 @@ def render_dashboard(
 ) -> str:
     safe_title = "新北市公托候補追蹤Dashboard"
 
-    # --- [保留重點] 過濾無效歷史紀錄，並保留最新一筆供走勢圖連線 ---
+    # --- [修改重點] 新增過濾邏輯：去除無變動的歷史紀錄，但保留「頭尾」以支撐圖表繪製 ---
     for org_id, org_data in all_data.items():
         if "history" in org_data:
             history = org_data["history"]
             if history:
+                # 1. 僅保留 changed 為 True (有變動) 的紀錄
                 filtered_history = [item for item in history if item.get("changed", False)]
-                if not filtered_history or filtered_history[-1].get("fetched_at") != history[-1].get("fetched_at"):
+                
+                # 2. 保留時間軸的「最起點」，讓圖表知道該從哪天開始畫（避免完全無變動時只有一個點）
+                if not filtered_history or filtered_history[0].get("fetched_at") != history[0].get("fetched_at"):
+                    filtered_history.insert(0, history[0])
+                    
+                # 3. 保留時間軸的「最末點」，讓圖表能連線到當下最新時刻
+                if filtered_history[-1].get("fetched_at") != history[-1].get("fetched_at"):
                     filtered_history.append(history[-1])
+                    
                 org_data["history"] = filtered_history
     # -------------------------------------------------------------------------
 
@@ -357,7 +365,7 @@ def render_dashboard(
         <h2>所有名單 <span class="sub" style="font-size:14px; font-weight:normal; margin-left:10px; color:var(--danger);">※ 紅色字體代表該幼兒距滿兩歲不到 14 天，即將被系統自動取消候補。</span></h2>
         
         <div class="sub" style="margin-bottom: 15px; color: var(--muted); border-left: 3px solid var(--accent); padding-left: 10px; font-size: 13px;">
-          如果 [同步候補] 超過一家公托，是去識別化名單容易導致同名同生日(或是雙胞胎姓名近似)，依規定一人同時只能登記備取兩間。
+          如果 [同步候補] 超過一家公托，是去識別化名單容易導致同名同生日(或是雙胞台姓名近似)，依規定一人同時只能登記備取兩間。
         </div>
 
         <div class="control-row" style="margin-bottom:15px;">
@@ -457,7 +465,6 @@ def render_dashboard(
         return y >= 2;
     }
 
-    // --- [修改重點] 加入防呆機制：確保統計不受異常 API 數字汙染 ---
     function calculateGlobalStats() {
         let totalCap = 0;
         let globalUniqueChildren = new Set();
@@ -497,7 +504,6 @@ def render_dashboard(
                 if (item.enroll_delta && item.enroll_delta > 0) {
                     const timeMs = new Date(item.fetched_at).getTime();
                     if (timeMs >= thresholdMs) {
-                        // 防呆機制：實際入托數不應超過「離開候補名單且非屆齡」的人數
                         let actualAdmittedCount = item.enroll_delta;
                         
                         if (item.removed_details) {
@@ -507,10 +513,8 @@ def render_dashboard(
                                     nonAgeOutCount++;
                                 }
                             });
-                            // 取兩者最小值，避免中心人員批次更新或輸入錯誤導致數值暴增
                             actualAdmittedCount = Math.min(item.enroll_delta, nonAgeOutCount);
                         } else {
-                            // 若無名單變化，卻有入托數字增長，我們視為 0
                             actualAdmittedCount = 0;
                         }
 
@@ -580,7 +584,6 @@ def render_dashboard(
             }
         }
     }
-    // -------------------------------------------------------------------------
 
     function toggleStatsPanel() {
         const statsPanel = $('stats-panel');
@@ -799,7 +802,7 @@ def render_dashboard(
                 const visibleHistory = historyData.filter(item => item.changed);
                 
                 if (!visibleHistory.length) {
-                  timeline.innerHTML = '<div class="timeline-item">尚無變動紀錄</div>';
+                  timeline.innerHTML = '<div class="timeline-item" style="color: var(--muted); text-align: center;">尚無變動紀錄</div>';
                 } else {
                   const revHistory = [].concat(visibleHistory).reverse();
                   revHistory.forEach((item) => {
