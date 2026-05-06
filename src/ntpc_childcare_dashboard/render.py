@@ -457,6 +457,7 @@ def render_dashboard(
         return y >= 2;
     }
 
+    // --- [修改重點] 加入防呆機制：確保統計不受異常 API 數字汙染 ---
     function calculateGlobalStats() {
         let totalCap = 0;
         let globalUniqueChildren = new Set();
@@ -496,11 +497,30 @@ def render_dashboard(
                 if (item.enroll_delta && item.enroll_delta > 0) {
                     const timeMs = new Date(item.fetched_at).getTime();
                     if (timeMs >= thresholdMs) {
-                        recentAdmissions.push({
-                            timeMs: timeMs,
-                            orgName: snap.org.orgshort || id,
-                            count: item.enroll_delta
-                        });
+                        // 防呆機制：實際入托數不應超過「離開候補名單且非屆齡」的人數
+                        let actualAdmittedCount = item.enroll_delta;
+                        
+                        if (item.removed_details) {
+                            let nonAgeOutCount = 0;
+                            item.removed_details.forEach(rd => {
+                                if (!isStrictlyTwo(rd.birthday, item.fetched_at)) {
+                                    nonAgeOutCount++;
+                                }
+                            });
+                            // 取兩者最小值，避免中心人員批次更新或輸入錯誤導致數值暴增
+                            actualAdmittedCount = Math.min(item.enroll_delta, nonAgeOutCount);
+                        } else {
+                            // 若無名單變化，卻有入托數字增長，我們視為 0
+                            actualAdmittedCount = 0;
+                        }
+
+                        if (actualAdmittedCount > 0) {
+                            recentAdmissions.push({
+                                timeMs: timeMs,
+                                orgName: snap.org.orgshort || id,
+                                count: actualAdmittedCount
+                            });
+                        }
                     }
                 }
             });
@@ -560,6 +580,7 @@ def render_dashboard(
             }
         }
     }
+    // -------------------------------------------------------------------------
 
     function toggleStatsPanel() {
         const statsPanel = $('stats-panel');
@@ -775,7 +796,6 @@ def render_dashboard(
             if (timeline) {
                 timeline.innerHTML = '';
                 
-                // 💡 [修改重點] 針對歷史紀錄時間軸的專屬過濾，隱藏 changed 為 false 的無變動紀錄
                 const visibleHistory = historyData.filter(item => item.changed);
                 
                 if (!visibleHistory.length) {

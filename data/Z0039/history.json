@@ -5157,5 +5157,30 @@
     "enroll_delta": 0,
     "prev_enroll": 234,
     "curr_enroll": 234
+  },
+  {
+    "date": "2026-05-06",
+    "fetched_at": "2026-05-06T11:25:31+08:00",
+    "waiting_count": 75,
+    "last_month_enrolled": 1,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 75 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "蔡O羚",
+        "birthday": "2025-12-25",
+        "category": "優先收托",
+        "current_index": 75
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 234,
+    "curr_enroll": 234
   }
 ]
