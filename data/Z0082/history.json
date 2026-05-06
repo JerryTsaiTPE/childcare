@@ -5261,5 +5261,42 @@
     "enroll_delta": 0,
     "prev_enroll": 240,
     "curr_enroll": 240
+  },
+  {
+    "date": "2026-05-06",
+    "fetched_at": "2026-05-06T14:15:10+08:00",
+    "waiting_count": 82,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "1 等 2 筆序號離開名單",
+      "2 → 1（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 2,
+      "current_index": 1,
+      "name": "洪O奎",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "許O知",
+        "birthday": "2024-06-21",
+        "category": "一般市民",
+        "previous_index": 1
+      },
+      {
+        "name": "何O晞",
+        "birthday": "2025-04-17",
+        "category": "一般市民",
+        "previous_index": 10
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 1,
+    "prev_enroll": 240,
+    "curr_enroll": 241
   }
 ]
