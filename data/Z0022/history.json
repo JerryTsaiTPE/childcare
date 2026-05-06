@@ -5504,5 +5504,30 @@
     "enroll_delta": 0,
     "prev_enroll": 229,
     "curr_enroll": 229
+  },
+  {
+    "date": "2026-05-06",
+    "fetched_at": "2026-05-06T10:15:05+08:00",
+    "waiting_count": 108,
+    "last_month_enrolled": 1,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 108 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "邱O淩",
+        "birthday": "2025-09-19",
+        "category": "一般市民",
+        "current_index": 108
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 229,
+    "curr_enroll": 229
   }
 ]

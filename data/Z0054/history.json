@@ -5164,5 +5164,36 @@
     "enroll_delta": 0,
     "prev_enroll": 289,
     "curr_enroll": 289
+  },
+  {
+    "date": "2026-05-06",
+    "fetched_at": "2026-05-06T10:15:12+08:00",
+    "waiting_count": 134,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 133 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "姚O萱",
+        "birthday": "2026-04-23",
+        "category": "一般市民",
+        "current_index": 133
+      },
+      {
+        "name": "王O恆",
+        "birthday": "2026-02-23",
+        "category": "一般市民",
+        "current_index": 134
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 289,
+    "curr_enroll": 289
   }
 ]

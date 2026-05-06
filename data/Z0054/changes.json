@@ -8794,5 +8794,60 @@
     "enroll_delta": 0,
     "prev_enroll": 289,
     "curr_enroll": 289
+  },
+  {
+    "fetched_at": "2026-05-06T10:15:12+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      133,
+      134
+    ],
+    "added": [
+      {
+        "name": "姚O萱",
+        "birthday": "2026-04-23",
+        "category": "一般市民",
+        "current_index": 133
+      },
+      {
+        "name": "王O恆",
+        "birthday": "2026-02-23",
+        "category": "一般市民",
+        "current_index": 134
+      }
+    ],
+    "added_details": [
+      {
+        "name": "姚O萱",
+        "birthday": "2026-04-23",
+        "category": "一般市民",
+        "current_index": 133
+      },
+      {
+        "name": "王O恆",
+        "birthday": "2026-02-23",
+        "category": "一般市民",
+        "current_index": 134
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 132,
+    "current_waiting_count": 134,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 133 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 289,
+    "curr_enroll": 289
   }
 ]
