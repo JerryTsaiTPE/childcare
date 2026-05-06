@@ -8899,5 +8899,38 @@
     "enroll_delta": 0,
     "prev_enroll": 43,
     "curr_enroll": 43
+  },
+  {
+    "date": "2026-05-07",
+    "fetched_at": "2026-05-07T01:15:01+08:00",
+    "waiting_count": 267,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "212 號離開名單",
+      "213 → 212（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 213,
+      "current_index": 212,
+      "name": "洪O安",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "蕭O榛",
+        "birthday": "2024-05-07",
+        "category": "一般市民",
+        "previous_index": 212
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [
+      212
+    ],
+    "enroll_delta": 0,
+    "prev_enroll": 43,
+    "curr_enroll": 43
   }
 ]
