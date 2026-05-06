@@ -9067,5 +9067,72 @@
     "enroll_delta": 0,
     "prev_enroll": 91,
     "curr_enroll": 91
+  },
+  {
+    "fetched_at": "2026-05-06T12:15:06+08:00",
+    "removed_previous_indexes": [
+      78
+    ],
+    "removed": [
+      {
+        "name": "歐O佑",
+        "birthday": "2026-04-22",
+        "category": "一般市民",
+        "previous_index": 78
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "歐O佑",
+        "birthday": "2026-04-22",
+        "category": "一般市民",
+        "previous_index": 78
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "邱O哲",
+        "birthday": "2025-09-15",
+        "category": "一般市民",
+        "previous_index": 79,
+        "current_index": 78,
+        "delta": -1
+      },
+      {
+        "name": "陳O鈞",
+        "birthday": "2026-04-25",
+        "category": "一般市民",
+        "previous_index": 80,
+        "current_index": 79,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 80,
+    "current_waiting_count": 79,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      78
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 79,
+      "current_index": 78,
+      "name": "邱O哲",
+      "delta": -1
+    },
+    "summary_lines": [
+      "78 號離開名單",
+      "79 → 78（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 0,
+    "prev_enroll": 91,
+    "curr_enroll": 91
   }
 ]
