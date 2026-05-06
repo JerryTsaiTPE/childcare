@@ -5628,5 +5628,30 @@
     "enroll_delta": 0,
     "prev_enroll": 213,
     "curr_enroll": 213
+  },
+  {
+    "date": "2026-05-06",
+    "fetched_at": "2026-05-06T15:15:03+08:00",
+    "waiting_count": 113,
+    "last_month_enrolled": 1,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 113 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "林O鈞",
+        "birthday": "2025-12-16",
+        "category": "一般市民",
+        "current_index": 113
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 213,
+    "curr_enroll": 213
   }
 ]

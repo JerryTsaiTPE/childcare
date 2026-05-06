@@ -9118,5 +9118,47 @@
     "enroll_delta": 0,
     "prev_enroll": 188,
     "curr_enroll": 188
+  },
+  {
+    "fetched_at": "2026-05-06T15:15:11+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      123
+    ],
+    "added": [
+      {
+        "name": "黃O恆",
+        "birthday": "2024-10-28",
+        "category": "優先收托",
+        "current_index": 123
+      }
+    ],
+    "added_details": [
+      {
+        "name": "黃O恆",
+        "birthday": "2024-10-28",
+        "category": "優先收托",
+        "current_index": 123
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 122,
+    "current_waiting_count": 123,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 123 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 188,
+    "curr_enroll": 188
   }
 ]

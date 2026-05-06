@@ -10308,5 +10308,86 @@
     "enroll_delta": 0,
     "prev_enroll": 318,
     "curr_enroll": 318
+  },
+  {
+    "fetched_at": "2026-05-06T15:15:08+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      106,
+      107,
+      108,
+      109
+    ],
+    "added": [
+      {
+        "name": "賴O茉",
+        "birthday": "2024-06-11",
+        "category": "優先收托",
+        "current_index": 106
+      },
+      {
+        "name": "白O辰",
+        "birthday": "2026-02-15",
+        "category": "優先收托",
+        "current_index": 107
+      },
+      {
+        "name": "林O璇",
+        "birthday": "2026-04-22",
+        "category": "優先收托",
+        "current_index": 108
+      },
+      {
+        "name": "黃O蒙",
+        "birthday": "2026-05-03",
+        "category": "優先收托",
+        "current_index": 109
+      }
+    ],
+    "added_details": [
+      {
+        "name": "賴O茉",
+        "birthday": "2024-06-11",
+        "category": "優先收托",
+        "current_index": 106
+      },
+      {
+        "name": "白O辰",
+        "birthday": "2026-02-15",
+        "category": "優先收托",
+        "current_index": 107
+      },
+      {
+        "name": "林O璇",
+        "birthday": "2026-04-22",
+        "category": "優先收托",
+        "current_index": 108
+      },
+      {
+        "name": "黃O蒙",
+        "birthday": "2026-05-03",
+        "category": "優先收托",
+        "current_index": 109
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 105,
+    "current_waiting_count": 109,
+    "net_waiting_count_change": 4,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 4 筆候補，最前面出現在 106 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 318,
+    "curr_enroll": 318
   }
 ]

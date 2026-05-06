@@ -10524,5 +10524,47 @@
     "enroll_delta": 0,
     "prev_enroll": 213,
     "curr_enroll": 213
+  },
+  {
+    "fetched_at": "2026-05-06T15:15:03+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      113
+    ],
+    "added": [
+      {
+        "name": "林O鈞",
+        "birthday": "2025-12-16",
+        "category": "一般市民",
+        "current_index": 113
+      }
+    ],
+    "added_details": [
+      {
+        "name": "林O鈞",
+        "birthday": "2025-12-16",
+        "category": "一般市民",
+        "current_index": 113
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 112,
+    "current_waiting_count": 113,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 113 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 213,
+    "curr_enroll": 213
   }
 ]
