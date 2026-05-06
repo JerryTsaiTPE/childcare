@@ -5214,5 +5214,42 @@
     "enroll_delta": 0,
     "prev_enroll": 180,
     "curr_enroll": 180
+  },
+  {
+    "date": "2026-05-06",
+    "fetched_at": "2026-05-06T13:15:11+08:00",
+    "waiting_count": 61,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "8 等 2 筆序號離開名單",
+      "10 → 8（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 10,
+      "current_index": 8,
+      "name": "邱O澔",
+      "delta": -2
+    },
+    "removed_details": [
+      {
+        "name": "高O淮",
+        "birthday": "2025-07-22",
+        "category": "一般市民",
+        "previous_index": 8
+      },
+      {
+        "name": "高O涵",
+        "birthday": "2025-07-22",
+        "category": "一般市民",
+        "previous_index": 9
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 180,
+    "curr_enroll": 180
   }
 ]
