@@ -13027,5 +13027,47 @@
     "enroll_delta": 0,
     "prev_enroll": 124,
     "curr_enroll": 124
+  },
+  {
+    "fetched_at": "2026-05-07T16:15:02+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      81
+    ],
+    "added": [
+      {
+        "name": "田O安",
+        "birthday": "2026-03-07",
+        "category": "一般市民",
+        "current_index": 81
+      }
+    ],
+    "added_details": [
+      {
+        "name": "田O安",
+        "birthday": "2026-03-07",
+        "category": "一般市民",
+        "current_index": 81
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 80,
+    "current_waiting_count": 81,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 81 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 124,
+    "curr_enroll": 124
   }
 ]

@@ -6141,5 +6141,44 @@
     "enroll_delta": 0,
     "prev_enroll": 229,
     "curr_enroll": 229
+  },
+  {
+    "date": "2026-05-07",
+    "fetched_at": "2026-05-07T16:15:05+08:00",
+    "waiting_count": 108,
+    "last_month_enrolled": 1,
+    "changed": true,
+    "change_kind": "reorder",
+    "summary_lines": [
+      "1 號離開名單",
+      "新增候補出現在 108 號",
+      "2 → 1（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 2,
+      "current_index": 1,
+      "name": "余O宸",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "曾O丞",
+        "birthday": "2025-02-23",
+        "category": "一般市民",
+        "previous_index": 1
+      }
+    ],
+    "added_details": [
+      {
+        "name": "何O熹",
+        "birthday": "2026-01-14",
+        "category": "一般市民",
+        "current_index": 108
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 1,
+    "prev_enroll": 229,
+    "curr_enroll": 230
   }
 ]
