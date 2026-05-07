@@ -18,22 +18,16 @@ def render_dashboard(
 ) -> str:
     safe_title = "新北市公托候補追蹤Dashboard"
 
-    # --- [修改重點] 新增過濾邏輯：去除無變動的歷史紀錄，但保留「頭尾」以支撐圖表繪製 ---
+    # --- 過濾無效歷史紀錄，並保留首尾以支撐圖表繪製 ---
     for org_id, org_data in all_data.items():
         if "history" in org_data:
             history = org_data["history"]
             if history:
-                # 1. 僅保留 changed 為 True (有變動) 的紀錄
                 filtered_history = [item for item in history if item.get("changed", False)]
-                
-                # 2. 保留時間軸的「最起點」，讓圖表知道該從哪天開始畫（避免完全無變動時只有一個點）
                 if not filtered_history or filtered_history[0].get("fetched_at") != history[0].get("fetched_at"):
                     filtered_history.insert(0, history[0])
-                    
-                # 3. 保留時間軸的「最末點」，讓圖表能連線到當下最新時刻
                 if filtered_history[-1].get("fetched_at") != history[-1].get("fetched_at"):
                     filtered_history.append(history[-1])
-                    
                 org_data["history"] = filtered_history
     # -------------------------------------------------------------------------
 
@@ -234,6 +228,25 @@ def render_dashboard(
         </div>
         <div class="sub" style="margin-top: 8px; font-size: 13px;">快速計算幼兒入學年齡與對應學年度，幫助家長提早規劃入學時程。</div>
       </div>
+      
+      <div class="card" style="border: 1px solid var(--border); transition: 0.3s; cursor: pointer; margin-top: 14px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" id="btn-open-name-stats">
+        <div style="color: var(--accent); font-weight:bold; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+          🔤 姓名統計 (第三個字) ↗
+        </div>
+        <div class="sub" style="margin-top: 8px; font-size: 13px;">分析全區備取名單中，名字第三個字的出現次數與佔比。</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="name-stats-overlay" class="overlay"></div>
+  <div id="name-stats-panel" class="slide-panel">
+    <div class="slide-panel-header">
+      <h2>🔤 姓名第三字統計</h2>
+      <button id="btn-close-name-stats" class="close-btn" title="關閉">✖</button>
+    </div>
+    <div class="slide-panel-content">
+      <input type="text" id="name-char-search" class="select-input" style="width:100%; margin-bottom: 10px; font-size:16px; padding:12px;" placeholder="輸入一個字搜尋 (如：明)..." maxlength="1">
+      <div id="name-stats-results"></div>
     </div>
   </div>
 
@@ -414,6 +427,8 @@ def render_dashboard(
     let snapshot = null;
     let latest = null;
     let historyData = [];
+    let nameStatsData = []; 
+    let totalValidNameCount = 0; // 💡 新增：儲存統計基數總人數
     const STORAGE_KEY = 'ntpc_childcare_default_org';
     let orgsByDistrict = {}; 
 
@@ -601,6 +616,93 @@ def render_dashboard(
         const linksOverlay = $('links-overlay');
         linksPanel.classList.toggle('active');
         linksOverlay.classList.toggle('active');
+    }
+
+    function toggleNameStatsPanel() {
+        const panel = $('name-stats-panel');
+        const overlay = $('name-stats-overlay');
+        const isActive = panel.classList.contains('active');
+        
+        if (!isActive) {
+            if (nameStatsData.length === 0) calculateNameStats();
+            renderNameStats('');
+            $('name-char-search').value = '';
+        }
+        
+        panel.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+
+    function calculateNameStats() {
+        let uniqueNames = new Map();
+        
+        orgIds.forEach(id => {
+            const snap = allData[id].snapshot;
+            if (snap && snap.entries) {
+                snap.entries.forEach(entry => {
+                    const key = `${entry.encname}|${entry.cbirthday}|${entry.displaydesc || ''}`;
+                    if (!uniqueNames.has(key)) {
+                        uniqueNames.set(key, entry.encname);
+                    }
+                });
+            }
+        });
+
+        let charCounts = {};
+        let totalValidChars = 0;
+        const excludeChars = ['O', 'o', '0', '〇', '○', 'Ｏ', ' ', '　'];
+
+        uniqueNames.forEach(name => {
+            if (name && name.length >= 3) {
+                const thirdChar = name.charAt(2);
+                if (!excludeChars.includes(thirdChar)) {
+                    charCounts[thirdChar] = (charCounts[thirdChar] || 0) + 1;
+                    totalValidChars++;
+                }
+            }
+        });
+
+        // 💡 儲存有效總人數供渲染顯示
+        totalValidNameCount = totalValidChars;
+
+        nameStatsData = Object.keys(charCounts).map(char => {
+            return {
+                char: char,
+                count: charCounts[char],
+                pct: totalValidChars > 0 ? ((charCounts[char] / totalValidChars) * 100).toFixed(2) : 0
+            };
+        });
+
+        nameStatsData.sort((a, b) => b.count - a.count);
+    }
+
+    function renderNameStats(filterChar) {
+        const container = $('name-stats-results');
+        if (!container) return;
+
+        let filtered = nameStatsData;
+        if (filterChar) {
+            filtered = nameStatsData.filter(item => item.char === filterChar);
+        }
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<div style="color:var(--muted); padding: 10px; text-align:center;">找不到符合的字</div>';
+            return;
+        }
+
+        // 💡 新增：在表格上方顯示統計基數
+        let html = `<div style="margin-bottom: 12px; font-size: 14px; color: var(--muted); text-align: right;">統計基數：共 <span style="color:var(--text); font-weight:bold; font-family:Consolas, monospace;">${totalValidNameCount}</span> 人</div>`;
+        
+        html += '<table class="dist-stats-table" style="margin-top:0;"><thead><tr><th style="text-align:left;">第三字</th><th style="text-align:right;">人數</th><th style="text-align:right;">佔比</th></tr></thead><tbody>';
+        filtered.forEach(item => {
+            html += `<tr>
+                <td style="font-weight:bold; color:var(--accent); font-size:18px;">${item.char}</td>
+                <td style="text-align:right; font-family:Consolas, monospace; font-size:16px;">${item.count}</td>
+                <td style="text-align:right; color:var(--muted); font-family:Consolas, monospace;">${item.pct}%</td>
+            </tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
     }
 
     function renderCurrentOrg() {
@@ -1185,6 +1287,26 @@ def render_dashboard(
             if (linksBtn) linksBtn.addEventListener('click', toggleLinksPanel);
             if (closeLinksBtn) closeLinksBtn.addEventListener('click', toggleLinksPanel);
             if (linksOverlay) linksOverlay.addEventListener('click', toggleLinksPanel);
+
+            const openNameStatsBtn = $('btn-open-name-stats');
+            const closeNameStatsBtn = $('btn-close-name-stats');
+            const nameStatsOverlay = $('name-stats-overlay');
+            const nameCharSearch = $('name-char-search');
+
+            if (openNameStatsBtn) {
+                openNameStatsBtn.addEventListener('click', () => {
+                    toggleLinksPanel(); 
+                    toggleNameStatsPanel(); 
+                });
+            }
+            if (closeNameStatsBtn) closeNameStatsBtn.addEventListener('click', toggleNameStatsPanel);
+            if (nameStatsOverlay) nameStatsOverlay.addEventListener('click', toggleNameStatsPanel);
+            
+            if (nameCharSearch) {
+                nameCharSearch.addEventListener('input', (e) => {
+                    renderNameStats(e.target.value.trim());
+                });
+            }
 
             const tooltip = $('chart-tooltip');
             document.addEventListener('mouseover', (e) => {

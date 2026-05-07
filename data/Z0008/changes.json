@@ -9880,5 +9880,125 @@
     "enroll_delta": 0,
     "prev_enroll": 336,
     "curr_enroll": 336
+  },
+  {
+    "fetched_at": "2026-05-07T13:59:37+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      140,
+      141,
+      142
+    ],
+    "added": [
+      {
+        "name": "洪O謙",
+        "birthday": "2024-12-28",
+        "category": "優先收托",
+        "current_index": 140
+      },
+      {
+        "name": "洪O嫙",
+        "birthday": "2026-01-15",
+        "category": "優先收托",
+        "current_index": 141
+      },
+      {
+        "name": "吳O希",
+        "birthday": "2026-04-28",
+        "category": "一般市民",
+        "current_index": 142
+      }
+    ],
+    "added_details": [
+      {
+        "name": "洪O謙",
+        "birthday": "2024-12-28",
+        "category": "優先收托",
+        "current_index": 140
+      },
+      {
+        "name": "洪O嫙",
+        "birthday": "2026-01-15",
+        "category": "優先收托",
+        "current_index": 141
+      },
+      {
+        "name": "吳O希",
+        "birthday": "2026-04-28",
+        "category": "一般市民",
+        "current_index": 142
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 139,
+    "current_waiting_count": 142,
+    "net_waiting_count_change": 3,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 3 筆候補，最前面出現在 140 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 336,
+    "curr_enroll": 336
+  },
+  {
+    "fetched_at": "2026-05-07T14:04:41+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 142,
+    "current_waiting_count": 142,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable",
+    "enroll_delta": 0,
+    "prev_enroll": 336,
+    "curr_enroll": 336
+  },
+  {
+    "fetched_at": "2026-05-07T14:15:04+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 142,
+    "current_waiting_count": 142,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable",
+    "enroll_delta": 0,
+    "prev_enroll": 336,
+    "curr_enroll": 336
   }
 ]

@@ -5726,5 +5726,66 @@
     "enroll_delta": 0,
     "prev_enroll": 463,
     "curr_enroll": 463
+  },
+  {
+    "date": "2026-05-07",
+    "fetched_at": "2026-05-07T13:59:41+08:00",
+    "waiting_count": 70,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 70 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "高O熙",
+        "birthday": "2024-10-03",
+        "category": "一般市民",
+        "current_index": 70
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 463,
+    "curr_enroll": 463
+  },
+  {
+    "date": "2026-05-07",
+    "fetched_at": "2026-05-07T14:04:45+08:00",
+    "waiting_count": 70,
+    "last_month_enrolled": 0,
+    "changed": false,
+    "change_kind": "stable",
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 463,
+    "curr_enroll": 463
+  },
+  {
+    "date": "2026-05-07",
+    "fetched_at": "2026-05-07T14:15:09+08:00",
+    "waiting_count": 70,
+    "last_month_enrolled": 0,
+    "changed": false,
+    "change_kind": "stable",
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 463,
+    "curr_enroll": 463
   }
 ]

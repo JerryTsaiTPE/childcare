@@ -9539,5 +9539,99 @@
     "enroll_delta": 0,
     "prev_enroll": 463,
     "curr_enroll": 463
+  },
+  {
+    "fetched_at": "2026-05-07T13:59:41+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      70
+    ],
+    "added": [
+      {
+        "name": "高O熙",
+        "birthday": "2024-10-03",
+        "category": "一般市民",
+        "current_index": 70
+      }
+    ],
+    "added_details": [
+      {
+        "name": "高O熙",
+        "birthday": "2024-10-03",
+        "category": "一般市民",
+        "current_index": 70
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 69,
+    "current_waiting_count": 70,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 70 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 463,
+    "curr_enroll": 463
+  },
+  {
+    "fetched_at": "2026-05-07T14:04:45+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 70,
+    "current_waiting_count": 70,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable",
+    "enroll_delta": 0,
+    "prev_enroll": 463,
+    "curr_enroll": 463
+  },
+  {
+    "fetched_at": "2026-05-07T14:15:09+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [],
+    "changed": false,
+    "baseline": false,
+    "previous_waiting_count": 70,
+    "current_waiting_count": 70,
+    "net_waiting_count_change": 0,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "名單無變動"
+    ],
+    "change_kind": "stable",
+    "enroll_delta": 0,
+    "prev_enroll": 463,
+    "curr_enroll": 463
   }
 ]
