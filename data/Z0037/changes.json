@@ -8310,5 +8310,47 @@
     "enroll_delta": 0,
     "prev_enroll": 298,
     "curr_enroll": 298
+  },
+  {
+    "fetched_at": "2026-05-07T10:15:07+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      21
+    ],
+    "added": [
+      {
+        "name": "吳O霈",
+        "birthday": "2025-01-04",
+        "category": "一般市民",
+        "current_index": 21
+      }
+    ],
+    "added_details": [
+      {
+        "name": "吳O霈",
+        "birthday": "2025-01-04",
+        "category": "一般市民",
+        "current_index": 21
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 20,
+    "current_waiting_count": 21,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 21 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 298,
+    "curr_enroll": 298
   }
 ]

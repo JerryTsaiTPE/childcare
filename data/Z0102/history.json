@@ -5647,5 +5647,36 @@
     "enroll_delta": 0,
     "prev_enroll": 180,
     "curr_enroll": 180
+  },
+  {
+    "date": "2026-05-07",
+    "fetched_at": "2026-05-07T10:15:11+08:00",
+    "waiting_count": 60,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "9 號離開名單",
+      "10 → 9（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 10,
+      "current_index": 9,
+      "name": "王O叡",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "駱O嵩",
+        "birthday": "2025-07-14",
+        "category": "一般市民",
+        "previous_index": 9
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 180,
+    "curr_enroll": 180
   }
 ]

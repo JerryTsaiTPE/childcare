@@ -9270,5 +9270,47 @@
     "enroll_delta": 0,
     "prev_enroll": 234,
     "curr_enroll": 234
+  },
+  {
+    "fetched_at": "2026-05-07T10:15:09+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      72
+    ],
+    "added": [
+      {
+        "name": "宜O芙",
+        "birthday": "2026-04-05",
+        "category": "優先收托",
+        "current_index": 72
+      }
+    ],
+    "added_details": [
+      {
+        "name": "宜O芙",
+        "birthday": "2026-04-05",
+        "category": "優先收托",
+        "current_index": 72
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 71,
+    "current_waiting_count": 72,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 72 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 234,
+    "curr_enroll": 234
   }
 ]

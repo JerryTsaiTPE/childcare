@@ -8978,5 +8978,60 @@
     "enroll_delta": 0,
     "prev_enroll": 66,
     "curr_enroll": 66
+  },
+  {
+    "fetched_at": "2026-05-07T10:15:14+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      99,
+      100
+    ],
+    "added": [
+      {
+        "name": "陳O映",
+        "birthday": "2025-03-12",
+        "category": "優先收托",
+        "current_index": 99
+      },
+      {
+        "name": "陳OO玽",
+        "birthday": "2025-03-12",
+        "category": "優先收托",
+        "current_index": 100
+      }
+    ],
+    "added_details": [
+      {
+        "name": "陳O映",
+        "birthday": "2025-03-12",
+        "category": "優先收托",
+        "current_index": 99
+      },
+      {
+        "name": "陳OO玽",
+        "birthday": "2025-03-12",
+        "category": "優先收托",
+        "current_index": 100
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 98,
+    "current_waiting_count": 100,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 99 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 66,
+    "curr_enroll": 66
   }
 ]
