@@ -5835,5 +5835,36 @@
     "enroll_delta": 0,
     "prev_enroll": 172,
     "curr_enroll": 172
+  },
+  {
+    "date": "2026-05-07",
+    "fetched_at": "2026-05-07T21:15:13+08:00",
+    "waiting_count": 64,
+    "last_month_enrolled": 1,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "41 號離開名單",
+      "42 → 41（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 42,
+      "current_index": 41,
+      "name": "游O禾",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "陳O彬",
+        "birthday": "2026-02-07",
+        "category": "一般市民",
+        "previous_index": 41
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 172,
+    "curr_enroll": 172
   }
 ]
