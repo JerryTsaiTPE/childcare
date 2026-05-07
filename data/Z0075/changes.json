@@ -9886,5 +9886,80 @@
     "enroll_delta": 0,
     "prev_enroll": 256,
     "curr_enroll": 256
+  },
+  {
+    "fetched_at": "2026-05-07T19:15:12+08:00",
+    "removed_previous_indexes": [
+      36
+    ],
+    "removed": [
+      {
+        "name": "賴O采",
+        "birthday": "2026-01-30",
+        "category": "一般市民",
+        "previous_index": 36
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "賴O采",
+        "birthday": "2026-01-30",
+        "category": "一般市民",
+        "previous_index": 36
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "李O旂",
+        "birthday": "2026-02-03",
+        "category": "一般市民",
+        "previous_index": 37,
+        "current_index": 36,
+        "delta": -1
+      },
+      {
+        "name": "張O紹",
+        "birthday": "2025-12-10",
+        "category": "一般市民",
+        "previous_index": 38,
+        "current_index": 37,
+        "delta": -1
+      },
+      {
+        "name": "陳O恩",
+        "birthday": "2025-12-11",
+        "category": "一般市民",
+        "previous_index": 39,
+        "current_index": 38,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 39,
+    "current_waiting_count": 38,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      36
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 37,
+      "current_index": 36,
+      "name": "李O旂",
+      "delta": -1
+    },
+    "summary_lines": [
+      "36 號離開名單",
+      "37 → 36（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 0,
+    "prev_enroll": 256,
+    "curr_enroll": 256
   }
 ]

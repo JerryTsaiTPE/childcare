@@ -5844,5 +5844,36 @@
     "enroll_delta": 0,
     "prev_enroll": 256,
     "curr_enroll": 256
+  },
+  {
+    "date": "2026-05-07",
+    "fetched_at": "2026-05-07T19:15:12+08:00",
+    "waiting_count": 38,
+    "last_month_enrolled": 3,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "36 號離開名單",
+      "37 → 36（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 37,
+      "current_index": 36,
+      "name": "李O旂",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "賴O采",
+        "birthday": "2026-01-30",
+        "category": "一般市民",
+        "previous_index": 36
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 256,
+    "curr_enroll": 256
   }
 ]

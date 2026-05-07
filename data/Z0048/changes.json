@@ -8578,5 +8578,88 @@
     "enroll_delta": 0,
     "prev_enroll": 361,
     "curr_enroll": 361
+  },
+  {
+    "fetched_at": "2026-05-07T19:15:12+08:00",
+    "removed_previous_indexes": [
+      70
+    ],
+    "removed": [
+      {
+        "name": "賴O采",
+        "birthday": "2026-01-30",
+        "category": "一般市民",
+        "previous_index": 70
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "賴O采",
+        "birthday": "2026-01-30",
+        "category": "一般市民",
+        "previous_index": 70
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "陳O然",
+        "birthday": "2026-02-03",
+        "category": "一般市民",
+        "previous_index": 71,
+        "current_index": 70,
+        "delta": -1
+      },
+      {
+        "name": "黃O澄",
+        "birthday": "2024-10-12",
+        "category": "一般市民",
+        "previous_index": 72,
+        "current_index": 71,
+        "delta": -1
+      },
+      {
+        "name": "馬O安",
+        "birthday": "2026-03-30",
+        "category": "一般市民",
+        "previous_index": 73,
+        "current_index": 72,
+        "delta": -1
+      },
+      {
+        "name": "徐O玄",
+        "birthday": "2026-02-06",
+        "category": "一般市民",
+        "previous_index": 74,
+        "current_index": 73,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 74,
+    "current_waiting_count": 73,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      70
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 71,
+      "current_index": 70,
+      "name": "陳O然",
+      "delta": -1
+    },
+    "summary_lines": [
+      "70 號離開名單",
+      "71 → 70（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 1,
+    "prev_enroll": 361,
+    "curr_enroll": 362
   }
 ]
