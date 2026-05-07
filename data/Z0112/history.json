@@ -5687,5 +5687,36 @@
     "enroll_delta": 0,
     "prev_enroll": 123,
     "curr_enroll": 123
+  },
+  {
+    "date": "2026-05-07",
+    "fetched_at": "2026-05-07T13:15:06+08:00",
+    "waiting_count": 49,
+    "last_month_enrolled": 0,
+    "changed": true,
+    "change_kind": "shrink",
+    "summary_lines": [
+      "1 號離開名單",
+      "2 → 1（只顯示第一個代表性變動）"
+    ],
+    "highlight_shift": {
+      "previous_index": 2,
+      "current_index": 1,
+      "name": "鍾O希",
+      "delta": -1
+    },
+    "removed_details": [
+      {
+        "name": "柯O妮",
+        "birthday": "2024-09-25",
+        "category": "一般市民",
+        "previous_index": 1
+      }
+    ],
+    "added_details": [],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 123,
+    "curr_enroll": 123
   }
 ]

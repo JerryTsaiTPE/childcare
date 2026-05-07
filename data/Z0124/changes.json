@@ -10564,5 +10564,47 @@
     "enroll_delta": 0,
     "prev_enroll": 35,
     "curr_enroll": 35
+  },
+  {
+    "fetched_at": "2026-05-07T13:15:12+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      98
+    ],
+    "added": [
+      {
+        "name": "林O",
+        "birthday": "2025-08-07",
+        "category": "優先收托",
+        "current_index": 98
+      }
+    ],
+    "added_details": [
+      {
+        "name": "林O",
+        "birthday": "2025-08-07",
+        "category": "優先收托",
+        "current_index": 98
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 97,
+    "current_waiting_count": 98,
+    "net_waiting_count_change": 1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增候補出現在 98 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 35,
+    "curr_enroll": 35
   }
 ]
