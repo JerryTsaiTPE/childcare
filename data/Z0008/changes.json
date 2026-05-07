@@ -10000,5 +10000,60 @@
     "enroll_delta": 0,
     "prev_enroll": 336,
     "curr_enroll": 336
+  },
+  {
+    "fetched_at": "2026-05-07T15:15:04+08:00",
+    "removed_previous_indexes": [],
+    "removed": [],
+    "removed_details": [],
+    "added_current_indexes": [
+      143,
+      144
+    ],
+    "added": [
+      {
+        "name": "黃O皓",
+        "birthday": "2025-09-29",
+        "category": "一般市民",
+        "current_index": 143
+      },
+      {
+        "name": "蔡O羚",
+        "birthday": "2025-12-25",
+        "category": "優先收托",
+        "current_index": 144
+      }
+    ],
+    "added_details": [
+      {
+        "name": "黃O皓",
+        "birthday": "2025-09-29",
+        "category": "一般市民",
+        "current_index": 143
+      },
+      {
+        "name": "蔡O羚",
+        "birthday": "2025-12-25",
+        "category": "優先收托",
+        "current_index": 144
+      }
+    ],
+    "moved": [],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 142,
+    "current_waiting_count": 144,
+    "net_waiting_count_change": 2,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": null,
+    "summary_lines": [
+      "新增 2 筆候補，最前面出現在 143 號"
+    ],
+    "change_kind": "grow",
+    "enroll_delta": 0,
+    "prev_enroll": 336,
+    "curr_enroll": 336
   }
 ]
