@@ -5657,5 +5657,30 @@
     "enroll_delta": 0,
     "prev_enroll": 256,
     "curr_enroll": 256
+  },
+  {
+    "date": "2026-05-07",
+    "fetched_at": "2026-05-07T11:15:12+08:00",
+    "waiting_count": 39,
+    "last_month_enrolled": 3,
+    "changed": true,
+    "change_kind": "grow",
+    "summary_lines": [
+      "新增候補出現在 39 號"
+    ],
+    "highlight_shift": null,
+    "removed_details": [],
+    "added_details": [
+      {
+        "name": "陳O恩",
+        "birthday": "2025-12-11",
+        "category": "一般市民",
+        "current_index": 39
+      }
+    ],
+    "likely_age_out_previous_indexes": [],
+    "enroll_delta": 0,
+    "prev_enroll": 256,
+    "curr_enroll": 256
   }
 ]
