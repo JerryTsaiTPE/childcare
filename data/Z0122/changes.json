@@ -8328,5 +8328,112 @@
     "enroll_delta": 0,
     "prev_enroll": 120,
     "curr_enroll": 120
+  },
+  {
+    "fetched_at": "2026-05-07T12:15:12+08:00",
+    "removed_previous_indexes": [
+      107
+    ],
+    "removed": [
+      {
+        "name": "王O宸",
+        "birthday": "2026-01-26",
+        "category": "一般市民",
+        "previous_index": 107
+      }
+    ],
+    "removed_details": [
+      {
+        "name": "王O宸",
+        "birthday": "2026-01-26",
+        "category": "一般市民",
+        "previous_index": 107
+      }
+    ],
+    "added_current_indexes": [],
+    "added": [],
+    "added_details": [],
+    "moved": [
+      {
+        "name": "莊O霈",
+        "birthday": "2026-03-22",
+        "category": "一般市民",
+        "previous_index": 108,
+        "current_index": 107,
+        "delta": -1
+      },
+      {
+        "name": "涂O祐",
+        "birthday": "2026-03-29",
+        "category": "一般市民",
+        "previous_index": 109,
+        "current_index": 108,
+        "delta": -1
+      },
+      {
+        "name": "陳O裕",
+        "birthday": "2025-11-10",
+        "category": "一般市民",
+        "previous_index": 110,
+        "current_index": 109,
+        "delta": -1
+      },
+      {
+        "name": "陳OOOOp",
+        "birthday": "2025-12-05",
+        "category": "優先收托",
+        "previous_index": 111,
+        "current_index": 110,
+        "delta": -1
+      },
+      {
+        "name": "黃O森",
+        "birthday": "2024-09-22",
+        "category": "一般市民",
+        "previous_index": 112,
+        "current_index": 111,
+        "delta": -1
+      },
+      {
+        "name": "林O安",
+        "birthday": "2026-04-03",
+        "category": "一般市民",
+        "previous_index": 113,
+        "current_index": 112,
+        "delta": -1
+      },
+      {
+        "name": "周O睿",
+        "birthday": "2024-08-21",
+        "category": "一般市民",
+        "previous_index": 114,
+        "current_index": 113,
+        "delta": -1
+      }
+    ],
+    "changed": true,
+    "baseline": false,
+    "previous_waiting_count": 114,
+    "current_waiting_count": 113,
+    "net_waiting_count_change": -1,
+    "likely_age_out_previous_indexes": [],
+    "likely_withdrawn_previous_indexes": [
+      107
+    ],
+    "likely_admitted_previous_indexes": [],
+    "highlight_shift": {
+      "previous_index": 108,
+      "current_index": 107,
+      "name": "莊O霈",
+      "delta": -1
+    },
+    "summary_lines": [
+      "107 號離開名單",
+      "108 → 107（只顯示第一個代表性變動）"
+    ],
+    "change_kind": "shrink",
+    "enroll_delta": 0,
+    "prev_enroll": 120,
+    "curr_enroll": 120
   }
 ]
