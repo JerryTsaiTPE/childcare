@@ -50,6 +50,11 @@ mkdir "%DEPLOY_DIR%"
 :: 將最新的 index.html 複製過去
 copy /Y index.html "%DEPLOY_DIR%\index.html" >nul
 
+:: 💡【新增這段】將 calculator 資料夾及其內容整個複製過去
+if exist "calculator" (
+    xcopy "calculator" "%DEPLOY_DIR%\calculator" /E /I /H /Y >nul
+)
+
 :: 進入暫存資料夾，初始化一個全新的 git
 cd /d "%DEPLOY_DIR%"
 git init
