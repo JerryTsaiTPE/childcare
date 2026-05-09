@@ -58,7 +58,7 @@ if exist "calculator" (
 :: 進入暫存資料夾，初始化一個全新的 git
 cd /d "%DEPLOY_DIR%"
 git init
-git add index.html
+git add .
 git commit -m "Deploy dashboard update: %date% %time%"
 
 :: 強制推送到遠端的 gh-pages 分支
