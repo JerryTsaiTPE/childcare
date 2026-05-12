@@ -18,16 +18,22 @@ def render_dashboard(
 ) -> str:
     safe_title = "新北市公托候補追蹤Dashboard"
 
-    # --- 過濾無效歷史紀錄，並保留首尾以支撐圖表繪製 ---
+    # --- 過濾無效歷史紀錄，並保留首尾端點以支撐連續圖表繪製 ---
     for org_id, org_data in all_data.items():
         if "history" in org_data:
             history = org_data["history"]
             if history:
+                # 1. 僅保留 changed 為 True (有變動) 的紀錄
                 filtered_history = [item for item in history if item.get("changed", False)]
+                
+                # 2. 保留最起點，讓圖表知道起點端點
                 if not filtered_history or filtered_history[0].get("fetched_at") != history[0].get("fetched_at"):
                     filtered_history.insert(0, history[0])
+                    
+                # 3. 保留最末點，讓圖表能連線到當下最新時刻
                 if filtered_history[-1].get("fetched_at") != history[-1].get("fetched_at"):
                     filtered_history.append(history[-1])
+                    
                 org_data["history"] = filtered_history
     # -------------------------------------------------------------------------
 
@@ -499,7 +505,7 @@ def render_dashboard(
         return false;
     }
 
-    // --- 終極版全區統計計算：精準落實跳號錄取收斂原則 ---
+    // --- 全區統計計算：結合跨中心連動與頭尾錄取收斂法則 ---
     function calculateGlobalStats() {
         let totalCap = 0;
         let globalUniqueChildren = new Set();
@@ -542,7 +548,7 @@ def render_dashboard(
                         let actualAdmittedCount = 0;
                         
                         if (item.removed_details && item.removed_details.length > 0) {
-                            // 1. 抓出非屆齡，且在別家也找不到的純淨名單
+                            // 1. 抓出非屆齡且全網消失的純淨候選人
                             let pureAdmittedCandidates = [];
                             item.removed_details.forEach(rd => {
                                 if (!isStrictlyTwo(rd.birthday, item.fetched_at)) {
@@ -553,9 +559,23 @@ def render_dashboard(
                                 }
                             });
                             
-                            // 2. 現場收斂：最後答應的人必定佔據第 N 個缺額。依原序號排序，取前 enroll_delta 名。
+                            // 2. 依原序號排序，取實際分配的錄取數
                             pureAdmittedCandidates.sort((a, b) => a.previous_index - b.previous_index);
-                            actualAdmittedCount = Math.min(item.enroll_delta, pureAdmittedCandidates.length);
+                            
+                            // 針對收斂後計算有效入托數量
+                            let countValid = 0;
+                            const enrollDelta = item.enroll_delta;
+                            pureAdmittedCandidates.forEach((rd, idx) => {
+                                if (pureAdmittedCandidates.length <= enrollDelta) {
+                                    countValid++;
+                                } else {
+                                    // 吻合現場通知順序：取前 (N-1) 名與最後 1 名做為真正入托
+                                    if (idx < enrollDelta - 1 || idx === pureAdmittedCandidates.length - 1) {
+                                        countValid++;
+                                    }
+                                }
+                            });
+                            actualAdmittedCount = countValid;
                         }
 
                         if (actualAdmittedCount > 0) {
@@ -728,7 +748,7 @@ def render_dashboard(
         container.innerHTML = html;
     }
 
-    // --- 終極版單一中心判定：完美貼合現場電話通知與棄權場景 ---
+    // --- 單一中心摘要與歷史渲染：完美區分電話通知跳號錄取與棄權場景 ---
     function renderCurrentOrg() {
         try {
             const data = allData[currentOrgId];
@@ -764,26 +784,30 @@ def render_dashboard(
                         }
                     });
                     
-                    // 2. 進行「同步候補連動」判定：被別家保留 = 鐵證如山的棄權者
+                    // 2. 進行「跨中心同步候補連動」過濾：被別家保留 = 棄權者
                     let pureAdmittedCandidates = [];
                     potentialCandidates.forEach(rd => {
                         const stillWaiting = isChildStillWaitingElsewhere(rd.name, rd.birthday, rd.category, currentOrgId);
                         if (stillWaiting) {
                             strictWithdrawn.push(rd.previous_index);
                         } else {
-                            // 全網消失者進入純淨名單
                             pureAdmittedCandidates.push(rd);
                         }
                     });
                     
-                    // 3. 第三層收斂：依原序號由小到大排序，前 enroll_delta 名才是真正錄取入托者
+                    // 3. 第三層收斂：依原序號由小到大排序
                     pureAdmittedCandidates.sort((a, b) => a.previous_index - b.previous_index);
+                    
+                    // 🌟 現場收斂規則：若全網消失者超出缺額數，取前 (N-1) 名與最後 1 名做為正式錄取
                     pureAdmittedCandidates.forEach((rd, idx) => {
-                        if (idx < enrollDelta) {
+                        if (pureAdmittedCandidates.length <= enrollDelta) {
                             strictAdmitted.push(rd.previous_index);
                         } else {
-                            // 超出缺額數量的全網消失者，歸為接到電話自行放棄
-                            strictWithdrawn.push(rd.previous_index);
+                            if (idx < enrollDelta - 1 || idx === pureAdmittedCandidates.length - 1) {
+                                strictAdmitted.push(rd.previous_index);
+                            } else {
+                                strictWithdrawn.push(rd.previous_index);
+                            }
                         }
                     });
                     
@@ -925,7 +949,7 @@ def render_dashboard(
 
             renderAllListTable();
 
-            // 💡 歷史紀錄明細表同步套用終極版規則
+            // 💡 歷史紀錄明細表完整對齊前端頭尾保留演算法
             const timeline = $('history-timeline');
             if (timeline) {
                 timeline.innerHTML = '';
@@ -975,7 +999,7 @@ def render_dashboard(
                         
                         let enrollDelta = item.hasOwnProperty('enroll_delta') ? item.enroll_delta : 0;
                         
-                        // 1. 抓出純淨名單
+                        // 1. 抓出純淨入托候選人
                         let pureAdmittedCandidates = [];
                         item.removed_details.forEach(rd => {
                             if (!isStrictlyTwo(rd.birthday, item.fetched_at)) {
@@ -998,10 +1022,18 @@ def render_dashboard(
                                 if (stillWaiting) {
                                     type = '自行取消';
                                 } else {
-                                    // 依純淨排序名次分配真正的遞補頭銜
+                                    // 🌟 依照現場收斂邏輯：若N大於等於純淨名單數全取，否則取前 (N-1) 名與最後 1 名為錄取
                                     let rank = pureAdmittedCandidates.findIndex(x => x.previous_index === rd.previous_index);
-                                    if (rank !== -1 && rank < enrollDelta) {
-                                        type = '<span style="color:var(--ok)">遞補入托</span>';
+                                    if (rank !== -1) {
+                                        if (pureAdmittedCandidates.length <= enrollDelta) {
+                                            type = '<span style="color:var(--ok)">遞補入托</span>';
+                                        } else {
+                                            if (rank < enrollDelta - 1 || rank === pureAdmittedCandidates.length - 1) {
+                                                type = '<span style="color:var(--ok)">遞補入托</span>';
+                                            } else {
+                                                type = '自行取消';
+                                            }
+                                        }
                                     } else {
                                         type = '自行取消';
                                     }
