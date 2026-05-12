@@ -428,7 +428,7 @@ def render_dashboard(
     let latest = null;
     let historyData = [];
     let nameStatsData = []; 
-    let totalValidNameCount = 0; // 💡 新增：儲存統計基數總人數
+    let totalValidNameCount = 0; 
     const STORAGE_KEY = 'ntpc_childcare_default_org';
     let orgsByDistrict = {}; 
 
@@ -480,6 +480,26 @@ def render_dashboard(
         return y >= 2;
     }
 
+    // 💡 跨中心搜尋幼兒是否依然存活於「同步候補」名單中
+    function isChildStillWaitingElsewhere(childName, childBirthday, childCategory, excludeOrgId) {
+        for (let i = 0; i < orgIds.length; i++) {
+            const oid = orgIds[i];
+            if (oid !== excludeOrgId) {
+                const otherSnapshot = allData[oid].snapshot;
+                if (otherSnapshot && otherSnapshot.entries) {
+                    const found = otherSnapshot.entries.find(e => 
+                        e.encname === childName && 
+                        e.cbirthday === childBirthday && 
+                        e.displaydesc === childCategory
+                    );
+                    if (found) return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // --- 終極版全區統計計算：精準落實跳號錄取收斂原則 ---
     function calculateGlobalStats() {
         let totalCap = 0;
         let globalUniqueChildren = new Set();
@@ -519,18 +539,23 @@ def render_dashboard(
                 if (item.enroll_delta && item.enroll_delta > 0) {
                     const timeMs = new Date(item.fetched_at).getTime();
                     if (timeMs >= thresholdMs) {
-                        let actualAdmittedCount = item.enroll_delta;
+                        let actualAdmittedCount = 0;
                         
-                        if (item.removed_details) {
-                            let nonAgeOutCount = 0;
+                        if (item.removed_details && item.removed_details.length > 0) {
+                            // 1. 抓出非屆齡，且在別家也找不到的純淨名單
+                            let pureAdmittedCandidates = [];
                             item.removed_details.forEach(rd => {
                                 if (!isStrictlyTwo(rd.birthday, item.fetched_at)) {
-                                    nonAgeOutCount++;
+                                    const stillWaiting = isChildStillWaitingElsewhere(rd.name, rd.birthday, rd.category, id);
+                                    if (!stillWaiting) {
+                                        pureAdmittedCandidates.push(rd);
+                                    }
                                 }
                             });
-                            actualAdmittedCount = Math.min(item.enroll_delta, nonAgeOutCount);
-                        } else {
-                            actualAdmittedCount = 0;
+                            
+                            // 2. 現場收斂：最後答應的人必定佔據第 N 個缺額。依原序號排序，取前 enroll_delta 名。
+                            pureAdmittedCandidates.sort((a, b) => a.previous_index - b.previous_index);
+                            actualAdmittedCount = Math.min(item.enroll_delta, pureAdmittedCandidates.length);
                         }
 
                         if (actualAdmittedCount > 0) {
@@ -662,7 +687,6 @@ def render_dashboard(
             }
         });
 
-        // 💡 儲存有效總人數供渲染顯示
         totalValidNameCount = totalValidChars;
 
         nameStatsData = Object.keys(charCounts).map(char => {
@@ -690,7 +714,6 @@ def render_dashboard(
             return;
         }
 
-        // 💡 新增：在表格上方顯示統計基數
         let html = `<div style="margin-bottom: 12px; font-size: 14px; color: var(--muted); text-align: right;">統計基數：共 <span style="color:var(--text); font-weight:bold; font-family:Consolas, monospace;">${totalValidNameCount}</span> 人</div>`;
         
         html += '<table class="dist-stats-table" style="margin-top:0;"><thead><tr><th style="text-align:left;">第三字</th><th style="text-align:right;">人數</th><th style="text-align:right;">佔比</th></tr></thead><tbody>';
@@ -705,6 +728,7 @@ def render_dashboard(
         container.innerHTML = html;
     }
 
+    // --- 終極版單一中心判定：完美貼合現場電話通知與棄權場景 ---
     function renderCurrentOrg() {
         try {
             const data = allData[currentOrgId];
@@ -729,33 +753,37 @@ def render_dashboard(
                     let strictWithdrawn = [];
                     
                     let enrollDelta = matchingHistory.hasOwnProperty('enroll_delta') ? matchingHistory.enroll_delta : 0;
-                    let useFallback = !matchingHistory.hasOwnProperty('enroll_delta');
-
-                    let nonAgeOuts = [];
                     
+                    // 1. 抓出非屆齡的潛在候選人
+                    let potentialCandidates = [];
                     matchingHistory.removed_details.forEach(rd => {
                         if (isStrictlyTwo(rd.birthday, matchingHistory.fetched_at)) {
                             strictAgeOut.push(rd.previous_index);
                         } else {
-                            nonAgeOuts.push(rd);
+                            potentialCandidates.push(rd);
                         }
                     });
                     
-                    nonAgeOuts.sort((a, b) => a.previous_index - b.previous_index);
-                    
-                    nonAgeOuts.forEach((rd, idx) => {
-                        if (useFallback) {
-                            if ((latest.likely_admitted_previous_indexes || []).includes(rd.previous_index) || rd.previous_index <= 20) {
-                                strictAdmitted.push(rd.previous_index);
-                            } else {
-                                strictWithdrawn.push(rd.previous_index);
-                            }
+                    // 2. 進行「同步候補連動」判定：被別家保留 = 鐵證如山的棄權者
+                    let pureAdmittedCandidates = [];
+                    potentialCandidates.forEach(rd => {
+                        const stillWaiting = isChildStillWaitingElsewhere(rd.name, rd.birthday, rd.category, currentOrgId);
+                        if (stillWaiting) {
+                            strictWithdrawn.push(rd.previous_index);
                         } else {
-                            if (idx < enrollDelta) {
-                                strictAdmitted.push(rd.previous_index);
-                            } else {
-                                strictWithdrawn.push(rd.previous_index);
-                            }
+                            // 全網消失者進入純淨名單
+                            pureAdmittedCandidates.push(rd);
+                        }
+                    });
+                    
+                    // 3. 第三層收斂：依原序號由小到大排序，前 enroll_delta 名才是真正錄取入托者
+                    pureAdmittedCandidates.sort((a, b) => a.previous_index - b.previous_index);
+                    pureAdmittedCandidates.forEach((rd, idx) => {
+                        if (idx < enrollDelta) {
+                            strictAdmitted.push(rd.previous_index);
+                        } else {
+                            // 超出缺額數量的全網消失者，歸為接到電話自行放棄
+                            strictWithdrawn.push(rd.previous_index);
                         }
                     });
                     
@@ -897,6 +925,7 @@ def render_dashboard(
 
             renderAllListTable();
 
+            // 💡 歷史紀錄明細表同步套用終極版規則
             const timeline = $('history-timeline');
             if (timeline) {
                 timeline.innerHTML = '';
@@ -945,15 +974,18 @@ def render_dashboard(
                         detailsHtml += '<div style="margin-top:10px;"><table class="panel-table" style="font-size:13px;"><thead><tr><th>原序號</th><th>兒童姓名</th><th>當時歲數</th><th>身分別</th><th>狀態</th><th style="color:var(--accent)">同步候補(目前)</th></tr></thead><tbody>';
                         
                         let enrollDelta = item.hasOwnProperty('enroll_delta') ? item.enroll_delta : 0;
-                        let useFallback = !item.hasOwnProperty('enroll_delta');
                         
-                        let nonAgeOuts = [];
+                        // 1. 抓出純淨名單
+                        let pureAdmittedCandidates = [];
                         item.removed_details.forEach(rd => {
                             if (!isStrictlyTwo(rd.birthday, item.fetched_at)) {
-                                nonAgeOuts.push(rd);
+                                const stillWaiting = isChildStillWaitingElsewhere(rd.name, rd.birthday, rd.category, currentOrgId);
+                                if (!stillWaiting) {
+                                    pureAdmittedCandidates.push(rd);
+                                }
                             }
                         });
-                        nonAgeOuts.sort((a, b) => a.previous_index - b.previous_index);
+                        pureAdmittedCandidates.sort((a, b) => a.previous_index - b.previous_index);
 
                         item.removed_details.forEach(rd => {
                             const age = getAgeString(rd.birthday, item.fetched_at);
@@ -962,14 +994,16 @@ def render_dashboard(
                             if (isStrictlyTwo(rd.birthday, item.fetched_at)) {
                                 type = '<span style="color:var(--danger)">屆齡取消</span>';
                             } else {
-                                if (useFallback) {
-                                    if ((item.likely_admitted_previous_indexes || []).includes(rd.previous_index) || rd.previous_index <= 20) {
-                                        type = '<span style="color:var(--ok)">遞補入托</span>';
-                                    }
+                                const stillWaiting = isChildStillWaitingElsewhere(rd.name, rd.birthday, rd.category, currentOrgId);
+                                if (stillWaiting) {
+                                    type = '自行取消';
                                 } else {
-                                    let rank = nonAgeOuts.findIndex(x => x.previous_index === rd.previous_index);
+                                    // 依純淨排序名次分配真正的遞補頭銜
+                                    let rank = pureAdmittedCandidates.findIndex(x => x.previous_index === rd.previous_index);
                                     if (rank !== -1 && rank < enrollDelta) {
                                         type = '<span style="color:var(--ok)">遞補入托</span>';
+                                    } else {
+                                        type = '自行取消';
                                     }
                                 }
                             }
