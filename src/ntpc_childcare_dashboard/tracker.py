@@ -160,7 +160,7 @@ def build_summary_lines(*, diff: dict[str, list[dict[str, Any]]], current_count:
             lines.append(f"新增 {len(added_indexes)} 筆候補，最前面出現在 {added_indexes[0]} 號")
     if highlight_shift:
         lines.append(
-            f"{highlight_shift['previous_index']} → {highlight_shift['current_index']}（只顯示第一個代表性變動）"
+            f"{highlight_shift['previous_index']} → {highlight_shift['current_index']}（排序變動，只顯示第一個代表）"
         )
     if not lines and current_count == previous_count:
         lines.append("名單無變動")
