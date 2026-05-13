@@ -417,7 +417,8 @@ def render_dashboard(
       <div class="panel">
         <h2>歷史紀錄</h2>
         <div class="history-toolbar">
-          <div class="sub">紀錄每次更新的變動；若整串名次都往前，僅顯示第一個作為代表。</div>
+          <div class="sub">紀錄每次更新的變動。</div>
+          <div class="sub">[遞補入托] 及 [自行取消]狀態判斷依據，是透過各資訊交叉比對出來的推測，實際名單公托未公開，詳情請致電公托確認。</div>
         </div>
         <div id="history-timeline" class="timeline"></div>
       </div>
