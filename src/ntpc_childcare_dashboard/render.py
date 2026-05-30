@@ -248,6 +248,20 @@ def render_dashboard(
         </div>
         <div class="sub" style="margin-top: 8px; font-size: 13px;">快速計算幼兒入學年齡與對應學年度，幫助家長提早規劃入學時程。</div>
       </div>
+
+      <div class="card" style="border: 1px solid var(--border); transition: 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="window.open('https://kiang.github.io/preschools', '_blank')">
+        <div style="color: var(--accent); font-weight:bold; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+          🔗 台灣幼兒園地圖 ↗
+        </div>
+        <div class="sub" style="margin-top: 8px; font-size: 13px;">快速查詢幼兒園資訊/平均月費。</div>
+      </div>
+
+      <div class="card" style="border: 1px solid var(--border); transition: 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="window.open('https://www.kindyinfo.com', '_blank')">
+        <div style="color: var(--accent); font-weight:bold; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+          🔗 幼園通 ↗
+        </div>
+        <div class="sub" style="margin-top: 8px; font-size: 13px;">快速查詢幼兒園資訊/裁罰紀錄。</div>
+      </div>
       
       <div class="card" style="border: 1px solid var(--border); transition: 0.3s; cursor: pointer; margin-top: 14px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" id="btn-open-name-stats">
         <div style="color: var(--accent); font-weight:bold; font-size: 16px; display: flex; align-items: center; gap: 8px;">
