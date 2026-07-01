@@ -242,6 +242,14 @@ def render_dashboard(
       <button id="btn-close-links" class="close-btn" title="關閉">✖</button>
     </div>
     <div class="slide-panel-content">
+
+      <div class="card" style="border: 1px solid var(--border); transition: 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="window.open('https://lovebaby.sw.ntpc.gov.tw/#/nursery-signup', '_blank')">
+        <div style="color: var(--accent); font-weight:bold; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+          🔗 115年度公托招生簡章 ↗
+        </div>
+        <div class="sub" style="margin-top: 8px; font-size: 13px;">報名日期115/7/1 - 115 7/8。</div>
+      </div>
+
       <div class="card" style="border: 1px solid var(--border); transition: 0.3s; cursor: pointer;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="window.open('https://jerrytsaitpe.github.io/childcare/calculator/', '_blank')">
         <div style="color: var(--accent); font-weight:bold; font-size: 16px; display: flex; align-items: center; gap: 8px;">
           🧮 幼兒園招生日期計算機 ↗
