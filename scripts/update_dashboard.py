@@ -158,6 +158,7 @@ def main() -> int:
             diff=diff,
             previous_count=(previous_snapshot or {}).get('waiting_count'),
             current_count=snapshot['waiting_count'],
+            active_years=list((snapshot.get('entries_by_year') or {}).keys()),
         )
         
         # 將變化量與前後數值都塞入變動紀錄中

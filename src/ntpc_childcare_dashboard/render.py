@@ -302,6 +302,7 @@ def render_dashboard(
         <div class="org-controls">
           <select id="district-selector" class="org-select" style="max-width: 140px;"></select>
           <select id="global-org-selector" class="org-select"></select>
+          <select id="academic-year-selector" class="org-select" style="display:none; max-width: 150px;" title="備取名單年度"><option>待選擇年度</option></select>
           <button id="btn-favorite" class="fav-btn" title="將目前中心設為預設"><span class="star">☆</span> 設為預設</button>
           
           <button id="btn-city-stats" class="fav-btn" style="padding: 10px 14px; border-radius: 8px;" title="查看全新北市統計">📊 全區統計</button>
@@ -784,6 +785,57 @@ def render_dashboard(
         container.innerHTML = html;
     }
 
+    function getAcademicYears() {
+        const byYear = snapshot && snapshot.entries_by_year;
+        if (byYear && Object.keys(byYear).length) return Object.keys(byYear).sort((a, b) => Number(a) - Number(b));
+        const entries = (snapshot && snapshot.entries) || [];
+        return [...new Set(entries.map(entry => String(entry.apyear || '')).filter(Boolean))].sort((a, b) => Number(a) - Number(b));
+    }
+
+    function getSelectedAcademicYear() {
+        const selector = $('academic-year-selector');
+        return selector && selector.value ? selector.value : null;
+    }
+
+    function getEntriesForSelectedYear() {
+        if (!snapshot) return [];
+        const selectedYear = getSelectedAcademicYear();
+        if (!selectedYear) return snapshot.entries || [];
+        if (snapshot.entries_by_year && snapshot.entries_by_year[selectedYear]) return snapshot.entries_by_year[selectedYear];
+        return (snapshot.entries || []).filter(entry => String(entry.apyear || '') === selectedYear);
+    }
+
+    function formatRank(index, apyear) {
+        const years = getAcademicYears();
+        const newestYear = years.length > 1 ? years[years.length - 1] : null;
+        if (newestYear && String(apyear || '') === newestYear) return `${index}(新)`;
+        return String(index);
+    }
+
+    function populateAcademicYearSelector() {
+        const selector = $('academic-year-selector');
+        if (!selector) return;
+        const years = getAcademicYears();
+        const previousSelection = selector.value;
+        selector.innerHTML = '';
+        if (years.length <= 1) {
+            selector.style.display = 'none';
+            return;
+        }
+        selector.style.display = '';
+        years.forEach(year => {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = `${year} 年度${year === years[years.length - 1] ? '（新）' : ''}`;
+            selector.appendChild(option);
+        });
+        selector.value = years.includes(previousSelection) ? previousSelection : years[years.length - 1];
+    }
+
+    function formatChangeRank(index, apyear) {
+        return formatRank(index, apyear);
+    }
+
     // --- 終極版單一中心判定：完美兼顧跨中心比對存活與電話連號放棄現場 ---
     function renderCurrentOrg() {
         try {
@@ -795,6 +847,7 @@ def render_dashboard(
             historyData = data.history || [];
 
             latest.added_details = latest.added_details || [];
+            latest.removed = latest.removed || [];
             latest.removed_previous_indexes = latest.removed_previous_indexes || [];
             latest.likely_admitted_previous_indexes = latest.likely_admitted_previous_indexes || [];
             latest.likely_age_out_previous_indexes = latest.likely_age_out_previous_indexes || [];
@@ -888,8 +941,10 @@ def render_dashboard(
             const upEl = $('updated-at');
             if (upEl) upEl.textContent = fmt.format(new Date(snapshot.fetched_at));
             
+            populateAcademicYearSelector();
+            const selectedEntries = getEntriesForSelectedYear();
             const wcEl = $('waiting-count');
-            if (wcEl) wcEl.textContent = snapshot.waiting_count;
+            if (wcEl) wcEl.textContent = selectedEntries.length;
             
             const lnEl = $('lastnum');
             if (lnEl) lnEl.textContent = snapshot.last_month_enrolled || '—';
@@ -912,7 +967,7 @@ def render_dashboard(
             if (msEl) msEl.textContent = latest.moved.length ? `共有 ${latest.moved.length} 位推進` + changeText : '尚無紀錄';
             
             const rsEl = $('removed-summary');
-            if (rsEl) rsEl.textContent = latest.removed_previous_indexes.length ? '序號 ' + latest.removed_previous_indexes.join('、') + changeText : '尚無紀錄';
+            if (rsEl) rsEl.textContent = latest.removed_previous_indexes.length ? '序號 ' + latest.removed.map(item => formatChangeRank(item.previous_index, item.apyear)).join('、') + changeText : '尚無紀錄';
             const asEl = $('admitted-summary');
             if (asEl) asEl.textContent = latest.likely_admitted_previous_indexes.length ? '序號 ' + latest.likely_admitted_previous_indexes.join('、') : '無';
             const aosEl = $('age-out-summary');
@@ -936,10 +991,10 @@ def render_dashboard(
             
             renderChips('added-chips', latest.added_details, '無', (v) => {
                 let idx = (typeof v === 'object') ? (v.current_index || v.index || '?') : v;
-                return `序號 ${idx}`;
+                return `序號 ${formatChangeRank(idx, v.apyear)}`;
             });
 
-            renderChips('removed-chips', latest.removed_previous_indexes, '尚無紀錄', (v) => `序號 ${v}`);
+            renderChips('removed-chips', latest.removed, '尚無紀錄', (v) => `序號 ${formatChangeRank(v.previous_index, v.apyear)}`);
             renderChips('admitted-chips', latest.likely_admitted_previous_indexes, '無', (v) => `序號 ${v}`);
             renderChips('age-out-chips', latest.likely_age_out_previous_indexes, '無', (v) => `序號 ${v}`);
             renderChips('withdrawn-chips', latest.likely_withdrawn_previous_indexes, '無', (v) => `序號 ${v}`);
@@ -952,7 +1007,7 @@ def render_dashboard(
                 } else {
                     latest.moved.forEach((item) => {
                         const cls = item.delta < 0 ? 'delta-up' : (item.delta > 0 ? 'delta-down' : 'delta-flat');
-                        movedTable.insertAdjacentHTML('beforeend', `<tr><td>${item.name}</td><td>${item.previous_index}</td><td>${item.current_index}</td><td class="${cls}">${item.delta}</td></tr>`);
+                        movedTable.insertAdjacentHTML('beforeend', `<tr><td>${item.name}</td><td>${formatChangeRank(item.previous_index, item.apyear)}</td><td>${formatChangeRank(item.current_index, item.apyear)}</td><td class="${cls}">${item.delta}</td></tr>`);
                     });
                 }
             }
@@ -960,13 +1015,13 @@ def render_dashboard(
             const top20Body = $('top20-table');
             if (top20Body) {
                 top20Body.innerHTML = '';
-                const entriesList = snapshot.entries || [];
+                const entriesList = getEntriesForSelectedYear();
                 entriesList.slice(0, 20).forEach(e => {
                     const ageStr = getAgeString(e.cbirthday, snapshot.fetched_at);
                     const daysOld = getDaysOld(e.cbirthday, snapshot.fetched_at);
                     const className = daysOld >= 716 ? ' class="aging-out"' : ''; 
                     const syncText = (e.sync_list && e.sync_list.length > 0) ? e.sync_list.join(', ') : '—';
-                    top20Body.insertAdjacentHTML('beforeend', `<tr${className}><td>${e.index}</td><td>${e.encname}</td><td>${e.cbirthday}</td><td>${ageStr}</td><td>${e.displaydesc}</td><td style="color:var(--accent-2)">${syncText}</td></tr>`);
+                    top20Body.insertAdjacentHTML('beforeend', `<tr${className}><td>${formatRank(e.index, e.apyear)}</td><td>${e.encname}</td><td>${e.cbirthday}</td><td>${ageStr}</td><td>${e.displaydesc}</td><td style="color:var(--accent-2)">${syncText}</td></tr>`);
                 });
             }
 
@@ -974,7 +1029,7 @@ def render_dashboard(
             if (top20Bars) {
                 top20Bars.innerHTML = '';
                 const counts = new Map();
-                const entriesList = snapshot.entries || [];
+                const entriesList = getEntriesForSelectedYear();
                 entriesList.slice(0, 20).forEach((entry) => counts.set(entry.displaydesc, (counts.get(entry.displaydesc) || 0) + 1));
                 const topCategoryTotal = Math.max(1, entriesList.slice(0, 20).length);
                 const maxCount = Math.max(1, ...counts.values());
@@ -1033,7 +1088,7 @@ def render_dashboard(
                             });
                             const syncText = syncOrgs.length > 0 ? syncOrgs.join(', ') : '—';
                             
-                            detailsHtml += `<tr><td>${idx}</td><td>${name}</td><td>${age}</td><td>${categoryStr}</td><td><span style="color:var(--accent)">新增候補</span></td><td style="color:var(--accent-2)">${syncText}</td></tr>`;
+                            detailsHtml += `<tr><td>${formatChangeRank(idx, ad.apyear)}</td><td>${name}</td><td>${age}</td><td>${categoryStr}</td><td><span style="color:var(--accent)">新增候補</span></td><td style="color:var(--accent-2)">${syncText}</td></tr>`;
                         });
                         detailsHtml += '</tbody></table></div>';
                     }
@@ -1104,7 +1159,7 @@ def render_dashboard(
                             });
                             const syncText = syncOrgs.length > 0 ? syncOrgs.join(', ') : '—';
                             const categoryStr = rd.category || '—';
-                            detailsHtml += `<tr><td>${rd.previous_index}</td><td>${rd.name}</td><td>${age}</td><td>${categoryStr}</td><td>${type}</td><td style="color:var(--accent-2)">${syncText}</td></tr>`;
+                            detailsHtml += `<tr><td>${formatChangeRank(rd.previous_index, rd.apyear)}</td><td>${rd.name}</td><td>${age}</td><td>${categoryStr}</td><td>${type}</td><td style="color:var(--accent-2)">${syncText}</td></tr>`;
                         });
                         detailsHtml += '</tbody></table></div>';
                     }
@@ -1122,7 +1177,7 @@ def render_dashboard(
 
                     const linesArray = item.summary_lines || ['名單無變動'];
                     const lines = linesArray.map((line) => `<li>${line}</li>`).join('');
-                    let highlight = item.highlight_shift ? `<div class="timeline-highlight">排序變動：${item.highlight_shift.previous_index} → ${item.highlight_shift.current_index}（${item.highlight_shift.name}）</div>` : '';
+                    let highlight = item.highlight_shift ? `<div class="timeline-highlight">排序變動：${formatChangeRank(item.highlight_shift.previous_index, item.highlight_shift.apyear)} → ${formatChangeRank(item.highlight_shift.current_index, item.highlight_shift.apyear)}（${item.highlight_shift.name}）</div>` : '';
                     card.innerHTML = `
                         <div class="timeline-meta">
                             <div>${fmt.format(new Date(item.fetched_at))}</div>
@@ -1175,14 +1230,14 @@ def render_dashboard(
       const dirEl = $('all-list-sort-direction');
       const target = $('all-list-table');
       if(!target || !keyEl || !dirEl || !snapshot || !snapshot.entries) return;
-      const rows = sortEntries(snapshot.entries, keyEl.value, dirEl.value);
+      const rows = sortEntries(getEntriesForSelectedYear(), keyEl.value, dirEl.value);
       target.innerHTML = '';
       rows.forEach((e) => {
         const ageStr = getAgeString(e.cbirthday, snapshot.fetched_at);
         const daysOld = getDaysOld(e.cbirthday, snapshot.fetched_at);
         const className = daysOld >= 716 ? ' class="aging-out"' : ''; 
         const syncText = (e.sync_list && e.sync_list.length > 0) ? e.sync_list.join(', ') : '—';
-        target.insertAdjacentHTML('beforeend', `<tr${className}><td>${e.index}</td><td>${e.encname}</td><td>${e.cbirthday}</td><td>${ageStr}</td><td>${e.displaydesc}</td><td style="color:var(--accent-2)">${syncText}</td></tr>`);
+        target.insertAdjacentHTML('beforeend', `<tr${className}><td>${formatRank(e.index, e.apyear)}</td><td>${e.encname}</td><td>${e.cbirthday}</td><td>${ageStr}</td><td>${e.displaydesc}</td><td style="color:var(--accent-2)">${syncText}</td></tr>`);
       });
     }
 
@@ -1453,6 +1508,8 @@ def render_dashboard(
                 }, 200);
             });
 
+            const academicYearSelector = $('academic-year-selector');
+            if (academicYearSelector) academicYearSelector.addEventListener('change', renderCurrentOrg);
             const sortKeyEl = $('all-list-sort-key');
             if(sortKeyEl) sortKeyEl.addEventListener('change', renderAllListTable);
             const sortDirEl = $('all-list-sort-direction');

@@ -4,8 +4,15 @@ from datetime import datetime
 from typing import Any
 
 
-def entry_key(entry: dict[str, Any]) -> tuple[str, str, str]:
+def entry_key(entry: dict[str, Any]) -> tuple[str, str, str, str]:
+    """Identify an entry inside its own academic-year standby list.
+
+    The source can temporarily publish multiple independently ranked years.
+    `apyear` is therefore part of the identity: rank 1 in 114 and rank 1 in
+    115 are different list entries, not a rename or a rank move.
+    """
     return (
+        str(entry.get("apyear", "")),
         str(entry.get("encname", "")),
         str(entry.get("cbirthday", "")),
         str(entry.get("displaydesc", "")),
@@ -20,15 +27,20 @@ def parse_standby_payload(payload: dict[str, Any]) -> dict[str, Any]:
             "encname": str(item.get("encname", "")),
             "cbirthday": str(item.get("cbirthday", "")),
             "displaydesc": str(item.get("displaydesc", "")),
+            "apyear": str(item.get("apyear", "")),
         }
         for item in list(data.get("data") or [])
     ]
-    entries.sort(key=lambda item: item["index"])
+    entries.sort(key=lambda item: (item["apyear"], item["index"]))
+    entries_by_year: dict[str, list[dict[str, Any]]] = {}
+    for entry in entries:
+        entries_by_year.setdefault(entry["apyear"], []).append(entry)
     return {
         "waiting_count": len(entries),
         "last_month_enrolled": data.get("lastnum"),
         "preshow": bool(data.get("preshow")),
         "entries": entries,
+        "entries_by_year": entries_by_year,
     }
 
 
@@ -38,9 +50,10 @@ def diff_snapshots(previous: list[dict[str, Any]], current: list[dict[str, Any]]
 
     removed = [
         {
-            "name": key[0],
-            "birthday": key[1],
-            "category": key[2],
+            "apyear": key[0],
+            "name": key[1],
+            "birthday": key[2],
+            "category": key[3],
             "previous_index": previous_map[key]["index"],
         }
         for key in previous_map
@@ -49,9 +62,10 @@ def diff_snapshots(previous: list[dict[str, Any]], current: list[dict[str, Any]]
 
     added = [
         {
-            "name": key[0],
-            "birthday": key[1],
-            "category": key[2],
+            "apyear": key[0],
+            "name": key[1],
+            "birthday": key[2],
+            "category": key[3],
             "current_index": current_map[key]["index"],
         }
         for key in current_map
@@ -67,9 +81,10 @@ def diff_snapshots(previous: list[dict[str, Any]], current: list[dict[str, Any]]
         if previous_index != current_index:
             moved.append(
                 {
-                    "name": key[0],
-                    "birthday": key[1],
-                    "category": key[2],
+                    "apyear": key[0],
+                    "name": key[1],
+                    "birthday": key[2],
+                    "category": key[3],
                     "previous_index": previous_index,
                     "current_index": current_index,
                     "delta": current_index - previous_index,
@@ -122,8 +137,11 @@ def classify_removed_indexes(diff: dict[str, list[dict[str, Any]]], fetched_at: 
         except Exception:
             pass
 
-        # 若不是屆齡，則依序號判斷
-        if idx <= THRESHOLD_INDEX:
+        # 單筆移除且沒有任何補位或排序推進時，較可能是家長自行取消；
+        # 其餘情況維持既有的前段序號遞補推定規則。
+        if len(removed_items) == 1 and not diff.get("added") and not diff.get("moved"):
+            likely_withdrawn.append(idx)
+        elif idx <= THRESHOLD_INDEX:
             likely_admitted.append(idx)
         else:
             likely_withdrawn.append(idx)
@@ -135,32 +153,53 @@ def build_highlight_shift(diff: dict[str, list[dict[str, Any]]]) -> dict[str, An
     if not diff["moved"]:
         return None
     first = min(diff["moved"], key=lambda item: (item["current_index"], item["previous_index"]))
-    return {
+    result = {
         "previous_index": first["previous_index"],
         "current_index": first["current_index"],
         "name": first["name"],
         "delta": first["delta"],
     }
+    if first.get("apyear"):
+        result["apyear"] = first["apyear"]
+    return result
 
 
-def build_summary_lines(*, diff: dict[str, list[dict[str, Any]]], current_count: int, previous_count: int, highlight_shift: dict[str, Any] | None) -> list[str]:
+def build_summary_lines(
+    *,
+    diff: dict[str, list[dict[str, Any]]],
+    current_count: int,
+    previous_count: int,
+    highlight_shift: dict[str, Any] | None,
+    active_years: list[str] | None = None,
+) -> list[str]:
+    """Build human-readable change lines without merging overlapping years."""
     lines: list[str] = []
-    removed_indexes = [item["previous_index"] for item in diff["removed"]]
-    added_indexes = [item["current_index"] for item in diff["added"]]
+    active_years = sorted({str(year) for year in (active_years or [])}, key=lambda year: int(year) if year.isdigit() else -1)
+    newest_year = active_years[-1] if len(active_years) > 1 else None
 
-    if removed_indexes:
-        if len(removed_indexes) == 1:
-            lines.append(f"{removed_indexes[0]} 號離開名單")
+    def rank_label(index: int, apyear: str) -> str:
+        return f"{index}(新)" if newest_year and str(apyear) == newest_year else str(index)
+
+    removed = diff["removed"]
+    added = diff["added"]
+    if removed:
+        first = removed[0]
+        label = rank_label(first["previous_index"], first.get("apyear", ""))
+        if len(removed) == 1:
+            lines.append(f"{label} 號離開名單")
         else:
-            lines.append(f"{removed_indexes[0]} 等 {len(removed_indexes)} 筆序號離開名單")
-    if added_indexes:
-        if len(added_indexes) == 1:
-            lines.append(f"新增候補出現在 {added_indexes[0]} 號")
+            lines.append(f"{label} 等 {len(removed)} 筆序號離開名單")
+    if added:
+        first = added[0]
+        label = rank_label(first["current_index"], first.get("apyear", ""))
+        if len(added) == 1:
+            lines.append(f"新增候補出現在 {label} 號")
         else:
-            lines.append(f"新增 {len(added_indexes)} 筆候補，最前面出現在 {added_indexes[0]} 號")
+            lines.append(f"新增 {len(added)} 筆候補，最前面出現在 {label} 號")
     if highlight_shift:
         lines.append(
-            f"{highlight_shift['previous_index']} → {highlight_shift['current_index']}（排序變動，只顯示第一個代表）"
+            f"{rank_label(highlight_shift['previous_index'], highlight_shift.get('apyear', ''))} → "
+            f"{rank_label(highlight_shift['current_index'], highlight_shift.get('apyear', ''))}（排序變動，只顯示第一個代表）"
         )
     if not lines and current_count == previous_count:
         lines.append("名單無變動")
@@ -179,7 +218,14 @@ def infer_change_kind(*, diff: dict[str, list[dict[str, Any]]], previous_count: 
     return "stable"
 
 
-def build_change_record(*, fetched_at: str, diff: dict[str, list[dict[str, Any]]], previous_count: int | None, current_count: int) -> dict[str, Any]:
+def build_change_record(
+    *,
+    fetched_at: str,
+    diff: dict[str, list[dict[str, Any]]],
+    previous_count: int | None,
+    current_count: int,
+    active_years: list[str] | None = None,
+) -> dict[str, Any]:
     baseline = previous_count is None
     normalized_previous_count = current_count if baseline else previous_count
     
@@ -200,6 +246,7 @@ def build_change_record(*, fetched_at: str, diff: dict[str, list[dict[str, Any]]
             current_count=current_count,
             previous_count=normalized_previous_count,
             highlight_shift=highlight_shift,
+            active_years=active_years,
         )
         change_kind = infer_change_kind(diff=diff, previous_count=normalized_previous_count, current_count=current_count)
         removed_details = diff["removed"]
@@ -233,6 +280,10 @@ def make_history_entry(snapshot: dict[str, Any], change_record: dict[str, Any]) 
         "date": str(snapshot["fetched_at"])[:10],
         "fetched_at": snapshot["fetched_at"],
         "waiting_count": snapshot["waiting_count"],
+        "waiting_count_by_year": {
+            str(year): len(entries)
+            for year, entries in (snapshot.get("entries_by_year") or {}).items()
+        },
         "last_month_enrolled": snapshot.get("last_month_enrolled"),
         "changed": bool(change_record.get("changed")),
         "change_kind": change_record.get("change_kind", "stable"),
