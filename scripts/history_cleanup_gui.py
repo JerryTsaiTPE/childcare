@@ -50,9 +50,24 @@ def in_range(timestamp: str | None, start: datetime, end: datetime) -> bool:
     return point is not None and start <= point <= end
 
 
+def timestamp_from_snapshot_filename(path: Path) -> datetime | None:
+    """Read the ISO-style timestamp encoded by update_dashboard.py in a snapshot filename."""
+    name = path.stem
+    try:
+        normalised = name.replace("+08_00", "+08:00")
+        date_part, time_part = normalised.split("T", 1)
+        time_part = time_part[:8].replace("-", ":") + time_part[8:]
+        return datetime.fromisoformat(f"{date_part}T{time_part}").replace(tzinfo=None)
+    except (ValueError, TypeError):
+        return None
+
+
 def snapshot_files_in_range(snapshot_dir: Path, start: datetime, end: datetime) -> list[Path]:
     matched: list[Path] = []
     for path in snapshot_dir.glob("*.json") if snapshot_dir.exists() else []:
+        file_time = timestamp_from_snapshot_filename(path)
+        if file_time is not None and not (start <= file_time <= end):
+            continue
         try:
             item = load_json(path, {})
         except (OSError, json.JSONDecodeError):
@@ -73,7 +88,7 @@ def preview_cleanup(
     org_ids: list[str],
     start_value: str,
     end_value: str,
-    progress_callback: Callable[[int, int, str], None] | None = None,
+    progress_callback: Callable[[int, int, str, str], None] | None = None,
 ) -> dict[str, dict[str, Any]]:
     start = parse_user_time(start_value)
     end = parse_user_time(end_value)
@@ -84,32 +99,51 @@ def preview_cleanup(
     total = len(org_ids)
     for completed, org_id in enumerate(org_ids):
         if progress_callback:
-            progress_callback(completed, total, org_id)
+            progress_callback(completed, total, org_id, "history.json")
         org_dir = data_dir / org_id
         history = load_json(org_dir / "history.json", [])
+        if progress_callback:
+            progress_callback(completed, total, org_id, "changes.json")
         changes = load_json(org_dir / "changes.json", [])
+        if progress_callback:
+            progress_callback(completed, total, org_id, "latest_snapshot.json")
         latest = load_json(org_dir / "latest_snapshot.json", {})
+        if progress_callback:
+            progress_callback(completed, total, org_id, "snapshots")
         snapshots = snapshot_files_in_range(org_dir / "snapshots", start, end)
         preview[org_id] = {
             "history": sum(in_range(item.get("fetched_at"), start, end) for item in history if isinstance(item, dict)),
             "changes": sum(in_range(item.get("fetched_at"), start, end) for item in changes if isinstance(item, dict)),
             "snapshots": len(snapshots),
+            "snapshot_paths": snapshots,
             "latest_in_range": in_range(latest.get("fetched_at") if isinstance(latest, dict) else None, start, end),
         }
         if progress_callback:
-            progress_callback(completed + 1, total, org_id)
+            progress_callback(completed + 1, total, org_id, "完成")
     return preview
 
 
-def backup_org_files(org_dir: Path, backup_org_dir: Path) -> None:
+def backup_affected_files(
+    org_dir: Path,
+    backup_org_dir: Path,
+    snapshot_paths: list[Path],
+    include_latest_snapshot: bool,
+) -> None:
+    """Back up only records/files this cleanup operation can modify."""
     backup_org_dir.mkdir(parents=True, exist_ok=True)
-    for name in ("history.json", "changes.json", "latest_snapshot.json"):
+    for name in ("history.json", "changes.json"):
         path = org_dir / name
         if path.exists():
             shutil.copy2(path, backup_org_dir / name)
-    snapshots = org_dir / "snapshots"
-    if snapshots.exists():
-        shutil.copytree(snapshots, backup_org_dir / "snapshots", dirs_exist_ok=True)
+    if include_latest_snapshot:
+        latest_path = org_dir / "latest_snapshot.json"
+        if latest_path.exists():
+            shutil.copy2(latest_path, backup_org_dir / latest_path.name)
+    if snapshot_paths:
+        snapshot_backup_dir = backup_org_dir / "snapshots"
+        snapshot_backup_dir.mkdir(parents=True, exist_ok=True)
+        for path in snapshot_paths:
+            shutil.copy2(path, snapshot_backup_dir / path.name)
 
 
 def latest_remaining_snapshot(snapshot_dir: Path) -> dict[str, Any] | None:
@@ -125,7 +159,14 @@ def latest_remaining_snapshot(snapshot_dir: Path) -> dict[str, Any] | None:
     return max(candidates, key=lambda item: item[0])[1] if candidates else None
 
 
-def cleanup_history(data_dir: Path, org_ids: list[str], start_value: str, end_value: str) -> dict[str, Any]:
+def cleanup_history(
+    data_dir: Path,
+    org_ids: list[str],
+    start_value: str,
+    end_value: str,
+    progress_callback: Callable[[int, int, str, str], None] | None = None,
+    preview: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     start = parse_user_time(start_value)
     end = parse_user_time(end_value)
     if start > end:
@@ -133,20 +174,34 @@ def cleanup_history(data_dir: Path, org_ids: list[str], start_value: str, end_va
 
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     backup_dir = data_dir / "history_cleanup_backups" / stamp
-    preview = preview_cleanup(data_dir, org_ids, start_value, end_value)
+    if preview is None:
+        preview = preview_cleanup(data_dir, org_ids, start_value, end_value, progress_callback)
     results: dict[str, Any] = {"backup_dir": backup_dir, "orgs": {}}
+    total = len(org_ids)
 
-    for org_id in org_ids:
+    for completed, org_id in enumerate(org_ids):
+        if progress_callback:
+            progress_callback(completed, total, org_id, "建立備份")
         org_dir = data_dir / org_id
         if not org_dir.is_dir():
             continue
-        backup_org_files(org_dir, backup_dir / org_id)
+        affected_snapshot_paths = preview[org_id]["snapshot_paths"]
+        backup_affected_files(
+            org_dir,
+            backup_dir / org_id,
+            affected_snapshot_paths,
+            include_latest_snapshot=preview[org_id]["latest_in_range"],
+        )
+        if progress_callback:
+            progress_callback(completed, total, org_id, "移除歷史紀錄")
         history_path, changes_path = org_dir / "history.json", org_dir / "changes.json"
         history = load_json(history_path, [])
         changes = load_json(changes_path, [])
         write_json(history_path, [item for item in history if not (isinstance(item, dict) and in_range(item.get("fetched_at"), start, end))])
         write_json(changes_path, [item for item in changes if not (isinstance(item, dict) and in_range(item.get("fetched_at"), start, end))])
 
+        if progress_callback:
+            progress_callback(completed, total, org_id, "移除原始快照")
         for path in snapshot_files_in_range(org_dir / "snapshots", start, end):
             path.unlink()
 
@@ -157,6 +212,8 @@ def cleanup_history(data_dir: Path, org_ids: list[str], start_value: str, end_va
                 raise RuntimeError(f"{org_id} 沒有可作為 latest_snapshot 的保留快照，已保留備份，請由備份手動復原。")
             write_json(latest_path, replacement)
         results["orgs"][org_id] = preview[org_id]
+        if progress_callback:
+            progress_callback(completed + 1, total, org_id, "完成")
     return results
 
 
@@ -254,8 +311,8 @@ def launch_gui() -> None:
         cleanup_button.state(["disabled"])
         event_queue: queue.Queue[tuple[str, Any]] = queue.Queue()
 
-        def report_progress(completed: int, total: int, org_id: str) -> None:
-            event_queue.put(("progress", (completed, total, org_id)))
+        def report_progress(completed: int, total: int, org_id: str, phase: str) -> None:
+            event_queue.put(("progress", (completed, total, org_id, phase)))
 
         def worker() -> None:
             try:
@@ -270,10 +327,10 @@ def launch_gui() -> None:
                 while True:
                     kind, payload = event_queue.get_nowait()
                     if kind == "progress":
-                        completed, total, org_id = payload
+                        completed, total, org_id, phase = payload
                         percent = (completed / total * 100) if total else 100
                         progress_var.set(percent)
-                        progress_text_var.set(f"正在預覽：{completed} / {total} 個中心（目前：{org_id}）")
+                        progress_text_var.set(f"正在預覽：{completed} / {total} 個中心（{org_id}：掃描 {phase}）")
                     elif kind == "done":
                         render_preview(payload, "預覽：下列項目將被移除（尚未寫入檔案）")
                         progress_var.set(100)
@@ -298,20 +355,115 @@ def launch_gui() -> None:
         root.after(75, poll_worker)
 
     def cleanup() -> None:
+        nonlocal preview_running
+        if preview_running:
+            return
         try:
             data_dir = Path(data_dir_var.get()).expanduser()
-            report = preview_cleanup(data_dir, orgs(), start_var.get(), end_var.get())
-            total = sum(item["history"] + item["changes"] + item["snapshots"] for item in report.values())
-            if not total:
-                messagebox.showinfo("沒有資料", "指定區間沒有可清理的歷史資料。", parent=root)
-                return
-            if not messagebox.askyesno("最後確認", f"將清理 {len(report)} 個中心，共 {total} 個歷史項目。\n執行前會自動建立完整備份。\n\n確定要繼續嗎？", icon="warning", parent=root):
-                return
-            result = cleanup_history(data_dir, orgs(), start_var.get(), end_var.get())
-            render_preview(result["orgs"], f"清理完成。備份位置：\n{result['backup_dir']}")
-            status_var.set("清理完成。請重新執行 update_dashboard.py 產生新的 index.html。")
+            chosen_orgs = orgs()
+            start_value, end_value = start_var.get(), end_var.get()
+            parse_user_time(start_value)
+            parse_user_time(end_value)
+            if parse_user_time(start_value) > parse_user_time(end_value):
+                raise ValueError("開始時間不可晚於結束時間")
         except Exception as exc:
-            messagebox.showerror("清理失敗", str(exc), parent=root)
+            messagebox.showerror("無法準備清理", str(exc), parent=root)
+            return
+
+        preview_running = True
+        progress_var.set(0)
+        progress_text_var.set(f"正在建立清理預覽：0 / {len(chosen_orgs)} 個中心")
+        status_var.set("正在確認受影響資料，完成後才會顯示確認視窗；尚未寫入、備份或刪除任何檔案。")
+        preview_button.state(["disabled"])
+        cleanup_button.state(["disabled"])
+        event_queue: queue.Queue[tuple[str, Any]] = queue.Queue()
+
+        def report_progress(completed: int, total: int, org_id: str, phase: str) -> None:
+            event_queue.put(("progress", (completed, total, org_id, phase)))
+
+        def worker() -> None:
+            try:
+                report = preview_cleanup(data_dir, chosen_orgs, start_value, end_value, report_progress)
+                event_queue.put(("ready", report))
+            except Exception as exc:
+                event_queue.put(("error", exc))
+
+        def run_cleanup(preview_report: dict[str, dict[str, Any]]) -> None:
+            def cleanup_worker() -> None:
+                try:
+                    result = cleanup_history(
+                        data_dir,
+                        chosen_orgs,
+                        start_value,
+                        end_value,
+                        report_progress,
+                        preview=preview_report,
+                    )
+                    event_queue.put(("cleaned", result))
+                except Exception as exc:
+                    event_queue.put(("error", exc))
+
+            progress_var.set(0)
+            progress_text_var.set(f"正在清理：0 / {len(chosen_orgs)} 個中心")
+            status_var.set("正在建立備份並清理資料，請勿關閉視窗或執行更新腳本。")
+            threading.Thread(target=cleanup_worker, daemon=True).start()
+            root.after(75, poll_worker)
+
+        def finish_with_error(error: Exception) -> None:
+            nonlocal preview_running
+            preview_running = False
+            preview_button.state(["!disabled"])
+            cleanup_button.state(["!disabled"])
+            progress_text_var.set("作業失敗")
+            messagebox.showerror("清理失敗", str(error), parent=root)
+
+        def poll_worker() -> None:
+            nonlocal preview_running
+            try:
+                while True:
+                    kind, payload = event_queue.get_nowait()
+                    if kind == "progress":
+                        completed, total, org_id, phase = payload
+                        percent = (completed / total * 100) if total else 100
+                        progress_var.set(percent)
+                        progress_text_var.set(f"正在處理：{completed} / {total} 個中心（{org_id}：{phase}）")
+                    elif kind == "ready":
+                        total = sum(item["history"] + item["changes"] + item["snapshots"] for item in payload.values())
+                        render_preview(payload, "清理前確認：下列項目將被移除（尚未寫入檔案）")
+                        progress_var.set(100)
+                        progress_text_var.set(f"清理預覽完成：已掃描 {len(chosen_orgs)} 個中心")
+                        if not total:
+                            preview_running = False
+                            preview_button.state(["!disabled"])
+                            cleanup_button.state(["!disabled"])
+                            messagebox.showinfo("沒有資料", "指定區間沒有可清理的歷史資料。", parent=root)
+                            return
+                        if not messagebox.askyesno("最後確認", f"將清理 {len(payload)} 個中心，共 {total} 個歷史項目。\n執行前會自動建立完整備份。\n\n確定要繼續嗎？", icon="warning", parent=root):
+                            preview_running = False
+                            preview_button.state(["!disabled"])
+                            cleanup_button.state(["!disabled"])
+                            status_var.set("已取消清理，未修改任何檔案。")
+                            return
+                        run_cleanup(payload)
+                        return
+                    elif kind == "cleaned":
+                        render_preview(payload["orgs"], f"清理完成。備份位置：\n{payload['backup_dir']}")
+                        progress_var.set(100)
+                        progress_text_var.set(f"清理完成：已處理 {len(chosen_orgs)} 個中心")
+                        status_var.set("清理完成。請重新執行 update_dashboard.py 產生新的 index.html。")
+                        preview_running = False
+                        preview_button.state(["!disabled"])
+                        cleanup_button.state(["!disabled"])
+                        return
+                    elif kind == "error":
+                        finish_with_error(payload)
+                        return
+            except queue.Empty:
+                pass
+            root.after(75, poll_worker)
+
+        threading.Thread(target=worker, daemon=True).start()
+        root.after(75, poll_worker)
 
     buttons = ttk.Frame(frame)
     buttons.pack(fill="x", pady=(4, 6))
