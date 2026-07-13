@@ -275,11 +275,37 @@ def build_change_record(
     }
 
 
+def select_trend_year_and_count(snapshot: dict[str, Any]) -> tuple[str | None, int | None]:
+    """Choose the existing academic-year trend through a yearly overlap.
+
+    The active ROC academic year runs August–July. While a newly published
+    list overlaps the outgoing July list, retain the actual current academic
+    year's series; after August it naturally selects the new year. If a source
+    anomaly omits that expected year, safely fall back to the newest available
+    list rather than summing lists.
+    """
+    counts = {
+        str(year): len(entries)
+        for year, entries in (snapshot.get("entries_by_year") or {}).items()
+    }
+    if not counts:
+        return None, None
+
+    fetched_date = datetime.fromisoformat(str(snapshot["fetched_at"])[:10]).date()
+    expected_current_year = str(fetched_date.year - 1911 - (1 if fetched_date.month < 8 else 0))
+    years = sorted(counts, key=lambda year: int(year) if year.isdigit() else -1)
+    trend_year = expected_current_year if expected_current_year in counts else years[0]
+    return trend_year, counts[trend_year]
+
+
 def make_history_entry(snapshot: dict[str, Any], change_record: dict[str, Any]) -> dict[str, Any]:
+    trend_year, trend_count = select_trend_year_and_count(snapshot)
     return {
         "date": str(snapshot["fetched_at"])[:10],
         "fetched_at": snapshot["fetched_at"],
         "waiting_count": snapshot["waiting_count"],
+        "trend_academic_year": trend_year,
+        "trend_waiting_count": trend_count,
         "waiting_count_by_year": {
             str(year): len(entries)
             for year, entries in (snapshot.get("entries_by_year") or {}).items()

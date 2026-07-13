@@ -1241,6 +1241,34 @@ def render_dashboard(
       });
     }
 
+    function getTrendPoint(point) {
+        const counts = point.waiting_count_by_year || {};
+        const fetchedDate = String(point.fetched_at || '').slice(0, 10);
+        const match = fetchedDate.match(/^(\d{4})-(\d{2})-/);
+        if (match && Object.keys(counts).length) {
+            const gregorianYear = Number(match[1]);
+            const month = Number(match[2]);
+            const expectedYear = String(gregorianYear - 1911 - (month < 8 ? 1 : 0));
+            if (Object.prototype.hasOwnProperty.call(counts, expectedYear)) {
+                return { waiting_count: counts[expectedYear], academic_year: expectedYear };
+            }
+            const oldestYear = Object.keys(counts).sort((a, b) => Number(a) - Number(b))[0];
+            return { waiting_count: counts[oldestYear], academic_year: oldestYear };
+        }
+        return {
+            waiting_count: point.trend_waiting_count ?? point.waiting_count,
+            academic_year: point.trend_academic_year || null
+        };
+    }
+
+    function getTrendWaitingCount(point) {
+        return getTrendPoint(point).waiting_count;
+    }
+
+    function getTrendAcademicYear(point) {
+        return getTrendPoint(point).academic_year;
+    }
+
     function getDailyHistory() {
         if (!historyData || historyData.length === 0) return [];
         const firstDateStr = historyData[0].fetched_at.split('T')[0];
@@ -1257,10 +1285,12 @@ def render_dashboard(
             const dStr = `${yyyy}-${mm}-${dd}`;
             
             const targetTime = `${dStr}T23:59:59`;
-            let currentCount = historyData[0].waiting_count;
+            let currentPoint = historyData[0];
+            let currentCount = getTrendWaitingCount(currentPoint);
             for (let j = 0; j < historyData.length; j++) {
                 if (historyData[j].fetched_at <= targetTime) {
-                    currentCount = historyData[j].waiting_count;
+                    currentPoint = historyData[j];
+                    currentCount = getTrendWaitingCount(currentPoint);
                 } else {
                     break;
                 }
@@ -1268,7 +1298,8 @@ def render_dashboard(
             
             vals.push({
                 fetched_at: `${dStr}T23:59:59`,
-                waiting_count: currentCount
+                waiting_count: currentCount,
+                trend_academic_year: getTrendAcademicYear(currentPoint)
             });
             
             curr.setDate(curr.getDate() + 1);
@@ -1301,10 +1332,12 @@ def render_dashboard(
             const hh = String(i).padStart(2, '0');
             const targetTime = `${date}T${hh}:59:59`;
             
-            let currentCount = historyData.length > 0 ? historyData[0].waiting_count : 0;
+            let currentPoint = historyData.length > 0 ? historyData[0] : null;
+            let currentCount = currentPoint ? getTrendWaitingCount(currentPoint) : 0;
             for (let j = 0; j < historyData.length; j++) {
                 if (historyData[j].fetched_at <= targetTime) {
-                    currentCount = historyData[j].waiting_count;
+                    currentPoint = historyData[j];
+                    currentCount = getTrendWaitingCount(currentPoint);
                 } else {
                     break; 
                 }
@@ -1312,7 +1345,8 @@ def render_dashboard(
             
             dayPoints.push({
                 fetched_at: `${date}T${hh}:00:00`,
-                waiting_count: currentCount
+                waiting_count: currentCount,
+                trend_academic_year: currentPoint ? getTrendAcademicYear(currentPoint) : null
             });
         }
         drawChart('hourly-chart', dayPoints, 'time');
@@ -1359,7 +1393,8 @@ def render_dashboard(
         }
         
         const fullTime = p.fetched_at.substring(0, 19).replace('T', ' ');
-        const tooltipHtml = `${fullTime}<br><span style='color:${color}; font-size:16px; font-weight:bold;'>${p.waiting_count} 人</span>`;
+        const trendYearText = p.trend_academic_year ? `<br><span style='color:#9bb2c8;'>歷史學年度：${p.trend_academic_year}</span>` : '';
+        const tooltipHtml = `${fullTime}${trendYearText}<br><span style='color:${color}; font-size:16px; font-weight:bold;'>${p.waiting_count} 人</span>`;
         
         html += `<circle cx="${x}" cy="${y}" r="4" fill="${color}" style="pointer-events:none;"></circle>`;
         html += `<circle cx="${x}" cy="${y}" r="14" fill="transparent" class="hover-target" data-info="${tooltipHtml}" style="cursor:pointer;"></circle>`;
