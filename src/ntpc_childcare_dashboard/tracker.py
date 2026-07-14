@@ -291,7 +291,10 @@ def build_admission_archive_record(
         "prev_enroll": history_entry.get("prev_enroll"),
         "curr_enroll": history_entry.get("curr_enroll"),
         "admitted_count": len(admitted_details),
-        "admitted_details": [dict(item) for item in admitted_details],
+        "admitted_details": [
+            {**item, "status": str(item.get("status") or "遞補入托")}
+            for item in admitted_details
+        ],
     }
 
 

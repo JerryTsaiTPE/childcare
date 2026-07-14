@@ -860,14 +860,14 @@ def render_dashboard(
             const people = (record.admitted_details || []).map((person) => {
                 const rank = formatChangeRank(person.previous_index, person.apyear);
                 const age = getAgeString(person.birthday, record.fetched_at);
-                return `<tr><td>${rank}</td><td>${person.name || '—'}</td><td>${person.birthday || '—'}</td><td>${age}</td><td>${person.category || '—'}</td></tr>`;
+                return `<tr><td>${rank}</td><td>${person.name || '—'}</td><td>${person.birthday || '—'}</td><td>${age}</td><td>${person.category || '—'}</td><td><span style="color:var(--ok)">${person.status || '遞補入托'}</span></td></tr>`;
             }).join('');
             const enrolled = record.prev_enroll != null && record.curr_enroll != null
                 ? `入托數：${record.prev_enroll} → ${record.curr_enroll} 人`
                 : `本次推定遞補：${record.admitted_count || 0} 人`;
             card.innerHTML = `
                 <div class="timeline-meta"><div>${fmt.format(new Date(record.fetched_at))}</div><div style="color:var(--ok); font-weight:bold;">${enrolled}</div></div>
-                <div class="table-wrap"><table class="panel-table" style="font-size:13px; border-left:3px solid var(--ok);"><thead><tr><th>原序號</th><th>兒童姓名</th><th>出生日期</th><th>當時歲數</th><th>身分別</th></tr></thead><tbody>${people}</tbody></table></div>`;
+                <div class="table-wrap"><table class="panel-table" style="font-size:13px; border-left:3px solid var(--ok);"><thead><tr><th>原序號</th><th>兒童姓名</th><th>出生日期</th><th>當時歲數</th><th>身分別</th><th>狀態</th></tr></thead><tbody>${people}</tbody></table></div>`;
             timeline.appendChild(card);
         });
     }
