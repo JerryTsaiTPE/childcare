@@ -455,7 +455,9 @@ def render_dashboard(
         <h2>歷史紀錄</h2>
         <div class="history-toolbar">
           <div class="sub">紀錄每次更新的變動；若整串名次都往前，僅顯示第一個作為代表。</div>
+          <button id="admission-history-filter" class="fav-btn" type="button">顯示所有遞補入托</button>
         </div>
+        <div class="sub" id="admission-history-note" style="display:none; margin-bottom:12px;">遞補入托資訊會永久保留，不受一般歷史紀錄清理或筆數上限影響。</div>
         <div id="history-timeline" class="timeline"></div>
       </div>
     </section>
@@ -470,8 +472,10 @@ def render_dashboard(
     let snapshot = null;
     let latest = null;
     let historyData = [];
+    let permanentAdmissionData = [];
+    let showPermanentAdmissions = false;
     let nameStatsData = []; 
-    let totalValidNameCount = 0; 
+    let totalValidNameCount = 0;
     const STORAGE_KEY = 'ntpc_childcare_default_org';
     let orgsByDistrict = {}; 
 
@@ -836,6 +840,38 @@ def render_dashboard(
         return formatRank(index, apyear);
     }
 
+    function renderPermanentAdmissionTimeline() {
+        const timeline = $('history-timeline');
+        const note = $('admission-history-note');
+        const button = $('admission-history-filter');
+        if (!timeline) return;
+        if (note) note.style.display = '';
+        if (button) button.textContent = '返回一般歷史紀錄';
+        timeline.innerHTML = '';
+
+        const records = [].concat(permanentAdmissionData || []).reverse();
+        if (!records.length) {
+            timeline.innerHTML = '<div class="timeline-item" style="color: var(--muted); text-align: center;">尚無已保存的遞補入托紀錄</div>';
+            return;
+        }
+        records.forEach((record) => {
+            const card = document.createElement('div');
+            card.className = 'timeline-item';
+            const people = (record.admitted_details || []).map((person) => {
+                const rank = formatChangeRank(person.previous_index, person.apyear);
+                const age = getAgeString(person.birthday, record.fetched_at);
+                return `<tr><td>${rank}</td><td>${person.name || '—'}</td><td>${person.birthday || '—'}</td><td>${age}</td><td>${person.category || '—'}</td></tr>`;
+            }).join('');
+            const enrolled = record.prev_enroll != null && record.curr_enroll != null
+                ? `入托數：${record.prev_enroll} → ${record.curr_enroll} 人`
+                : `本次推定遞補：${record.admitted_count || 0} 人`;
+            card.innerHTML = `
+                <div class="timeline-meta"><div>${fmt.format(new Date(record.fetched_at))}</div><div style="color:var(--ok); font-weight:bold;">${enrolled}</div></div>
+                <div class="table-wrap"><table class="panel-table" style="font-size:13px; border-left:3px solid var(--ok);"><thead><tr><th>原序號</th><th>兒童姓名</th><th>出生日期</th><th>當時歲數</th><th>身分別</th></tr></thead><tbody>${people}</tbody></table></div>`;
+            timeline.appendChild(card);
+        });
+    }
+
     // --- 終極版單一中心判定：完美兼顧跨中心比對存活與電話連號放棄現場 ---
     function renderCurrentOrg() {
         try {
@@ -845,6 +881,12 @@ def render_dashboard(
             snapshot = data.snapshot;
             latest = data.latest_change || {};
             historyData = data.history || [];
+            permanentAdmissionData = data.admissions || [];
+            showPermanentAdmissions = false;
+            const admissionFilterButton = $('admission-history-filter');
+            const admissionHistoryNote = $('admission-history-note');
+            if (admissionFilterButton) admissionFilterButton.textContent = '顯示所有遞補入托';
+            if (admissionHistoryNote) admissionHistoryNote.style.display = 'none';
 
             latest.added_details = latest.added_details || [];
             latest.removed = latest.removed || [];
@@ -1551,6 +1593,14 @@ def render_dashboard(
             if(sortDirEl) sortDirEl.addEventListener('change', renderAllListTable);
             const dateSelEl = $('date-selector');
             if(dateSelEl) dateSelEl.addEventListener('change', renderHourlyChart);
+            const admissionFilterButton = $('admission-history-filter');
+            if (admissionFilterButton) {
+                admissionFilterButton.addEventListener('click', () => {
+                    showPermanentAdmissions = !showPermanentAdmissions;
+                    if (showPermanentAdmissions) renderPermanentAdmissionTimeline();
+                    else renderCurrentOrg();
+                });
+            }
             
             document.querySelectorAll('.tab-btn').forEach((button) => {
               button.addEventListener('click', () => {

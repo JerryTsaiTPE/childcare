@@ -275,6 +275,26 @@ def build_change_record(
     }
 
 
+def build_admission_archive_record(
+    history_entry: dict[str, Any], admitted_details: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """Create an immutable, self-contained record for confirmed likely admissions.
+
+    The archive intentionally copies the evidence available at the time of the
+    update.  It is stored separately from rolling `history.json`, so chart
+    retention or manual history cleanup cannot erase admission information.
+    """
+    return {
+        "fetched_at": str(history_entry.get("fetched_at", "")),
+        "waiting_count": history_entry.get("waiting_count"),
+        "enroll_delta": history_entry.get("enroll_delta", 0),
+        "prev_enroll": history_entry.get("prev_enroll"),
+        "curr_enroll": history_entry.get("curr_enroll"),
+        "admitted_count": len(admitted_details),
+        "admitted_details": [dict(item) for item in admitted_details],
+    }
+
+
 def select_trend_year_and_count(snapshot: dict[str, Any]) -> tuple[str | None, int | None]:
     """Choose the existing academic-year trend through a yearly overlap.
 

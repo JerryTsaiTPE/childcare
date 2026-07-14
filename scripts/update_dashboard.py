@@ -21,6 +21,7 @@ if str(SRC) not in sys.path:
 
 from ntpc_childcare_dashboard.render import render_dashboard
 from ntpc_childcare_dashboard.tracker import (
+    build_admission_archive_record,
     build_change_record,
     diff_snapshots,
     make_history_entry,
@@ -80,6 +81,37 @@ def trim_history(history: list[dict], limit: int = 1000) -> list[dict]:
     return history[-limit:]
 
 
+def is_strictly_two_years_old(birthday: str, fetched_at: str) -> bool:
+    """Match the dashboard's calendar-age rule for age-out candidates."""
+    try:
+        birth = datetime.fromisoformat(str(birthday)).date()
+        observed = datetime.fromisoformat(str(fetched_at)[:10]).date()
+        return (observed.year - birth.year, observed.month, observed.day) >= (2, birth.month, birth.day)
+    except (TypeError, ValueError):
+        return False
+
+
+def select_archived_admissions(
+    history_entry: dict, other_current_entries: set[tuple[str, str, str]]
+) -> list[dict]:
+    """Freeze the same admission inference used by the dashboard at update time."""
+    enroll_delta = int(history_entry.get("enroll_delta") or 0)
+    if enroll_delta <= 0:
+        return []
+
+    candidates = []
+    for removed in history_entry.get("removed_details") or []:
+        identity = (str(removed.get("name", "")), str(removed.get("birthday", "")), str(removed.get("category", "")))
+        if not is_strictly_two_years_old(removed.get("birthday", ""), history_entry.get("fetched_at", "")) and identity not in other_current_entries:
+            candidates.append(removed)
+    candidates.sort(key=lambda item: int(item.get("previous_index") or 0))
+    if len(candidates) <= enroll_delta:
+        return candidates
+    # Keep the established display rule: first N-1 candidates plus the final
+    # candidate, which reflects the observed notification ordering.
+    return candidates[: max(0, enroll_delta - 1)] + candidates[-1:]
+
+
 def main() -> int:
     TARGET_ORGS = get_target_orgs()
     if not TARGET_ORGS:
@@ -108,6 +140,9 @@ def main() -> int:
         latest_path = org_dir / 'latest_snapshot.json'
         changes_path = org_dir / 'changes.json'
         history_path = org_dir / 'history.json'
+        admissions_path = org_dir / 'admissions.json'
+        admissions = load_json(admissions_path, [])
+        if not isinstance(admissions, list): admissions = []
 
         org_info = org_info_map.get(org_id, {"orgid": org_id, "orgname": "未知中心", "orgshort": org_id, "distdesc": "未知"})
 
@@ -199,6 +234,8 @@ def main() -> int:
             "snapshot": snapshot,
             "latest_change": last_meaningful_change,
             "history": history,
+            "admissions": admissions,
+            "admissions_path": admissions_path,
             "related_info_text": center_memo,
             "validity_text": center_validity
         }
@@ -223,6 +260,35 @@ def main() -> int:
             key = (entry['encname'], entry['cbirthday'], entry.get('displaydesc', ''))
             others = [m for m in global_map[key] if m['org_id'] != oid]
             entry['sync_list'] = [f"{o['org_name']}({o['index']})" for o in others]
+
+    # `history.json` is deliberately bounded for dashboard performance, but
+    # admissions must remain queryable forever.  Freeze the current inference
+    # once, write it to a separate append-only per-center archive, then expose
+    # that archive to the static page.
+    for oid, data in all_org_data.items():
+        other_current_entries = set()
+        for other_oid, other_data in all_org_data.items():
+            if other_oid == oid:
+                continue
+            for entry in other_data['snapshot'].get('entries') or []:
+                other_current_entries.add((
+                    str(entry.get('encname', '')),
+                    str(entry.get('cbirthday', '')),
+                    str(entry.get('displaydesc', '')),
+                ))
+
+        archived_timestamps = {str(item.get('fetched_at', '')) for item in data['admissions']}
+        for history_entry in data['history']:
+            fetched_at = str(history_entry.get('fetched_at', ''))
+            if not fetched_at or fetched_at in archived_timestamps:
+                continue
+            admitted_details = select_archived_admissions(history_entry, other_current_entries)
+            if admitted_details:
+                data['admissions'].append(build_admission_archive_record(history_entry, admitted_details))
+                archived_timestamps.add(fetched_at)
+
+        data['admissions'].sort(key=lambda item: str(item.get('fetched_at', '')))
+        save_json(data.pop('admissions_path'), data['admissions'])
 
     print("====================================")
     print("產生 HTML 儀表板...")
