@@ -44,6 +44,13 @@ def parse_standby_payload(payload: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def is_suspicious_empty_waitlist(
+    previous_entries: list[dict[str, Any]], current_entries: list[dict[str, Any]]
+) -> bool:
+    """Reject an implausible full-list disappearance while retaining valid baselines."""
+    return bool(previous_entries) and not current_entries
+
+
 def diff_snapshots(previous: list[dict[str, Any]], current: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     previous_map = {entry_key(item): item for item in previous}
     current_map = {entry_key(item): item for item in current}

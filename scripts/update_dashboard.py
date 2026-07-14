@@ -24,6 +24,7 @@ from ntpc_childcare_dashboard.tracker import (
     build_admission_archive_record,
     build_change_record,
     diff_snapshots,
+    is_suspicious_empty_waitlist,
     make_history_entry,
     parse_standby_payload,
 )
@@ -112,6 +113,38 @@ def select_archived_admissions(
     return candidates[: max(0, enroll_delta - 1)] + candidates[-1:]
 
 
+def load_cached_center_data(
+    *,
+    latest_path: Path,
+    history_path: Path,
+    changes_path: Path,
+    admissions: list,
+    admissions_path: Path,
+    related_info_text: str,
+    validity_text: str,
+) -> dict | None:
+    """Keep a center visible with its last verified data when a fetch is unsafe."""
+    snapshot = load_json(latest_path, {})
+    if not isinstance(snapshot, dict) or not snapshot.get("org"):
+        return None
+    history = load_json(history_path, [])
+    changes = load_json(changes_path, [])
+    if not isinstance(history, list):
+        history = []
+    if not isinstance(changes, list):
+        changes = []
+    latest_change = next((item for item in reversed(changes) if item.get("changed")), {})
+    return {
+        "snapshot": snapshot,
+        "latest_change": latest_change,
+        "history": history,
+        "admissions": admissions,
+        "admissions_path": admissions_path,
+        "related_info_text": related_info_text,
+        "validity_text": validity_text,
+    }
+
+
 def main() -> int:
     TARGET_ORGS = get_target_orgs()
     if not TARGET_ORGS:
@@ -145,17 +178,23 @@ def main() -> int:
         if not isinstance(admissions, list): admissions = []
 
         org_info = org_info_map.get(org_id, {"orgid": org_id, "orgname": "未知中心", "orgshort": org_id, "distdesc": "未知"})
+        cached_org_info = info_cache.get(org_id, {})
+        center_memo = cached_org_info.get("related_info_text", "尚未抓取中心說明，請手動執行一次 run_slow_scraper.bat")
+        center_validity = cached_org_info.get("validity_text", "未知 (需執行快取更新)")
 
         api_standby = f'https://lovebaby.sw.ntpc.gov.tw/webapi/NpsApply/GetStandbyList?orgid={org_id}'
         try:
             standby_payload = fetch_json(api_standby)
-        except Exception as e:
-            print(f"   ⚠️ 抓取 {org_id} API 失敗，略過。")
+        except Exception:
+            cached_data = load_cached_center_data(
+                latest_path=latest_path, history_path=history_path, changes_path=changes_path,
+                admissions=admissions, admissions_path=admissions_path,
+                related_info_text=center_memo, validity_text=center_validity,
+            )
+            if cached_data:
+                all_org_data[org_id] = cached_data
+            print(f"   ⚠️ 抓取 {org_id} API 失敗，保留上次有效資料。")
             continue
-
-        cached_org_info = info_cache.get(org_id, {})
-        center_memo = cached_org_info.get("related_info_text", "尚未抓取中心說明，請手動執行一次 run_slow_scraper.bat")
-        center_validity = cached_org_info.get("validity_text", "未知 (需執行快取更新)")
 
         parsed = parse_standby_payload(standby_payload)
         tz_taipei = timezone(timedelta(hours=8))
@@ -170,6 +209,17 @@ def main() -> int:
         previous_snapshot = load_json(latest_path, {})
         if not isinstance(previous_snapshot, dict): previous_snapshot = {}
         previous_entries = previous_snapshot.get('entries', [])
+        if not isinstance(previous_entries, list): previous_entries = []
+        if is_suspicious_empty_waitlist(previous_entries, snapshot['entries']):
+            cached_data = load_cached_center_data(
+                latest_path=latest_path, history_path=history_path, changes_path=changes_path,
+                admissions=admissions, admissions_path=admissions_path,
+                related_info_text=center_memo, validity_text=center_validity,
+            )
+            if cached_data:
+                all_org_data[org_id] = cached_data
+            print(f"   ⚠️ {org_id} 回傳空名單但上次有 {len(previous_entries)} 筆，判定來源異常；保留上次有效資料。")
+            continue
 
         prev_enroll = 0
         if previous_snapshot and 'org' in previous_snapshot and 'enroll_count' in previous_snapshot['org']:
