@@ -203,12 +203,9 @@ def build_summary_lines(
             lines.append(f"新增候補出現在 {label} 號")
         else:
             lines.append(f"新增 {len(added)} 筆候補，最前面出現在 {label} 號")
-    if highlight_shift:
-        lines.append(
-            f"{rank_label(highlight_shift['previous_index'], highlight_shift.get('apyear', ''))} → "
-            f"{rank_label(highlight_shift['current_index'], highlight_shift.get('apyear', ''))}（排序變動，只顯示第一個代表）"
-        )
-    if not lines and current_count == previous_count:
+    # 排序變動不寫入 summary_lines，改由 UI 以 highlight_shift 顯示：
+    # 「排序變動：100 → 99（段O涵）」
+    if not lines and current_count == previous_count and not highlight_shift:
         lines.append("名單無變動")
     return lines
 

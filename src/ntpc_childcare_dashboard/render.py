@@ -121,6 +121,7 @@ def render_dashboard(
     .delta-down { color: var(--danger); }
     .delta-flat { color: var(--muted); }
     .panels { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px; margin-bottom: 18px; }
+    .panels.panels-single { grid-template-columns: 1fr; }
     .panel { padding: 20px; }
     .panel h2 { margin: 0 0 14px; font-size: 20px; }
     .chart-box { min-height: 320px; width: 100%; position: relative; }
@@ -332,18 +333,19 @@ def render_dashboard(
         <div class="card"><div class="metric">近一次影響人數</div><div class="value small" id="moved-count"></div><div class="sub" id="moved-summary"></div></div>
       </section>
 
-      <section class="panels">
+            <section class="panels">
         <div class="panel chart-box">
           <h2>📈 近一週備取總數</h2>
           <svg id="history-chart" width="100%" height="300"></svg>
         </div>
         <div class="panel">
-          <h2>前 20 名備取身分</h2>
+          <h2>全名單備取身分比例</h2>
+          <div class="sub" style="margin:-6px 0 12px; font-size:13px;">依目前選定年度的全數備取名單計算，切換年度時會同步更新。</div>
           <div id="top20-bars"></div>
         </div>
       </section>
 
-      <section class="panels">
+      <section class="panels panels-single">
         <div class="panel">
           <h2>最新變動摘要 <span id="latest-change-time" style="font-size: 14px; font-weight: normal; color: var(--warn); margin-left: 8px;"></span></h2>
           <div class="list">
@@ -376,15 +378,6 @@ def render_dashboard(
                 </table>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="panel">
-          <h2>前 20 名備取名單 <span class="sub" style="font-size:13px; font-weight:normal; margin-left:8px;">(紅色為14天內屆齡者)</span></h2>
-          <div class="table-wrap">
-            <table class="panel-table">
-              <thead><tr><th>序號</th><th>姓名</th><th>出生日期</th><th>目前歲數</th><th>身分別</th><th style="color:var(--accent)">同步候補</th></tr></thead>
-              <tbody id="top20-table"></tbody>
-            </table>
           </div>
         </div>
       </section>
@@ -1054,37 +1047,29 @@ def render_dashboard(
                 }
             }
 
-            const top20Body = $('top20-table');
-            if (top20Body) {
-                top20Body.innerHTML = '';
-                const entriesList = getEntriesForSelectedYear();
-                entriesList.slice(0, 20).forEach(e => {
-                    const ageStr = getAgeString(e.cbirthday, snapshot.fetched_at);
-                    const daysOld = getDaysOld(e.cbirthday, snapshot.fetched_at);
-                    const className = daysOld >= 716 ? ' class="aging-out"' : ''; 
-                    const syncText = (e.sync_list && e.sync_list.length > 0) ? e.sync_list.join(', ') : '—';
-                    top20Body.insertAdjacentHTML('beforeend', `<tr${className}><td>${formatRank(e.index, e.apyear)}</td><td>${e.encname}</td><td>${e.cbirthday}</td><td>${ageStr}</td><td>${e.displaydesc}</td><td style="color:var(--accent-2)">${syncText}</td></tr>`);
-                });
-            }
-
+            // 全名單備取身分比例（依選定年度變動）
             const top20Bars = $('top20-bars');
             if (top20Bars) {
                 top20Bars.innerHTML = '';
                 const counts = new Map();
                 const entriesList = getEntriesForSelectedYear();
-                entriesList.slice(0, 20).forEach((entry) => counts.set(entry.displaydesc, (counts.get(entry.displaydesc) || 0) + 1));
-                const topCategoryTotal = Math.max(1, entriesList.slice(0, 20).length);
-                const maxCount = Math.max(1, ...counts.values());
+                entriesList.forEach((entry) => counts.set(entry.displaydesc, (counts.get(entry.displaydesc) || 0) + 1));
+                const topCategoryTotal = Math.max(1, entriesList.length);
+                const maxCount = Math.max(1, ...Array.from(counts.values(), (v) => v), 1);
                 const sortedEntries = [];
                 counts.forEach((v, k) => sortedEntries.push([k, v]));
                 sortedEntries.sort((a, b) => b[1] - a[1]);
-                sortedEntries.forEach((pair) => {
-                  const label = pair[0];
-                  const count = pair[1];
-                  const pct = Math.round((count / topCategoryTotal) * 1000) / 10;
-                  const widthPct = (count / maxCount) * 100;
-                  top20Bars.insertAdjacentHTML('beforeend', `<div class="bar-row"><div>${label}</div><div class="bar-track"><div class="bar-fill" style="width:${widthPct}%"></div></div><div>${count} 人 / ${pct}%</div></div>`);
-                });
+                if (!sortedEntries.length) {
+                  top20Bars.innerHTML = '<div class="sub">此年度尚無名單資料</div>';
+                } else {
+                  sortedEntries.forEach((pair) => {
+                    const label = pair[0] || '未分類';
+                    const count = pair[1];
+                    const pct = Math.round((count / topCategoryTotal) * 1000) / 10;
+                    const widthPct = (count / maxCount) * 100;
+                    top20Bars.insertAdjacentHTML('beforeend', `<div class="bar-row"><div>${label}</div><div class="bar-track"><div class="bar-fill" style="width:${widthPct}%"></div></div><div>${count} 人 / ${pct}%</div></div>`);
+                  });
+                }
             }
 
             renderAllListTable();
@@ -1217,8 +1202,12 @@ def render_dashboard(
                         }
                     }
 
-                    const linesArray = item.summary_lines || ['名單無變動'];
-                    const lines = linesArray.map((line) => `<li>${line}</li>`).join('');
+                    // 舊歷史資料可能含「排序變動，只顯示第一個代表」；改由 highlight_shift 統一顯示
+                    const linesArray = (item.summary_lines || ['名單無變動']).filter((line) => {
+                        const text = String(line || '');
+                        return !text.includes('排序變動，只顯示第一個代表') && !text.includes('只顯示第一個代表性變動');
+                    });
+                    const lines = (linesArray.length ? linesArray : []).map((line) => `<li>${line}</li>`).join('');
                     let highlight = item.highlight_shift ? `<div class="timeline-highlight">排序變動：${formatChangeRank(item.highlight_shift.previous_index, item.highlight_shift.apyear)} → ${formatChangeRank(item.highlight_shift.current_index, item.highlight_shift.apyear)}（${item.highlight_shift.name}）</div>` : '';
                     card.innerHTML = `
                         <div class="timeline-meta">
@@ -1469,7 +1458,16 @@ def render_dashboard(
                 if (!orgsByDistrict[dist]) orgsByDistrict[dist] = [];
                 orgsByDistrict[dist].push(id);
             });
-            const districts = Object.keys(orgsByDistrict);
+            // 分區下拉預設順序：跟 org_ids.txt 一致，板橋區固定第一個
+            const preferredDistrictOrder = ['板橋區','土城區','新莊區','中和區','永和區','新店區','三峽區','樹林區','蘆洲區','三重區','五股區','淡水區','八里區','林口區','汐止區','泰山區','三芝區','金山區','瑞芳區','深坑區','鶯歌區'];
+            const districts = Object.keys(orgsByDistrict).sort((a, b) => {
+                const ia = preferredDistrictOrder.indexOf(a);
+                const ib = preferredDistrictOrder.indexOf(b);
+                if (ia === -1 && ib === -1) return a.localeCompare(b, 'zh-Hant');
+                if (ia === -1) return 1;
+                if (ib === -1) return -1;
+                return ia - ib;
+            });
             const savedOrgId = localStorage.getItem(STORAGE_KEY);
             let initialDist = districts[0];
             if (savedOrgId && orgIds.includes(savedOrgId)) {
