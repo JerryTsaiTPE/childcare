@@ -365,10 +365,25 @@ def select_archived_admissions(
     if enroll_delta <= 0:
         return []
 
+    removed_details = list(history_entry.get("removed_details") or [])
+    active_years = sorted(
+        (str(year) for year in (history_entry.get("waiting_count_by_year") or {}) if str(year)),
+        key=lambda year: int(year) if year.isdigit() else -1,
+    )
+    newest_year = active_years[-1] if len(active_years) > 1 else None
+    # During the annual overlap, a departure from the newly published list is
+    # not evidence of a replacement admission when total departures exceed the
+    # observed enrollment increase.  Only the outgoing list remains eligible.
+    exclude_newest_year = bool(newest_year and len(removed_details) > enroll_delta)
+
     candidates = []
-    for removed in history_entry.get("removed_details") or []:
+    for removed in removed_details:
         identity = (str(removed.get("name", "")), str(removed.get("birthday", "")), str(removed.get("category", "")))
-        if not is_strictly_two_years_old(removed.get("birthday", ""), history_entry.get("fetched_at", "")) and identity not in other_current_entries:
+        if (
+            not is_strictly_two_years_old(removed.get("birthday", ""), history_entry.get("fetched_at", ""))
+            and identity not in other_current_entries
+            and not (exclude_newest_year and str(removed.get("apyear", "")) == newest_year)
+        ):
             candidates.append(removed)
     candidates.sort(key=lambda item: int(item.get("previous_index") or 0))
     if len(candidates) <= enroll_delta:

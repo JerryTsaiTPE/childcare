@@ -551,16 +551,21 @@ def render_dashboard(
     function classifyHistoricalRemovalStatuses(item, orgId) {
         const removed = item.removed_details || [];
         const enrollDelta = Object.prototype.hasOwnProperty.call(item, 'enroll_delta') ? item.enroll_delta : 0;
+        const overlappingYears = Object.keys(item.waiting_count_by_year || {}).filter(Boolean).sort((a, b) => Number(a) - Number(b));
+        const newestYear = overlappingYears.length > 1 ? overlappingYears[overlappingYears.length - 1] : null;
+        const excludeNewestYearAdmissions = overlappingYears.length > 1 && removed.length > enrollDelta;
         const candidates = removed.filter((rd) => !isStrictlyTwo(rd.birthday, item.fetched_at)
-            && !isChildStillWaitingElsewhere(rd.name, rd.birthday, rd.category, orgId))
+            && !isChildStillWaitingElsewhere(rd.name, rd.birthday, rd.category, orgId)
+            && !(excludeNewestYearAdmissions && String(rd.apyear || '') === newestYear))
             .sort((a, b) => a.previous_index - b.previous_index);
         const statuses = new Map();
 
         removed.forEach((rd) => {
             let status;
+            const excludedNewYearRemoval = excludeNewestYearAdmissions && String(rd.apyear || '') === newestYear;
             if (isStrictlyTwo(rd.birthday, item.fetched_at)) {
                 status = '屆齡取消';
-            } else if (enrollDelta <= 0) {
+            } else if (enrollDelta <= 0 || excludedNewYearRemoval) {
                 status = '自行取消';
             } else {
                 const rank = candidates.findIndex((candidate) => candidate.previous_index === rd.previous_index);
