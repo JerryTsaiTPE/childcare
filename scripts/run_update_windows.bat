@@ -1,81 +1,132 @@
 @echo off
 chcp 65001 >nul
-setlocal ENABLEEXTENSIONS
+setlocal EnableExtensions DisableDelayedExpansion
+set "EXIT_CODE=1"
 
-:: ==========================================
-:: 設定您的路徑
-:: ==========================================
+rem ==========================================
+rem 本機部署路徑
+rem ==========================================
 set "PROJECT_ROOT=C:\Users\JerryPC\Desktop\childcare"
 set "WEB_ROOT=Z:\childcare"
-:: 設定 GitHub 遠端網址 (請確認大小寫正確)
 set "REMOTE_REPO=https://github.com/JerryTsaiTPE/childcare.git"
 
-cd /d "%PROJECT_ROOT%"
+if not exist "%PROJECT_ROOT%\scripts\update_dashboard.py" (
+    echo ❌ [錯誤] 找不到 %PROJECT_ROOT%\scripts\update_dashboard.py
+    goto :finish
+)
+
+pushd "%PROJECT_ROOT%"
+if errorlevel 1 (
+    echo ❌ [錯誤] 無法進入專案資料夾：%PROJECT_ROOT%
+    goto :finish
+)
+set "DID_PUSHD=1"
 
 echo [%date% %time%] 🚀 開始執行【裝甲版】儀表板自動更新...
 
-:: 1. 執行 Python 更新資料與產出 HTML
+rem 1. 只執行更新器；若由 run_update_via_proxy.bat 呼叫，會繼承該程序範圍的 CHILDCARE_API_PROXY。
 python scripts\update_dashboard.py
-set "EXIT_CODE=%errorlevel%"
-
+set "EXIT_CODE=%ERRORLEVEL%"
 if not "%EXIT_CODE%"=="0" (
     echo ❌ [錯誤] Python 腳本執行失敗，已終止。
     goto :finish
 )
 
-:: 2. 備份 index.html 到您的同步空間
+rem 2. 備份 index.html 到同步空間。
 if exist "%WEB_ROOT%" (
     copy /Y index.html "%WEB_ROOT%\index.html" >nul
+    if errorlevel 1 (
+        echo ❌ [錯誤] 無法同步 index.html 至 %WEB_ROOT%
+        set "EXIT_CODE=1"
+        goto :finish
+    )
+) else (
+    echo ⚠️ [略過] 找不到網站同步資料夾：%WEB_ROOT%
 )
 
-:: ==========================================
-:: 3. 處理程式碼與腳本的備份 (提交到 main 分支)
-:: ==========================================
+rem 3. 將程式碼備份到 main。
 echo 📦 正在備份程式碼變更至 main 分支...
 git add .
-git commit -m "Auto-update Scripts: %date% %time%" || echo ℹ️ 程式碼無新變更需要儲存
+if errorlevel 1 (
+    echo ❌ [錯誤] git add 失敗。
+    set "EXIT_CODE=1"
+    goto :finish
+)
+git diff --cached --quiet
+if errorlevel 1 (
+    git commit -m "Auto-update Scripts: %date% %time%"
+    if errorlevel 1 (
+        echo ❌ [錯誤] git commit 失敗。
+        set "EXIT_CODE=1"
+        goto :finish
+    )
+) else (
+    echo ℹ️ 程式碼無新變更需要儲存。
+)
 git pull origin main --rebase
+if errorlevel 1 (
+    echo ❌ [錯誤] git pull --rebase 失敗；未繼續發布。
+    set "EXIT_CODE=1"
+    goto :finish
+)
 git push origin main
+if errorlevel 1 (
+    echo ❌ [錯誤] git push main 失敗；未繼續發布。
+    set "EXIT_CODE=1"
+    goto :finish
+)
 
-:: ==========================================
-:: 4. 處理網頁發布 (強制推送到 gh-pages 分支，不留歷史)
-:: ==========================================
+rem 4. 建置單一 commit 的 gh-pages 分支。
 echo 🌐 正在建置並發布單一 Commit 的 gh-pages 分支...
-
-:: 建立暫存的發布資料夾
 set "DEPLOY_DIR=%PROJECT_ROOT%\_deploy_tmp"
 if exist "%DEPLOY_DIR%" rmdir /S /Q "%DEPLOY_DIR%"
 mkdir "%DEPLOY_DIR%"
+if errorlevel 1 (
+    echo ❌ [錯誤] 無法建立發布暫存資料夾。
+    set "EXIT_CODE=1"
+    goto :finish
+)
 
-:: 將最新的 index.html 複製過去
 copy /Y index.html "%DEPLOY_DIR%\index.html" >nul
-
-:: 💡【新增這段】將 calculator 資料夾及其內容整個複製過去
-if exist "calculator" (
-    xcopy "calculator" "%DEPLOY_DIR%\calculator" /E /I /H /Y >nul
+if errorlevel 1 (
+    echo ❌ [錯誤] 無法複製 index.html 至發布暫存資料夾。
+    set "EXIT_CODE=1"
+    goto :cleanup
+)
+if exist "calculator" xcopy "calculator" "%DEPLOY_DIR%\calculator" /E /I /H /Y >nul
+if errorlevel 1 (
+    echo ❌ [錯誤] 無法複製 calculator 資料夾。
+    set "EXIT_CODE=1"
+    goto :cleanup
 )
 
-:: 進入暫存資料夾，初始化一個全新的 git
-cd /d "%DEPLOY_DIR%"
+pushd "%DEPLOY_DIR%"
 git init
+if errorlevel 1 goto :publish_failed
 git add .
+if errorlevel 1 goto :publish_failed
 git commit -m "Deploy dashboard update: %date% %time%"
-
-:: 強制推送到遠端的 gh-pages 分支
+if errorlevel 1 goto :publish_failed
 git push --force "%REMOTE_REPO%" master:gh-pages
-if not %errorlevel% == 0 (
-    echo ⚠️ 第一次推送網頁失敗，嘗試第二次...
-    git push --force "%REMOTE_REPO%" master:gh-pages
-)
+if errorlevel 1 goto :publish_failed
+popd
 
-:: 清理暫存資料夾並回到根目錄
-cd /d "%PROJECT_ROOT%"
-rmdir /S /Q "%DEPLOY_DIR%"
+:cleanup
+if exist "%DEPLOY_DIR%" rmdir /S /Q "%DEPLOY_DIR%"
+if not "%EXIT_CODE%"=="0" goto :finish
 
 echo =======================================================
 echo ✅ 所有任務已圓滿完成！儀表板已同步至 GitHub Pages。
 echo =======================================================
+set "EXIT_CODE=0"
+goto :finish
+
+:publish_failed
+popd
+echo ❌ [錯誤] gh-pages 發布失敗。
+set "EXIT_CODE=1"
+goto :cleanup
 
 :finish
-:: pause
-exit /b %EXIT_CODE%
+if defined DID_PUSHD popd
+endlocal & exit /b %EXIT_CODE%

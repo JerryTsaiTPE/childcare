@@ -1,11 +1,11 @@
 @echo off
-setlocal EnableExtensions
+setlocal EnableExtensions DisableDelayedExpansion
 
-rem Only update_dashboard.py reads this variable.
-rem It is inherited by the called batch and its Python process only.
+rem Service-only proxy: this applies only to this batch process and its children.
+rem It does not change Windows, browser, Git, NAS, or any other application's proxy.
 set "CHILDCARE_API_PROXY=http://100.85.96.12:8888"
 
-call "C:\Users\JerryPC\Desktop\childcare\scripts\run_update_windows.bat"
+call "%~dp0run_update_windows.bat"
 set "EXIT_CODE=%ERRORLEVEL%"
 
 endlocal & exit /b %EXIT_CODE%

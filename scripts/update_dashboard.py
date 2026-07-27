@@ -2,14 +2,18 @@
 from __future__ import annotations
 
 import json
+import os
+import re
 import sys
 import time
+
 import urllib.request
 import ssl
 from email.utils import parsedate_to_datetime
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.error import HTTPError
+from urllib.parse import urlsplit
 
 # 強制 Windows 控制台使用 UTF-8 編碼
 if sys.platform == 'win32':
@@ -98,6 +102,25 @@ def is_api_circuit_open(state: dict, *, now: datetime | None = None) -> bool:
     return current_time < deadline
 
 
+def decode_error_body(body: bytes, headers) -> str:
+    """Decode an HTTP error body using its header or HTML-declared charset."""
+    encodings = []
+    if headers:
+        content_charset = headers.get_content_charset()
+        if content_charset:
+            encodings.append(content_charset)
+    declared = re.search(br"charset\s*=\s*['\"]?([a-zA-Z0-9_-]+)", body[:1024], re.IGNORECASE)
+    if declared:
+        encodings.append(declared.group(1).decode("ascii"))
+    encodings.extend(["utf-8", "big5"])
+    for encoding in dict.fromkeys(encodings):
+        try:
+            return body.decode(encoding)
+        except (LookupError, UnicodeDecodeError):
+            continue
+    return body.decode("utf-8", errors="replace")
+
+
 def open_api_circuit(*, state_path: Path, error: HTTPError, org_id: str | None, now: datetime | None = None) -> dict:
     """Persist the full HTTP failure evidence and a conservative cooldown."""
     current_time = now or datetime.now(timezone.utc)
@@ -108,7 +131,7 @@ def open_api_circuit(*, state_path: Path, error: HTTPError, org_id: str | None, 
         MINIMUM_BACKOFF_SECONDS,
     )
     try:
-        response_body_preview = error.read(2000).decode('utf-8', errors='replace')
+        response_body_preview = decode_error_body(error.read(2000), error.headers)
     except Exception:
         response_body_preview = ''
     headers = dict(error.headers.items()) if error.headers else {}
@@ -139,7 +162,38 @@ def wait_for_center_request(*, previous_started_at: float | None, interval_secon
     if remaining > 0:
         sleep(remaining)
 
-def fetch_json(url: str) -> dict:
+def get_service_proxy_url(raw_value: str | None = None) -> str | None:
+    """Read the opt-in proxy for this updater only, rejecting unsafe values."""
+    value = os.environ.get('CHILDCARE_API_PROXY') if raw_value is None else raw_value
+    if value is None or not str(value).strip():
+        return None
+    proxy_url = str(value).strip()
+    parsed = urlsplit(proxy_url)
+    if parsed.scheme not in ('http', 'https') or not parsed.hostname:
+        raise ValueError(
+            'CHILDCARE_API_PROXY 必須是完整的 http:// 或 https:// proxy URL，例如 http://127.0.0.1:8080'
+        )
+    if parsed.path not in ('', '/') or parsed.query or parsed.fragment:
+        raise ValueError('CHILDCARE_API_PROXY 只能是 proxy 的主機與連接埠，不能包含路徑、query 或 fragment')
+    try:
+        port = parsed.port
+    except ValueError as error:
+        raise ValueError('CHILDCARE_API_PROXY 的連接埠格式不正確') from error
+    if port is not None and not 1 <= port <= 65535:
+        raise ValueError('CHILDCARE_API_PROXY 的連接埠必須介於 1 到 65535')
+    return proxy_url
+
+
+def redact_proxy_url(proxy_url: str) -> str:
+    """Return proxy endpoint for logs without exposing embedded credentials."""
+    parsed = urlsplit(proxy_url)
+    host = parsed.hostname or 'invalid-host'
+    if ':' in host and not host.startswith('['):
+        host = f'[{host}]'
+    return f'{parsed.scheme}://{host}{":" + str(parsed.port) if parsed.port else ""}'
+
+
+def fetch_json(url: str, *, proxy_url: str | None = None) -> dict:
     req = urllib.request.Request(
         url,
         headers={
@@ -149,7 +203,15 @@ def fetch_json(url: str) -> dict:
         },
     )
     context = ssl._create_unverified_context()
-    with urllib.request.urlopen(req, timeout=30, context=context) as response:
+    if proxy_url:
+        opener = urllib.request.build_opener(
+            urllib.request.ProxyHandler({'http': proxy_url, 'https': proxy_url}),
+            urllib.request.HTTPSHandler(context=context),
+        )
+        response_context = opener.open(req, timeout=30)
+    else:
+        response_context = urllib.request.urlopen(req, timeout=30, context=context)
+    with response_context as response:
         return json.load(response)
 
 def load_json(path: Path, default):
@@ -240,8 +302,17 @@ def main() -> int:
         print("❌ 無法載入中心名單 (org_ids.txt)，請檢查路徑或檔案內容。")
         return 1
 
+    try:
+        api_proxy_url = get_service_proxy_url()
+    except ValueError as error:
+        print(f"❌ {error}")
+        return 1
+    if api_proxy_url:
+        print(f"🌐 此更新服務將透過獨立 proxy 出口：{redact_proxy_url(api_proxy_url)}")
+
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     backoff_state = load_api_backoff_state(API_BACKOFF_FILE)
+
     circuit_open = is_api_circuit_open(backoff_state)
     if circuit_open:
         print(
@@ -252,7 +323,7 @@ def main() -> int:
     else:
         print("🚀 [低頻模式] 獲取新北市公托清單...")
         try:
-            orgs_payload = fetch_json(API_ORGS)
+            orgs_payload = fetch_json(API_ORGS, proxy_url=api_proxy_url)
             org_info_map = {item.get('orgid'): item for item in orgs_payload.get('data') or []}
         except HTTPError as error:
             print(f"獲取公托清單失敗: HTTP {error.code} {error.reason}")
@@ -307,7 +378,7 @@ def main() -> int:
         wait_for_center_request(previous_started_at=last_center_request_started_at)
         last_center_request_started_at = time.monotonic()
         try:
-            standby_payload = fetch_json(api_standby)
+            standby_payload = fetch_json(api_standby, proxy_url=api_proxy_url)
         except HTTPError as error:
             cached_data = load_cached_center_data(
                 latest_path=latest_path, history_path=history_path, changes_path=changes_path,
