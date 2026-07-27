@@ -57,9 +57,123 @@ DATA_DIR = ROOT / 'data'
 INDEX_PATH = ROOT / 'index.html'
 CACHE_FILE = DATA_DIR / 'info_cache.json'
 API_BACKOFF_FILE = DATA_DIR / 'api_backoff.json'
-CENTER_REQUEST_INTERVAL_SECONDS = 2.0
-DEFAULT_BACKOFF_SECONDS = 15 * 60
-MINIMUM_BACKOFF_SECONDS = 2 * 60
+ORG_LIST_CACHE_FILE = DATA_DIR / 'org_list_cache.json'
+UPDATE_CURSOR_FILE = DATA_DIR / 'update_cursor.json'
+UPDATE_HISTORY_FILE = DATA_DIR / 'update_history.jsonl'
+UPDATE_LOCK_FILE = DATA_DIR / 'update.lock'
+CENTER_REQUEST_INTERVAL_SECONDS = 15.0
+MAX_CENTER_REQUESTS_PER_BATCH = 10
+BATCH_REST_SECONDS = 120
+ORG_LIST_CACHE_TTL_SECONDS = 24 * 60 * 60
+LOCK_STALE_AFTER_SECONDS = 3 * 60 * 60
+DEFAULT_BACKOFF_SECONDS = 60 * 60
+MINIMUM_BACKOFF_SECONDS = 60 * 60
+
+
+def _as_utc(value: datetime | None = None) -> datetime:
+    current = value or datetime.now(timezone.utc)
+    return current.replace(tzinfo=timezone.utc) if current.tzinfo is None else current.astimezone(timezone.utc)
+
+
+def _parse_iso_datetime(value) -> datetime | None:
+    try:
+        parsed = datetime.fromisoformat(str(value))
+    except (TypeError, ValueError):
+        return None
+    return _as_utc(parsed)
+
+
+def plan_update_batches(target_orgs: list[str], *, start_index: int, batch_size: int = MAX_CENTER_REQUESTS_PER_BATCH) -> list[list[tuple[int, str]]]:
+    """Return one complete, cursor-rotated cycle split into bounded batches."""
+    if not target_orgs:
+        return []
+    if batch_size < 1:
+        raise ValueError('batch_size 必須至少為 1')
+    start = start_index % len(target_orgs)
+    ordered = [((start + offset) % len(target_orgs), target_orgs[(start + offset) % len(target_orgs)]) for offset in range(len(target_orgs))]
+    return [ordered[offset: offset + batch_size] for offset in range(0, len(ordered), batch_size)]
+
+
+def batch_rest_seconds(*, batch_index: int, batch_count: int) -> int:
+    return BATCH_REST_SECONDS if batch_index < batch_count - 1 else 0
+
+
+def load_fresh_org_info_map(path: Path, *, ttl_seconds: int = ORG_LIST_CACHE_TTL_SECONDS, now: datetime | None = None) -> dict | None:
+    payload = load_json(path, {})
+    fetched_at = _parse_iso_datetime(payload.get('fetched_at')) if isinstance(payload, dict) else None
+    data = payload.get('data') if isinstance(payload, dict) else None
+    current_time = _as_utc(now)
+    if not fetched_at or not isinstance(data, list) or current_time - fetched_at > timedelta(seconds=ttl_seconds):
+        return None
+    return {item.get('orgid'): item for item in data if isinstance(item, dict) and item.get('orgid')}
+
+
+def save_org_info_cache(path: Path, payload: dict, *, now: datetime | None = None) -> None:
+    save_json(path, {'fetched_at': _as_utc(now).isoformat(), 'data': list(payload.get('data') or [])})
+
+
+def load_update_cursor(path: Path, *, total_orgs: int) -> dict:
+    saved = load_json(path, {})
+    if not isinstance(saved, dict) or total_orgs < 1:
+        return {'next_index': 0, 'last_successful_org_id': None}
+    try:
+        next_index = int(saved.get('next_index', 0)) % total_orgs
+    except (TypeError, ValueError):
+        next_index = 0
+    return {'next_index': next_index, 'last_successful_org_id': saved.get('last_successful_org_id')}
+
+
+def save_update_cursor(path: Path, *, next_index: int, last_successful_org_id: str, total_orgs: int) -> None:
+    save_json(path, {
+        'next_index': next_index % total_orgs if total_orgs else 0,
+        'last_successful_org_id': last_successful_org_id,
+        'updated_at': _as_utc().isoformat(),
+    })
+
+
+def acquire_run_lock(path: Path, *, run_id: str, now: datetime | None = None, stale_after_seconds: int = LOCK_STALE_AFTER_SECONDS) -> bool:
+    """Atomically acquire the updater lock; only reclaim locks older than the safe bound."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    current_time = _as_utc(now)
+    try:
+        descriptor = os.open(str(path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    except FileExistsError:
+        existing = load_json(path, {})
+        created_at = _parse_iso_datetime(existing.get('created_at')) if isinstance(existing, dict) else None
+        if not created_at or current_time - created_at <= timedelta(seconds=stale_after_seconds):
+            return False
+        try:
+            path.unlink()
+        except FileNotFoundError:
+            pass
+        return acquire_run_lock(path, run_id=run_id, now=current_time, stale_after_seconds=stale_after_seconds)
+    with os.fdopen(descriptor, 'w', encoding='utf-8') as handle:
+        json.dump({'run_id': run_id, 'created_at': current_time.isoformat(), 'pid': os.getpid()}, handle, ensure_ascii=False)
+    return True
+
+
+def release_run_lock(path: Path, *, run_id: str) -> None:
+    existing = load_json(path, {})
+    if isinstance(existing, dict) and existing.get('run_id') == run_id:
+        try:
+            path.unlink()
+        except FileNotFoundError:
+            pass
+
+
+def append_update_history(path: Path, event: dict, *, now: datetime | None = None) -> None:
+    """Append a secret-free event record for later, non-invasive rate-limit analysis."""
+    current_time = _as_utc(now)
+    blocked_terms = ('proxy', 'password', 'secret', 'token', 'authorization', 'cookie', 'credential')
+    safe_event = {key: value for key, value in event.items() if not any(term in key.lower() for term in blocked_terms)}
+    record = {
+        'timestamp_utc': current_time.isoformat(),
+        'timestamp_taipei': current_time.astimezone(timezone(timedelta(hours=8))).isoformat(),
+        **safe_event,
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('a', encoding='utf-8', newline='\n') as handle:
+        handle.write(json.dumps(record, ensure_ascii=False, separators=(',', ':')) + '\n')
 
 
 def parse_retry_after(value: str | None, *, now: datetime | None = None) -> int | None:
@@ -296,7 +410,7 @@ def load_cached_center_data(
     }
 
 
-def main() -> int:
+def _run_update_cycle(*, run_id: str) -> int:
     TARGET_ORGS = get_target_orgs()
     if not TARGET_ORGS:
         print("❌ 無法載入中心名單 (org_ids.txt)，請檢查路徑或檔案內容。")
@@ -311,28 +425,47 @@ def main() -> int:
         print(f"🌐 此更新服務將透過獨立 proxy 出口：{redact_proxy_url(api_proxy_url)}")
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
+    update_history_path = DATA_DIR / UPDATE_HISTORY_FILE.name
+    cursor_path = DATA_DIR / UPDATE_CURSOR_FILE.name
+    org_list_cache_path = DATA_DIR / ORG_LIST_CACHE_FILE.name
+    append_update_history(update_history_path, {
+        'event': 'run_started', 'run_id': run_id, 'target_org_count': len(TARGET_ORGS),
+        'batch_size': MAX_CENTER_REQUESTS_PER_BATCH, 'center_interval_seconds': CENTER_REQUEST_INTERVAL_SECONDS,
+        'batch_rest_seconds': BATCH_REST_SECONDS,
+    })
     backoff_state = load_api_backoff_state(API_BACKOFF_FILE)
 
     circuit_open = is_api_circuit_open(backoff_state)
-    if circuit_open:
+    org_info_map = load_fresh_org_info_map(org_list_cache_path)
+    if org_info_map is not None:
+        print("📦 使用未過期的公托清單快取；本輪不發送清單 API request。")
+        append_update_history(update_history_path, {'event': 'org_list_cache_hit', 'run_id': run_id, 'org_count': len(org_info_map)})
+    elif circuit_open:
         print(
             "🛑 API 融斷冷卻中；不會發送任何 LoveBaby API 請求。"
             f" 冷卻截止：{backoff_state.get('blocked_until')}"
         )
         org_info_map = {}
+        append_update_history(update_history_path, {'event': 'circuit_open_at_run_start', 'run_id': run_id, 'blocked_until': backoff_state.get('blocked_until')})
     else:
-        print("🚀 [低頻模式] 獲取新北市公托清單...")
+        print("🚀 [分批低頻模式] 獲取新北市公托清單...")
+        org_list_started_at = time.monotonic()
+        append_update_history(update_history_path, {'event': 'org_list_request_started', 'run_id': run_id})
         try:
             orgs_payload = fetch_json(API_ORGS, proxy_url=api_proxy_url)
+            save_org_info_cache(org_list_cache_path, orgs_payload)
             org_info_map = {item.get('orgid'): item for item in orgs_payload.get('data') or []}
+            append_update_history(update_history_path, {'event': 'org_list_request_completed', 'run_id': run_id, 'status': 'success', 'duration_ms': round((time.monotonic() - org_list_started_at) * 1000)})
         except HTTPError as error:
             print(f"獲取公托清單失敗: HTTP {error.code} {error.reason}")
             org_info_map = {}
+            append_update_history(update_history_path, {'event': 'org_list_request_completed', 'run_id': run_id, 'status': 'http_error', 'http_status': error.code, 'duration_ms': round((time.monotonic() - org_list_started_at) * 1000)})
             if error.code in (403, 429):
                 backoff_state = open_api_circuit(
                     state_path=API_BACKOFF_FILE, error=error, org_id=None
                 )
                 circuit_open = True
+                append_update_history(update_history_path, {'event': 'circuit_opened', 'run_id': run_id, 'http_status': error.code, 'blocked_until': backoff_state['blocked_until'], 'scope': 'org_list'})
                 print(
                     "🛑 已開啟 API 融斷，停止本輪後續請求。"
                     f" 冷卻截止：{backoff_state['blocked_until']}"
@@ -340,12 +473,30 @@ def main() -> int:
         except Exception as error:
             print(f"獲取公托清單失敗: {error}")
             org_info_map = {}
+            append_update_history(update_history_path, {'event': 'org_list_request_completed', 'run_id': run_id, 'status': 'error', 'error_type': type(error).__name__, 'duration_ms': round((time.monotonic() - org_list_started_at) * 1000)})
 
     info_cache = load_json(CACHE_FILE, {})
+    cursor = load_update_cursor(cursor_path, total_orgs=len(TARGET_ORGS))
+    batches = plan_update_batches(
+        TARGET_ORGS, start_index=cursor['next_index'], batch_size=MAX_CENTER_REQUESTS_PER_BATCH
+    )
+    planned_orgs = [(batch_index, org_index, org_id) for batch_index, batch in enumerate(batches) for org_index, org_id in batch]
     all_org_data = {}
     last_center_request_started_at = None
+    active_batch_index = None
 
-    for org_id in TARGET_ORGS:
+    for batch_index, org_index, org_id in planned_orgs:
+        if active_batch_index != batch_index:
+            if active_batch_index is not None and not circuit_open:
+                rest_seconds = batch_rest_seconds(batch_index=active_batch_index, batch_count=len(batches))
+                if rest_seconds:
+                    print(f"   ⏸️ 第 {active_batch_index + 1} 批完成，休息 {rest_seconds} 秒。")
+                    append_update_history(update_history_path, {'event': 'batch_rest_started', 'run_id': run_id, 'batch_index': active_batch_index + 1, 'rest_seconds': rest_seconds})
+                    time.sleep(rest_seconds)
+                    append_update_history(update_history_path, {'event': 'batch_rest_completed', 'run_id': run_id, 'batch_index': active_batch_index + 1})
+            active_batch_index = batch_index
+            append_update_history(update_history_path, {'event': 'batch_started', 'run_id': run_id, 'batch_index': batch_index + 1, 'batch_size': len(batches[batch_index])})
+
         org_dir = DATA_DIR / org_id
         org_dir.mkdir(parents=True, exist_ok=True)
         snapshot_dir = org_dir / 'snapshots'
@@ -377,6 +528,11 @@ def main() -> int:
         api_standby = f'https://lovebaby.sw.ntpc.gov.tw/webapi/NpsApply/GetStandbyList?orgid={org_id}'
         wait_for_center_request(previous_started_at=last_center_request_started_at)
         last_center_request_started_at = time.monotonic()
+        request_started_at = last_center_request_started_at
+        append_update_history(update_history_path, {
+            'event': 'center_request_started', 'run_id': run_id, 'batch_index': batch_index + 1,
+            'org_id': org_id, 'cursor_index': org_index,
+        })
         try:
             standby_payload = fetch_json(api_standby, proxy_url=api_proxy_url)
         except HTTPError as error:
@@ -387,11 +543,20 @@ def main() -> int:
             )
             if cached_data:
                 all_org_data[org_id] = cached_data
+            append_update_history(update_history_path, {
+                'event': 'center_request_completed', 'run_id': run_id, 'batch_index': batch_index + 1,
+                'org_id': org_id, 'cursor_index': org_index, 'status': 'http_error',
+                'http_status': error.code, 'duration_ms': round((time.monotonic() - request_started_at) * 1000),
+            })
             if error.code in (403, 429):
                 backoff_state = open_api_circuit(
                     state_path=API_BACKOFF_FILE, error=error, org_id=org_id
                 )
                 circuit_open = True
+                append_update_history(update_history_path, {
+                    'event': 'circuit_opened', 'run_id': run_id, 'scope': 'center', 'org_id': org_id,
+                    'http_status': error.code, 'blocked_until': backoff_state['blocked_until'],
+                })
                 print(
                     f"   🛑 {org_id} 回傳 HTTP {error.code}，已開啟 API 融斷並停止後續請求。"
                     f" 冷卻截止：{backoff_state['blocked_until']}"
@@ -407,6 +572,11 @@ def main() -> int:
             )
             if cached_data:
                 all_org_data[org_id] = cached_data
+            append_update_history(update_history_path, {
+                'event': 'center_request_completed', 'run_id': run_id, 'batch_index': batch_index + 1,
+                'org_id': org_id, 'cursor_index': org_index, 'status': 'error',
+                'error_type': type(error).__name__, 'duration_ms': round((time.monotonic() - request_started_at) * 1000),
+            })
             print(f"   ⚠️ 抓取 {org_id} API 失敗 ({error})，保留上次有效資料。")
             continue
 
@@ -493,6 +663,14 @@ def main() -> int:
         save_json(latest_path, snapshot)
         save_json(history_path, history)
         save_json(changes_path, changes)
+        save_update_cursor(
+            cursor_path, next_index=org_index + 1, last_successful_org_id=org_id, total_orgs=len(TARGET_ORGS)
+        )
+        append_update_history(update_history_path, {
+            'event': 'center_request_completed', 'run_id': run_id, 'batch_index': batch_index + 1,
+            'org_id': org_id, 'cursor_index': org_index, 'status': 'success',
+            'duration_ms': round((time.monotonic() - request_started_at) * 1000),
+        })
 
         all_org_data[org_id] = {
             "snapshot": snapshot,
@@ -560,6 +738,29 @@ def main() -> int:
     INDEX_PATH.write_text(html, encoding='utf-8')
     print("🎉 儀表板更新完成！")
     return 0
+
+
+def main() -> int:
+    """Run exactly one lock-protected, observable update cycle."""
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    run_id = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}-{os.getpid()}-{time.time_ns() % 1_000_000}"
+    lock_path = DATA_DIR / UPDATE_LOCK_FILE.name
+    update_history_path = DATA_DIR / UPDATE_HISTORY_FILE.name
+    if not acquire_run_lock(lock_path, run_id=run_id):
+        append_update_history(update_history_path, {'event': 'run_skipped_lock_held', 'run_id': run_id})
+        print("🛑 已有更新程序執行中；本次不會發送任何 LoveBaby API 請求。")
+        return 2
+    append_update_history(update_history_path, {'event': 'run_lock_acquired', 'run_id': run_id})
+    try:
+        result = _run_update_cycle(run_id=run_id)
+        append_update_history(update_history_path, {'event': 'run_completed', 'run_id': run_id, 'exit_code': result})
+        return result
+    except Exception as error:
+        append_update_history(update_history_path, {'event': 'run_failed', 'run_id': run_id, 'error_type': type(error).__name__})
+        raise
+    finally:
+        release_run_lock(lock_path, run_id=run_id)
+
 
 if __name__ == '__main__':
     try:
