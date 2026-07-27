@@ -539,6 +539,52 @@ def render_dashboard(
         return false;
     }
 
+    function historicalChildKey(child) {
+        return `${child.name || child.encname || ''}|${child.birthday || child.cbirthday || ''}|${child.category || child.displaydesc || ''}`;
+    }
+
+    function sameChildAcrossYears(removed, added) {
+        return historicalChildKey(removed) === historicalChildKey(added)
+            && String(removed.apyear || '') !== String(added.apyear || '');
+    }
+
+    function classifyHistoricalRemovalStatuses(item, orgId) {
+        const removed = item.removed_details || [];
+        const enrollDelta = Object.prototype.hasOwnProperty.call(item, 'enroll_delta') ? item.enroll_delta : 0;
+        const candidates = removed.filter((rd) => !isStrictlyTwo(rd.birthday, item.fetched_at)
+            && !isChildStillWaitingElsewhere(rd.name, rd.birthday, rd.category, orgId))
+            .sort((a, b) => a.previous_index - b.previous_index);
+        const statuses = new Map();
+
+        removed.forEach((rd) => {
+            let status;
+            if (isStrictlyTwo(rd.birthday, item.fetched_at)) {
+                status = '屆齡取消';
+            } else if (enrollDelta <= 0) {
+                status = '自行取消';
+            } else {
+                const rank = candidates.findIndex((candidate) => candidate.previous_index === rd.previous_index);
+                const admitted = rank !== -1 && (candidates.length <= enrollDelta || rank < enrollDelta - 1 || rank === candidates.length - 1);
+                status = admitted ? '遞補入托' : '自行取消';
+            }
+            statuses.set(historicalChildKey(rd), { removed: rd, status });
+        });
+        return statuses;
+    }
+
+    function classifyHistoricalAddedStatus(ad, removedStatusByKey) {
+        const crossYearDuplicate = Array.from(removedStatusByKey.values()).some((record) =>
+            record.status === '遞補入托' && sameChildAcrossYears(record.removed, ad));
+        if (crossYearDuplicate) return '自行取消';
+        return '新增候補';
+    }
+
+    function formatHistoricalStatus(status) {
+        if (status === '遞補入托') return '<span style="color:var(--ok)">遞補入托</span>';
+        if (status === '屆齡取消') return '<span style="color:var(--danger)">屆齡取消</span>';
+        return status;
+    }
+
     // --- 全區統計計算：結合跨中心連動與頭尾錄取防呆收斂法則 ---
     function calculateGlobalStats() {
         let totalCap = 0;
@@ -1091,6 +1137,7 @@ def render_dashboard(
                     card.dataset.changeKind = item.change_kind || 'stable';
                     
                     let detailsHtml = '';
+                    const removedStatusByKey = classifyHistoricalRemovalStatuses(item, currentOrgId);
                     if (item.added_details && item.added_details.length > 0) {
                         // 💡 加上 class="table-wrap" 確保手機上可以橫向滑動
                         detailsHtml += '<div class="table-wrap" style="margin-top:10px; margin-bottom:15px;"><table class="panel-table" style="font-size:13px; border-left: 3px solid var(--accent);"><thead><tr><th>新序號</th><th>兒童姓名</th><th>目前歲數</th><th>身分別</th><th>狀態</th><th style="color:var(--accent)">同步候補(目前)</th></tr></thead><tbody>';
@@ -1114,8 +1161,9 @@ def render_dashboard(
                                 }
                             });
                             const syncText = syncOrgs.length > 0 ? syncOrgs.join(', ') : '—';
+                            const addedStatus = classifyHistoricalAddedStatus(ad, removedStatusByKey);
                             
-                            detailsHtml += `<tr><td>${formatChangeRank(idx, ad.apyear)}</td><td>${name}</td><td>${age}</td><td>${categoryStr}</td><td><span style="color:var(--accent)">新增候補</span></td><td style="color:var(--accent-2)">${syncText}</td></tr>`;
+                            detailsHtml += `<tr><td>${formatChangeRank(idx, ad.apyear)}</td><td>${name}</td><td>${age}</td><td>${categoryStr}</td><td>${formatHistoricalStatus(addedStatus)}</td><td style="color:var(--accent-2)">${syncText}</td></tr>`;
                         });
                         detailsHtml += '</tbody></table></div>';
                     }
@@ -1124,53 +1172,9 @@ def render_dashboard(
                         // 💡 加上 class="table-wrap" 確保手機上可以橫向滑動
                         detailsHtml += '<div class="table-wrap" style="margin-top:10px;"><table class="panel-table" style="font-size:13px;"><thead><tr><th>原序號</th><th>兒童姓名</th><th>當時歲數</th><th>身分別</th><th>狀態</th><th style="color:var(--accent)">同步候補(目前)</th></tr></thead><tbody>';
                         
-                        let enrollDelta = item.hasOwnProperty('enroll_delta') ? item.enroll_delta : 0;
-                        
-                        // 1. 抓出純淨入托候選人
-                        let pureAdmittedCandidates = [];
-                        item.removed_details.forEach(rd => {
-                            if (!isStrictlyTwo(rd.birthday, item.fetched_at)) {
-                                const stillWaiting = isChildStillWaitingElsewhere(rd.name, rd.birthday, rd.category, currentOrgId);
-                                if (!stillWaiting) {
-                                    pureAdmittedCandidates.push(rd);
-                                }
-                            }
-                        });
-                        pureAdmittedCandidates.sort((a, b) => a.previous_index - b.previous_index);
-
                         item.removed_details.forEach(rd => {
                             const age = getAgeString(rd.birthday, item.fetched_at);
-                            let type = '自行取消';
-                            
-                            if (isStrictlyTwo(rd.birthday, item.fetched_at)) {
-                                type = '<span style="color:var(--danger)">屆齡取消</span>';
-                            } else {
-                                // 🌟 鐵律守門員：若官方缺額增長數 <= 0，全部強制列為自行取消
-                                if (enrollDelta <= 0) {
-                                    type = '自行取消';
-                                } else {
-                                    const stillWaiting = isChildStillWaitingElsewhere(rd.name, rd.birthday, rd.category, currentOrgId);
-                                    if (stillWaiting) {
-                                        type = '自行取消';
-                                    } else {
-                                        let rank = pureAdmittedCandidates.findIndex(x => x.previous_index === rd.previous_index);
-                                        if (rank !== -1) {
-                                            if (pureAdmittedCandidates.length <= enrollDelta) {
-                                                type = '<span style="color:var(--ok)">遞補入托</span>';
-                                            } else {
-                                                // 吻合現場通知順序：保留前 (N-1) 名與最後 1 名為錄取
-                                                if (rank < enrollDelta - 1 || rank === pureAdmittedCandidates.length - 1) {
-                                                    type = '<span style="color:var(--ok)">遞補入托</span>';
-                                                } else {
-                                                    type = '自行取消';
-                                                }
-                                            }
-                                        } else {
-                                            type = '自行取消';
-                                        }
-                                    }
-                                }
-                            }
+                            const type = formatHistoricalStatus(removedStatusByKey.get(historicalChildKey(rd))?.status || '自行取消');
                             
                             let syncOrgs = [];
                             orgIds.forEach(oid => {
