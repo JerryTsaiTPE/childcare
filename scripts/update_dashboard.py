@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import socket
 import sys
 import time
 
@@ -61,7 +62,7 @@ ORG_LIST_CACHE_FILE = DATA_DIR / 'org_list_cache.json'
 UPDATE_CURSOR_FILE = DATA_DIR / 'update_cursor.json'
 UPDATE_HISTORY_FILE = DATA_DIR / 'update_history.jsonl'
 UPDATE_LOCK_FILE = DATA_DIR / 'update.lock'
-CENTER_REQUEST_INTERVAL_SECONDS = 15.0
+CENTER_REQUEST_INTERVAL_SECONDS = 5.5
 MAX_CENTER_REQUESTS_PER_BATCH = 10
 BATCH_REST_SECONDS = 120
 ORG_LIST_CACHE_TTL_SECONDS = 24 * 60 * 60
@@ -307,6 +308,23 @@ def redact_proxy_url(proxy_url: str) -> str:
     return f'{parsed.scheme}://{host}{":" + str(parsed.port) if parsed.port else ""}'
 
 
+def probe_service_proxy(
+    proxy_url: str, *, create_connection=socket.create_connection, timeout_seconds: float = 3.0
+) -> str | None:
+    """Return a safe diagnostic when the configured proxy TCP endpoint is unavailable."""
+    parsed = urlsplit(proxy_url)
+    host = parsed.hostname
+    if not host:
+        return f'Proxy 位址無效：{redact_proxy_url(proxy_url)}'
+    port = parsed.port or (443 if parsed.scheme == 'https' else 80)
+    try:
+        connection = create_connection((host, port), timeout=timeout_seconds)
+    except OSError as error:
+        return f'無法連線至 {redact_proxy_url(proxy_url)}：{error}'
+    connection.close()
+    return None
+
+
 def fetch_json(url: str, *, proxy_url: str | None = None) -> dict:
     req = urllib.request.Request(
         url,
@@ -449,8 +467,17 @@ def _run_update_cycle(*, run_id: str) -> int:
         'batch_rest_seconds': BATCH_REST_SECONDS,
     })
     backoff_state = load_api_backoff_state(API_BACKOFF_FILE)
-
     circuit_open = is_api_circuit_open(backoff_state)
+    if api_proxy_url and not circuit_open:
+        proxy_error = probe_service_proxy(api_proxy_url)
+        if proxy_error:
+            append_update_history(update_history_path, {
+                'event': 'proxy_probe_failed', 'run_id': run_id, 'error_type': 'ProxyConnectionError',
+            })
+            print(f"❌ 更新已停止：{proxy_error}")
+            print("   請先確認 proxy 主機已開機、Tailscale 連線正常，且 HTTP CONNECT proxy 正在監聽該連接埠。")
+            return 1
+
     org_info_map = load_fresh_org_info_map(org_list_cache_path)
     if org_info_map is not None:
         print("📦 使用未過期的公托清單快取；本輪不發送清單 API request。")
