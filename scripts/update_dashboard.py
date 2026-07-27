@@ -3,10 +3,13 @@ from __future__ import annotations
 
 import json
 import sys
+import time
 import urllib.request
 import ssl
+from email.utils import parsedate_to_datetime
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.error import HTTPError
 
 # 強制 Windows 控制台使用 UTF-8 編碼
 if sys.platform == 'win32':
@@ -49,6 +52,92 @@ API_ORGS = 'https://lovebaby.sw.ntpc.gov.tw/webapi/Org/GetPublicNpsOrgList'
 DATA_DIR = ROOT / 'data'
 INDEX_PATH = ROOT / 'index.html'
 CACHE_FILE = DATA_DIR / 'info_cache.json'
+API_BACKOFF_FILE = DATA_DIR / 'api_backoff.json'
+CENTER_REQUEST_INTERVAL_SECONDS = 2.0
+DEFAULT_BACKOFF_SECONDS = 15 * 60
+MINIMUM_BACKOFF_SECONDS = 2 * 60
+
+
+def parse_retry_after(value: str | None, *, now: datetime | None = None) -> int | None:
+    """Return Retry-After as seconds, supporting delta-seconds and HTTP-date."""
+    if value is None or not str(value).strip():
+        return None
+    text = str(value).strip()
+    if text.isdigit():
+        return int(text)
+    try:
+        retry_at = parsedate_to_datetime(text)
+    except (TypeError, ValueError, IndexError):
+        return None
+    if retry_at.tzinfo is None:
+        retry_at = retry_at.replace(tzinfo=timezone.utc)
+    current_time = now or datetime.now(timezone.utc)
+    if current_time.tzinfo is None:
+        current_time = current_time.replace(tzinfo=timezone.utc)
+    return max(0, int((retry_at - current_time).total_seconds()))
+
+
+def load_api_backoff_state(path: Path) -> dict:
+    state = load_json(path, {})
+    return state if isinstance(state, dict) else {}
+
+
+def is_api_circuit_open(state: dict, *, now: datetime | None = None) -> bool:
+    blocked_until = state.get('blocked_until')
+    if not blocked_until:
+        return False
+    try:
+        deadline = datetime.fromisoformat(str(blocked_until))
+    except ValueError:
+        return False
+    if deadline.tzinfo is None:
+        deadline = deadline.replace(tzinfo=timezone.utc)
+    current_time = now or datetime.now(timezone.utc)
+    if current_time.tzinfo is None:
+        current_time = current_time.replace(tzinfo=timezone.utc)
+    return current_time < deadline
+
+
+def open_api_circuit(*, state_path: Path, error: HTTPError, org_id: str | None, now: datetime | None = None) -> dict:
+    """Persist the full HTTP failure evidence and a conservative cooldown."""
+    current_time = now or datetime.now(timezone.utc)
+    retry_after_raw = error.headers.get('Retry-After') if error.headers else None
+    retry_after_seconds = parse_retry_after(retry_after_raw, now=current_time)
+    cooldown_seconds = max(
+        retry_after_seconds if retry_after_seconds is not None else DEFAULT_BACKOFF_SECONDS,
+        MINIMUM_BACKOFF_SECONDS,
+    )
+    try:
+        response_body_preview = error.read(2000).decode('utf-8', errors='replace')
+    except Exception:
+        response_body_preview = ''
+    headers = dict(error.headers.items()) if error.headers else {}
+    state = {
+        'opened_at': current_time.isoformat(),
+        'blocked_until': (current_time + timedelta(seconds=cooldown_seconds)).isoformat(),
+        'status_code': error.code,
+        'reason': str(error.reason),
+        'org_id': org_id,
+        'url': error.url,
+        'retry_after_raw': retry_after_raw,
+        'retry_after_seconds': retry_after_seconds,
+        'applied_cooldown_seconds': cooldown_seconds,
+        'headers': headers,
+        'headers_raw': str(error.headers) if error.headers else '',
+        'response_body_preview': response_body_preview,
+    }
+
+    save_json(state_path, state)
+    return state
+
+
+def wait_for_center_request(*, previous_started_at: float | None, interval_seconds: float = CENTER_REQUEST_INTERVAL_SECONDS, monotonic_now=time.monotonic, sleep=time.sleep) -> None:
+    """Space center request start times without delaying the first request."""
+    if previous_started_at is None:
+        return
+    remaining = interval_seconds - (monotonic_now() - previous_started_at)
+    if remaining > 0:
+        sleep(remaining)
 
 def fetch_json(url: str) -> dict:
     req = urllib.request.Request(
@@ -152,17 +241,38 @@ def main() -> int:
         return 1
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    
-    print("🚀 [高速模式] 獲取新北市公托清單...")
-    try:
-        orgs_payload = fetch_json(API_ORGS)
-        org_info_map = {item.get('orgid'): item for item in orgs_payload.get('data') or []}
-    except Exception as e:
-        print(f"獲取公托清單失敗: {e}")
+    backoff_state = load_api_backoff_state(API_BACKOFF_FILE)
+    circuit_open = is_api_circuit_open(backoff_state)
+    if circuit_open:
+        print(
+            "🛑 API 融斷冷卻中；不會發送任何 LoveBaby API 請求。"
+            f" 冷卻截止：{backoff_state.get('blocked_until')}"
+        )
         org_info_map = {}
+    else:
+        print("🚀 [低頻模式] 獲取新北市公托清單...")
+        try:
+            orgs_payload = fetch_json(API_ORGS)
+            org_info_map = {item.get('orgid'): item for item in orgs_payload.get('data') or []}
+        except HTTPError as error:
+            print(f"獲取公托清單失敗: HTTP {error.code} {error.reason}")
+            org_info_map = {}
+            if error.code in (403, 429):
+                backoff_state = open_api_circuit(
+                    state_path=API_BACKOFF_FILE, error=error, org_id=None
+                )
+                circuit_open = True
+                print(
+                    "🛑 已開啟 API 融斷，停止本輪後續請求。"
+                    f" 冷卻截止：{backoff_state['blocked_until']}"
+                )
+        except Exception as error:
+            print(f"獲取公托清單失敗: {error}")
+            org_info_map = {}
 
     info_cache = load_json(CACHE_FILE, {})
-    all_org_data = {} 
+    all_org_data = {}
+    last_center_request_started_at = None
 
     for org_id in TARGET_ORGS:
         org_dir = DATA_DIR / org_id
@@ -182,10 +292,7 @@ def main() -> int:
         center_memo = cached_org_info.get("related_info_text", "尚未抓取中心說明，請手動執行一次 run_slow_scraper.bat")
         center_validity = cached_org_info.get("validity_text", "未知 (需執行快取更新)")
 
-        api_standby = f'https://lovebaby.sw.ntpc.gov.tw/webapi/NpsApply/GetStandbyList?orgid={org_id}'
-        try:
-            standby_payload = fetch_json(api_standby)
-        except Exception:
+        if circuit_open:
             cached_data = load_cached_center_data(
                 latest_path=latest_path, history_path=history_path, changes_path=changes_path,
                 admissions=admissions, admissions_path=admissions_path,
@@ -193,7 +300,43 @@ def main() -> int:
             )
             if cached_data:
                 all_org_data[org_id] = cached_data
-            print(f"   ⚠️ 抓取 {org_id} API 失敗，保留上次有效資料。")
+            print(f"   ⏭️ {org_id} 因 API 融斷而略過，保留上次有效資料。")
+            continue
+
+        api_standby = f'https://lovebaby.sw.ntpc.gov.tw/webapi/NpsApply/GetStandbyList?orgid={org_id}'
+        wait_for_center_request(previous_started_at=last_center_request_started_at)
+        last_center_request_started_at = time.monotonic()
+        try:
+            standby_payload = fetch_json(api_standby)
+        except HTTPError as error:
+            cached_data = load_cached_center_data(
+                latest_path=latest_path, history_path=history_path, changes_path=changes_path,
+                admissions=admissions, admissions_path=admissions_path,
+                related_info_text=center_memo, validity_text=center_validity,
+            )
+            if cached_data:
+                all_org_data[org_id] = cached_data
+            if error.code in (403, 429):
+                backoff_state = open_api_circuit(
+                    state_path=API_BACKOFF_FILE, error=error, org_id=org_id
+                )
+                circuit_open = True
+                print(
+                    f"   🛑 {org_id} 回傳 HTTP {error.code}，已開啟 API 融斷並停止後續請求。"
+                    f" 冷卻截止：{backoff_state['blocked_until']}"
+                )
+            else:
+                print(f"   ⚠️ {org_id} HTTP {error.code} {error.reason}，保留上次有效資料。")
+            continue
+        except Exception as error:
+            cached_data = load_cached_center_data(
+                latest_path=latest_path, history_path=history_path, changes_path=changes_path,
+                admissions=admissions, admissions_path=admissions_path,
+                related_info_text=center_memo, validity_text=center_validity,
+            )
+            if cached_data:
+                all_org_data[org_id] = cached_data
+            print(f"   ⚠️ 抓取 {org_id} API 失敗 ({error})，保留上次有效資料。")
             continue
 
         parsed = parse_standby_payload(standby_payload)
@@ -344,7 +487,7 @@ def main() -> int:
     print("產生 HTML 儀表板...")
     html = render_dashboard(all_data=all_org_data, rule_text="", validity_text="", related_info_text="")
     INDEX_PATH.write_text(html, encoding='utf-8')
-    print("🎉 高速更新與推播全部完成！")
+    print("🎉 儀表板更新完成！")
     return 0
 
 if __name__ == '__main__':
