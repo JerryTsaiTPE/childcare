@@ -62,9 +62,9 @@ ORG_LIST_CACHE_FILE = DATA_DIR / 'org_list_cache.json'
 UPDATE_CURSOR_FILE = DATA_DIR / 'update_cursor.json'
 UPDATE_HISTORY_FILE = DATA_DIR / 'update_history.jsonl'
 UPDATE_LOCK_FILE = DATA_DIR / 'update.lock'
-CENTER_REQUEST_INTERVAL_SECONDS = 5.5
+CENTER_REQUEST_INTERVAL_SECONDS = 5.0
 MAX_CENTER_REQUESTS_PER_BATCH = 10
-BATCH_REST_SECONDS = 80
+BATCH_REST_SECONDS = 70
 ORG_LIST_CACHE_TTL_SECONDS = 24 * 60 * 60
 LOCK_STALE_AFTER_SECONDS = 3 * 60 * 60
 DEFAULT_BACKOFF_SECONDS = 60 * 60
@@ -478,11 +478,10 @@ def _run_update_cycle(*, run_id: str) -> int:
             print("   請先確認 proxy 主機已開機、Tailscale 連線正常，且 HTTP CONNECT proxy 正在監聽該連接埠。")
             return 1
 
-    org_info_map = load_fresh_org_info_map(org_list_cache_path)
-    if org_info_map is not None:
-        print("📦 使用未過期的公托清單快取；本輪不發送清單 API request。")
-        append_update_history(update_history_path, {'event': 'org_list_cache_hit', 'run_id': run_id, 'org_count': len(org_info_map)})
-    elif circuit_open:
+    # `enroll_count` drives admission inference, so every update cycle must
+    # obtain a new official center-list payload.  The persisted copy is an
+    # audit/fallback record only; it must never suppress this live request.
+    if circuit_open:
         print(
             "🛑 API 融斷冷卻中；不會發送任何 LoveBaby API 請求。"
             f" 冷卻截止：{backoff_state.get('blocked_until')}"
@@ -490,7 +489,7 @@ def _run_update_cycle(*, run_id: str) -> int:
         org_info_map = {}
         append_update_history(update_history_path, {'event': 'circuit_open_at_run_start', 'run_id': run_id, 'blocked_until': backoff_state.get('blocked_until')})
     else:
-        print("🚀 [分批低頻模式] 獲取新北市公托清單...")
+        print("🚀 [分批低頻模式] 每輪更新中心清單與 enroll_count...")
         org_list_started_at = time.monotonic()
         append_update_history(update_history_path, {'event': 'org_list_request_started', 'run_id': run_id})
         try:
@@ -512,10 +511,12 @@ def _run_update_cycle(*, run_id: str) -> int:
                     "🛑 已開啟 API 融斷，停止本輪後續請求。"
                     f" 冷卻截止：{backoff_state['blocked_until']}"
                 )
+            return 1
         except Exception as error:
             print(f"獲取公托清單失敗: {error}")
             org_info_map = {}
             append_update_history(update_history_path, {'event': 'org_list_request_completed', 'run_id': run_id, 'status': 'error', 'error_type': type(error).__name__, 'duration_ms': round((time.monotonic() - org_list_started_at) * 1000)})
+            return 1
 
     info_cache = load_json(CACHE_FILE, {})
     cursor = load_update_cursor(cursor_path, total_orgs=len(TARGET_ORGS))
