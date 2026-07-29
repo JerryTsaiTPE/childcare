@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import random
 import re
 import socket
 import sys
@@ -62,9 +63,11 @@ ORG_LIST_CACHE_FILE = DATA_DIR / 'org_list_cache.json'
 UPDATE_CURSOR_FILE = DATA_DIR / 'update_cursor.json'
 UPDATE_HISTORY_FILE = DATA_DIR / 'update_history.jsonl'
 UPDATE_LOCK_FILE = DATA_DIR / 'update.lock'
-CENTER_REQUEST_INTERVAL_SECONDS = 5.0
+CENTER_REQUEST_INTERVAL_MIN_SECONDS = 2.0
+CENTER_REQUEST_INTERVAL_MAX_SECONDS = 5.0
 MAX_CENTER_REQUESTS_PER_BATCH = 10
-BATCH_REST_SECONDS = 70
+BATCH_REST_MIN_SECONDS = 30.0
+BATCH_REST_MAX_SECONDS = 70.0
 ORG_LIST_CACHE_TTL_SECONDS = 24 * 60 * 60
 LOCK_STALE_AFTER_SECONDS = 3 * 60 * 60
 DEFAULT_BACKOFF_SECONDS = 60 * 60
@@ -95,8 +98,15 @@ def plan_update_batches(target_orgs: list[str], *, start_index: int, batch_size:
     return [ordered[offset: offset + batch_size] for offset in range(0, len(ordered), batch_size)]
 
 
-def batch_rest_seconds(*, batch_index: int, batch_count: int) -> int:
-    return BATCH_REST_SECONDS if batch_index < batch_count - 1 else 0
+def center_request_interval_seconds(*, uniform=random.uniform) -> float:
+    """Draw a fresh request-start interval for each center."""
+    return uniform(CENTER_REQUEST_INTERVAL_MIN_SECONDS, CENTER_REQUEST_INTERVAL_MAX_SECONDS)
+
+
+def batch_rest_seconds(*, batch_index: int, batch_count: int, uniform=random.uniform) -> float:
+    if batch_index >= batch_count - 1:
+        return 0
+    return uniform(BATCH_REST_MIN_SECONDS, BATCH_REST_MAX_SECONDS)
 
 
 def load_fresh_org_info_map(path: Path, *, ttl_seconds: int = ORG_LIST_CACHE_TTL_SECONDS, now: datetime | None = None) -> dict | None:
@@ -269,7 +279,7 @@ def open_api_circuit(*, state_path: Path, error: HTTPError, org_id: str | None, 
     return state
 
 
-def wait_for_center_request(*, previous_started_at: float | None, interval_seconds: float = CENTER_REQUEST_INTERVAL_SECONDS, monotonic_now=time.monotonic, sleep=time.sleep) -> None:
+def wait_for_center_request(*, previous_started_at: float | None, interval_seconds: float = CENTER_REQUEST_INTERVAL_MAX_SECONDS, monotonic_now=time.monotonic, sleep=time.sleep) -> None:
     """Space center request start times without delaying the first request."""
     if previous_started_at is None:
         return
@@ -463,8 +473,11 @@ def _run_update_cycle(*, run_id: str) -> int:
     org_list_cache_path = DATA_DIR / ORG_LIST_CACHE_FILE.name
     append_update_history(update_history_path, {
         'event': 'run_started', 'run_id': run_id, 'target_org_count': len(TARGET_ORGS),
-        'batch_size': MAX_CENTER_REQUESTS_PER_BATCH, 'center_interval_seconds': CENTER_REQUEST_INTERVAL_SECONDS,
-        'batch_rest_seconds': BATCH_REST_SECONDS,
+        'batch_size': MAX_CENTER_REQUESTS_PER_BATCH,
+        'center_interval_min_seconds': CENTER_REQUEST_INTERVAL_MIN_SECONDS,
+        'center_interval_max_seconds': CENTER_REQUEST_INTERVAL_MAX_SECONDS,
+        'batch_rest_min_seconds': BATCH_REST_MIN_SECONDS,
+        'batch_rest_max_seconds': BATCH_REST_MAX_SECONDS,
     })
     backoff_state = load_api_backoff_state(API_BACKOFF_FILE)
     circuit_open = is_api_circuit_open(backoff_state)
@@ -533,7 +546,7 @@ def _run_update_cycle(*, run_id: str) -> int:
             if active_batch_index is not None and not circuit_open:
                 rest_seconds = batch_rest_seconds(batch_index=active_batch_index, batch_count=len(batches))
                 if rest_seconds:
-                    print(f"   ⏸️ 第 {active_batch_index + 1} 批完成，休息 {rest_seconds} 秒。")
+                    print(f"   ⏸️ 第 {active_batch_index + 1} 批完成，隨機休息 {rest_seconds:.1f} 秒。")
                     append_update_history(update_history_path, {'event': 'batch_rest_started', 'run_id': run_id, 'batch_index': active_batch_index + 1, 'rest_seconds': rest_seconds})
                     time.sleep(rest_seconds)
                     append_update_history(update_history_path, {'event': 'batch_rest_completed', 'run_id': run_id, 'batch_index': active_batch_index + 1})
@@ -569,12 +582,17 @@ def _run_update_cycle(*, run_id: str) -> int:
             continue
 
         api_standby = f'https://lovebaby.sw.ntpc.gov.tw/webapi/NpsApply/GetStandbyList?orgid={org_id}'
-        wait_for_center_request(previous_started_at=last_center_request_started_at)
+        request_interval_seconds = center_request_interval_seconds()
+        wait_for_center_request(
+            previous_started_at=last_center_request_started_at,
+            interval_seconds=request_interval_seconds,
+        )
         last_center_request_started_at = time.monotonic()
         request_started_at = last_center_request_started_at
         append_update_history(update_history_path, {
             'event': 'center_request_started', 'run_id': run_id, 'batch_index': batch_index + 1,
             'org_id': org_id, 'cursor_index': org_index,
+            'request_interval_seconds': request_interval_seconds,
         })
         try:
             standby_payload = fetch_json(api_standby, proxy_url=api_proxy_url)
