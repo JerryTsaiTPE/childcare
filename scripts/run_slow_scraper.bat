@@ -18,7 +18,7 @@ echo 爬蟲結束，觸發一次高速更新以套用最新說明文字...
 echo =======================================================
 
 :: 呼叫同資料夾下的快速更新腳本
-call run_update_windows.bat
+call run_update_via_proxy.bat
 
 echo ✅ 緩慢爬蟲任務徹底結束！
 pause
