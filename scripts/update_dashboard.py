@@ -491,45 +491,18 @@ def _run_update_cycle(*, run_id: str) -> int:
             print("   請先確認 proxy 主機已開機、Tailscale 連線正常，且 HTTP CONNECT proxy 正在監聽該連接埠。")
             return 1
 
-    # `enroll_count` drives admission inference, so every update cycle must
-    # obtain a new official center-list payload.  The persisted copy is an
-    # audit/fallback record only; it must never suppress this live request.
+    # `enroll_count` drives admission inference.  The source exposes it only
+    # through the full center-list endpoint, so refresh that endpoint at the
+    # beginning of every batch and use only the current batch's entries.  This
+    # bounds the list/enrollment timing gap to one batch rather than one run.
     if circuit_open:
         print(
             "🛑 API 融斷冷卻中；不會發送任何 LoveBaby API 請求。"
             f" 冷卻截止：{backoff_state.get('blocked_until')}"
         )
-        org_info_map = {}
         append_update_history(update_history_path, {'event': 'circuit_open_at_run_start', 'run_id': run_id, 'blocked_until': backoff_state.get('blocked_until')})
     else:
-        print("🚀 [分批低頻模式] 每輪更新中心清單與 enroll_count...")
-        org_list_started_at = time.monotonic()
-        append_update_history(update_history_path, {'event': 'org_list_request_started', 'run_id': run_id})
-        try:
-            orgs_payload = fetch_json(API_ORGS, proxy_url=api_proxy_url)
-            save_org_info_cache(org_list_cache_path, orgs_payload)
-            org_info_map = {item.get('orgid'): item for item in orgs_payload.get('data') or []}
-            append_update_history(update_history_path, {'event': 'org_list_request_completed', 'run_id': run_id, 'status': 'success', 'duration_ms': round((time.monotonic() - org_list_started_at) * 1000)})
-        except HTTPError as error:
-            print(f"獲取公托清單失敗: HTTP {error.code} {error.reason}")
-            org_info_map = {}
-            append_update_history(update_history_path, {'event': 'org_list_request_completed', 'run_id': run_id, 'status': 'http_error', 'http_status': error.code, 'duration_ms': round((time.monotonic() - org_list_started_at) * 1000)})
-            if error.code in (403, 429):
-                backoff_state = open_api_circuit(
-                    state_path=API_BACKOFF_FILE, error=error, org_id=None
-                )
-                circuit_open = True
-                append_update_history(update_history_path, {'event': 'circuit_opened', 'run_id': run_id, 'http_status': error.code, 'blocked_until': backoff_state['blocked_until'], 'scope': 'org_list'})
-                print(
-                    "🛑 已開啟 API 融斷，停止本輪後續請求。"
-                    f" 冷卻截止：{backoff_state['blocked_until']}"
-                )
-            return 1
-        except Exception as error:
-            print(f"獲取公托清單失敗: {error}")
-            org_info_map = {}
-            append_update_history(update_history_path, {'event': 'org_list_request_completed', 'run_id': run_id, 'status': 'error', 'error_type': type(error).__name__, 'duration_ms': round((time.monotonic() - org_list_started_at) * 1000)})
-            return 1
+        print("🚀 [分批低頻模式] 每批開始前重新取得該批中心的 enroll_count...")
 
     info_cache = load_json(CACHE_FILE, {})
     cursor = load_update_cursor(cursor_path, total_orgs=len(TARGET_ORGS))
@@ -540,6 +513,9 @@ def _run_update_cycle(*, run_id: str) -> int:
     all_org_data = {}
     last_center_request_started_at = None
     active_batch_index = None
+    batch_org_info_map: dict[str, dict] = {}
+    batch_started_at = None
+    enroll_count_fetched_at = None
 
     for batch_index, org_index, org_id in planned_orgs:
         if active_batch_index != batch_index:
@@ -551,7 +527,80 @@ def _run_update_cycle(*, run_id: str) -> int:
                     time.sleep(rest_seconds)
                     append_update_history(update_history_path, {'event': 'batch_rest_completed', 'run_id': run_id, 'batch_index': active_batch_index + 1})
             active_batch_index = batch_index
-            append_update_history(update_history_path, {'event': 'batch_started', 'run_id': run_id, 'batch_index': batch_index + 1, 'batch_size': len(batches[batch_index])})
+            batch_started_at = datetime.now(timezone(timedelta(hours=8))).isoformat(timespec='seconds')
+            append_update_history(update_history_path, {
+                'event': 'batch_started', 'run_id': run_id, 'batch_index': batch_index + 1,
+                'batch_size': len(batches[batch_index]), 'batch_started_at': batch_started_at,
+            })
+
+            if not circuit_open:
+                org_list_started_at = time.monotonic()
+                append_update_history(update_history_path, {
+                    'event': 'batch_org_list_request_started', 'run_id': run_id,
+                    'batch_index': batch_index + 1,
+                })
+                try:
+                    orgs_payload = fetch_json(API_ORGS, proxy_url=api_proxy_url)
+                    save_org_info_cache(org_list_cache_path, orgs_payload)
+                    all_current_org_info = {
+                        item.get('orgid'): item
+                        for item in orgs_payload.get('data') or []
+                        if isinstance(item, dict) and item.get('orgid')
+                    }
+                    batch_org_info_map = {
+                        batch_org_id: all_current_org_info[batch_org_id]
+                        for _, batch_org_id in batches[batch_index]
+                        if batch_org_id in all_current_org_info
+                    }
+                    enroll_count_fetched_at = datetime.now(timezone(timedelta(hours=8))).isoformat(timespec='seconds')
+                    missing_org_ids = [
+                        batch_org_id for _, batch_org_id in batches[batch_index]
+                        if batch_org_id not in batch_org_info_map
+                    ]
+                    append_update_history(update_history_path, {
+                        'event': 'batch_org_list_request_completed', 'run_id': run_id,
+                        'batch_index': batch_index + 1, 'status': 'success',
+                        'duration_ms': round((time.monotonic() - org_list_started_at) * 1000),
+                        'enroll_count_fetched_at': enroll_count_fetched_at,
+                        'missing_org_count': len(missing_org_ids),
+                    })
+                    if missing_org_ids:
+                        print(
+                            f"❌ 第 {batch_index + 1} 批中心清單未包含 {len(missing_org_ids)} 間目標中心，"
+                            "為避免以不明入托數推定異動，本輪停止。"
+                        )
+                        return 1
+                except HTTPError as error:
+                    print(f"獲取第 {batch_index + 1} 批公托入托數失敗: HTTP {error.code} {error.reason}")
+                    append_update_history(update_history_path, {
+                        'event': 'batch_org_list_request_completed', 'run_id': run_id,
+                        'batch_index': batch_index + 1, 'status': 'http_error',
+                        'http_status': error.code,
+                        'duration_ms': round((time.monotonic() - org_list_started_at) * 1000),
+                    })
+                    if error.code in (403, 429):
+                        backoff_state = open_api_circuit(
+                            state_path=API_BACKOFF_FILE, error=error, org_id=None
+                        )
+                        append_update_history(update_history_path, {
+                            'event': 'circuit_opened', 'run_id': run_id,
+                            'http_status': error.code, 'blocked_until': backoff_state['blocked_until'],
+                            'scope': 'batch_org_list', 'batch_index': batch_index + 1,
+                        })
+                        print(
+                            "🛑 已開啟 API 融斷，停止本輪後續請求。"
+                            f" 冷卻截止：{backoff_state['blocked_until']}"
+                        )
+                    return 1
+                except Exception as error:
+                    print(f"獲取第 {batch_index + 1} 批公托入托數失敗: {error}")
+                    append_update_history(update_history_path, {
+                        'event': 'batch_org_list_request_completed', 'run_id': run_id,
+                        'batch_index': batch_index + 1, 'status': 'error',
+                        'error_type': type(error).__name__,
+                        'duration_ms': round((time.monotonic() - org_list_started_at) * 1000),
+                    })
+                    return 1
 
         org_dir = DATA_DIR / org_id
         org_dir.mkdir(parents=True, exist_ok=True)
@@ -565,7 +614,7 @@ def _run_update_cycle(*, run_id: str) -> int:
         admissions = load_json(admissions_path, [])
         if not isinstance(admissions, list): admissions = []
 
-        org_info = org_info_map.get(org_id, {"orgid": org_id, "orgname": "未知中心", "orgshort": org_id, "distdesc": "未知"})
+        org_info = batch_org_info_map.get(org_id, {"orgid": org_id, "orgname": "未知中心", "orgshort": org_id, "distdesc": "未知"})
         cached_org_info = info_cache.get(org_id, {})
         center_memo = cached_org_info.get("related_info_text", "尚未抓取中心說明，請手動執行一次 run_slow_scraper.bat")
         center_validity = cached_org_info.get("validity_text", "未知 (需執行快取更新)")
@@ -648,6 +697,12 @@ def _run_update_cycle(*, run_id: str) -> int:
         snapshot = {
             'org': org_info,
             'fetched_at': fetched_at,
+            'batch': {
+                'index': batch_index + 1,
+                'size': len(batches[batch_index]),
+                'started_at': batch_started_at,
+                'enroll_count_fetched_at': enroll_count_fetched_at,
+            },
             **parsed,
         }
 
@@ -695,6 +750,9 @@ def _run_update_cycle(*, run_id: str) -> int:
         change_record['enroll_delta'] = enroll_delta
         change_record['prev_enroll'] = prev_enroll
         change_record['curr_enroll'] = curr_enroll
+        change_record['batch_index'] = batch_index + 1
+        change_record['batch_started_at'] = batch_started_at
+        change_record['enroll_count_fetched_at'] = enroll_count_fetched_at
 
         history = load_json(history_path, [])
         if not isinstance(history, list): history = []
@@ -704,6 +762,9 @@ def _run_update_cycle(*, run_id: str) -> int:
         new_hist_entry['enroll_delta'] = enroll_delta
         new_hist_entry['prev_enroll'] = prev_enroll
         new_hist_entry['curr_enroll'] = curr_enroll
+        new_hist_entry['batch_index'] = batch_index + 1
+        new_hist_entry['batch_started_at'] = batch_started_at
+        new_hist_entry['enroll_count_fetched_at'] = enroll_count_fetched_at
         history.append(new_hist_entry)
         
         history = trim_history(history)
