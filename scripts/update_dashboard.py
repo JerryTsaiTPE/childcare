@@ -517,8 +517,31 @@ def _run_update_cycle(*, run_id: str, first_batch_only: bool = False) -> int:
     # 💡【關鍵修復】將 info_cache 移到這裡（在 planned_orgs 與迴圈開始前載入）
     info_cache = load_json(CACHE_FILE, {})
 
-    planned_orgs = [(batch_index, org_index, org_id) for batch_index, batch in enumerate(batches) for org_index, org_id in batch]
     all_org_data = {}
+    for tid in TARGET_ORGS:
+        t_dir = DATA_DIR / tid
+        t_latest = t_dir / 'latest_snapshot.json'
+        t_changes = t_dir / 'changes.json'
+        t_history = t_dir / 'history.json'
+        t_admissions = t_dir / 'admissions.json'
+        
+        cached_info = info_cache.get(tid, {})
+        t_memo = cached_info.get("related_info_text", "尚未抓取中心說明")
+        t_validity = cached_info.get("validity_text", "未知")
+
+        cached_data = load_cached_center_data(
+            latest_path=t_latest,
+            history_path=t_history,
+            changes_path=t_changes,
+            admissions=load_json(t_admissions, []),
+            admissions_path=t_admissions,
+            related_info_text=t_memo,
+            validity_text=t_validity,
+        )
+        if cached_data:
+            all_org_data[tid] = cached_data
+
+    planned_orgs = [(batch_index, org_index, org_id) for batch_index, batch in enumerate(batches) for org_index, org_id in batch]
     last_center_request_started_at = None
     active_batch_index = None
     batch_org_info_map: dict[str, dict] = {}
@@ -815,7 +838,7 @@ def _run_update_cycle(*, run_id: str, first_batch_only: bool = False) -> int:
         print(f"✅ {org_id} 高速更新完成。")
 
     if not all_org_data:
-        print("沒有成功抓取任何中心資料，終止執行。")
+        print("❌ 完全找不到任何中心資料（包含歷史快取），終止執行。")
         return 1
 
     global_map = {}
