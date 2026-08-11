@@ -4,7 +4,7 @@ setlocal EnableExtensions DisableDelayedExpansion
 set "EXIT_CODE=1"
 
 rem ==========================================
-rem 本機部署路徑
+rem 本機部署路徑 (第一批次完整部署版)
 rem ==========================================
 set "PROJECT_ROOT=C:\Users\JerryPC\Desktop\childcare"
 set "WEB_ROOT=\\192.168.68.58\jerry0423\web\childcare"
@@ -22,10 +22,10 @@ if errorlevel 1 (
 )
 set "DID_PUSHD=1"
 
-echo [%date% %time%] 🚀 開始執行【裝甲版】儀表板自動更新...
+echo [%date% %time%] 🚀 開始執行【第一批次】儀表板自動更新與完整 GitHub 部署...
 
-rem 1. 只執行更新器；若由 run_update_via_proxy.bat 呼叫，會繼承該程序範圍的 CHILDCARE_API_PROXY。
-python scripts\update_dashboard.py
+rem 1. 只更新第一批次公托資料 (帶入 --first-batch-only 參數)
+python scripts\update_dashboard.py --first-batch-only
 set "EXIT_CODE=%ERRORLEVEL%"
 if not "%EXIT_CODE%"=="0" (
     echo ❌ [錯誤] Python 腳本執行失敗，已終止。
@@ -54,7 +54,7 @@ if errorlevel 1 (
 )
 git diff --cached --quiet
 if errorlevel 1 (
-    git commit -m "Auto-update Scripts: %date% %time%"
+    git commit -m "Auto-update First Batch: %date% %time%"
     if errorlevel 1 (
         echo ❌ [錯誤] git commit 失敗。
         set "EXIT_CODE=1"
@@ -105,7 +105,7 @@ git init
 if errorlevel 1 goto :publish_failed
 git add .
 if errorlevel 1 goto :publish_failed
-git commit -m "Deploy dashboard update: %date% %time%"
+git commit -m "Deploy dashboard first-batch update: %date% %time%"
 if errorlevel 1 goto :publish_failed
 git push --force "%REMOTE_REPO%" master:gh-pages
 if errorlevel 1 goto :publish_failed
@@ -116,7 +116,7 @@ if exist "%DEPLOY_DIR%" rmdir /S /Q "%DEPLOY_DIR%"
 if not "%EXIT_CODE%"=="0" goto :finish
 
 echo =======================================================
-echo ✅ 所有任務已圓滿完成！儀表板已同步至 GitHub Pages。
+echo ✅ 第一批次驗證發布完成！儀表板已同步至 GitHub Pages。
 echo =======================================================
 set "EXIT_CODE=0"
 goto :finish
