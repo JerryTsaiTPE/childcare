@@ -7,7 +7,7 @@ rem ==========================================
 rem 本機部署路徑
 rem ==========================================
 set "PROJECT_ROOT=C:\Users\JerryPC\Desktop\childcare"
-set "WEB_ROOT=\\192.168.68.58\jerry0423\web\childcare"
+set "WEB_ROOT=Z:\childcare"
 set "REMOTE_REPO=https://github.com/JerryTsaiTPE/childcare.git"
 
 if not exist "%PROJECT_ROOT%\scripts\update_dashboard.py" (
