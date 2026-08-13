@@ -56,6 +56,7 @@ def get_target_orgs():
     return orgs
 
 API_ORGS = 'https://lovebaby.sw.ntpc.gov.tw/webapi/Org/GetPublicNpsOrgList'
+API_REQUEST_TIMEOUT_SECONDS = 60
 DATA_DIR = ROOT / 'data'
 INDEX_PATH = ROOT / 'index.html'
 CACHE_FILE = DATA_DIR / 'info_cache.json'
@@ -351,9 +352,9 @@ def fetch_json(url: str, *, proxy_url: str | None = None) -> dict:
             urllib.request.ProxyHandler({'http': proxy_url, 'https': proxy_url}),
             urllib.request.HTTPSHandler(context=context),
         )
-        response_context = opener.open(req, timeout=30)
+        response_context = opener.open(req, timeout=API_REQUEST_TIMEOUT_SECONDS)
     else:
-        response_context = urllib.request.urlopen(req, timeout=30, context=context)
+        response_context = urllib.request.urlopen(req, timeout=API_REQUEST_TIMEOUT_SECONDS, context=context)
     with response_context as response:
         return json.load(response)
 
