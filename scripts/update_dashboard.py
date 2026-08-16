@@ -8,7 +8,6 @@ import re
 import socket
 import sys
 import time
-import argparse
 
 import urllib.request
 import ssl
@@ -56,7 +55,6 @@ def get_target_orgs():
     return orgs
 
 API_ORGS = 'https://lovebaby.sw.ntpc.gov.tw/webapi/Org/GetPublicNpsOrgList'
-API_REQUEST_TIMEOUT_SECONDS = 60
 DATA_DIR = ROOT / 'data'
 INDEX_PATH = ROOT / 'index.html'
 CACHE_FILE = DATA_DIR / 'info_cache.json'
@@ -352,9 +350,9 @@ def fetch_json(url: str, *, proxy_url: str | None = None) -> dict:
             urllib.request.ProxyHandler({'http': proxy_url, 'https': proxy_url}),
             urllib.request.HTTPSHandler(context=context),
         )
-        response_context = opener.open(req, timeout=API_REQUEST_TIMEOUT_SECONDS)
+        response_context = opener.open(req, timeout=30)
     else:
-        response_context = urllib.request.urlopen(req, timeout=API_REQUEST_TIMEOUT_SECONDS, context=context)
+        response_context = urllib.request.urlopen(req, timeout=30, context=context)
     with response_context as response:
         return json.load(response)
 
@@ -455,7 +453,7 @@ def load_cached_center_data(
     }
 
 
-def _run_update_cycle(*, run_id: str, first_batch_only: bool = False) -> int:
+def _run_update_cycle(*, run_id: str) -> int:
     TARGET_ORGS = get_target_orgs()
     if not TARGET_ORGS:
         print("❌ 無法載入中心名單 (org_ids.txt)，請檢查路徑或檔案內容。")
@@ -506,43 +504,13 @@ def _run_update_cycle(*, run_id: str, first_batch_only: bool = False) -> int:
     else:
         print("🚀 [分批低頻模式] 每批開始前重新取得該批中心的 enroll_count...")
 
+    info_cache = load_json(CACHE_FILE, {})
     cursor = load_update_cursor(cursor_path, total_orgs=len(TARGET_ORGS))
     batches = plan_update_batches(
         TARGET_ORGS, start_index=cursor['next_index'], batch_size=MAX_CENTER_REQUESTS_PER_BATCH
     )
-
-    if first_batch_only and batches:
-        print("⚡ [快速模式] 僅執行第一批次 (First Batch Only)...")
-        batches = batches[:1]
-
-    # 💡【關鍵修復】將 info_cache 移到這裡（在 planned_orgs 與迴圈開始前載入）
-    info_cache = load_json(CACHE_FILE, {})
-
-    all_org_data = {}
-    for tid in TARGET_ORGS:
-        t_dir = DATA_DIR / tid
-        t_latest = t_dir / 'latest_snapshot.json'
-        t_changes = t_dir / 'changes.json'
-        t_history = t_dir / 'history.json'
-        t_admissions = t_dir / 'admissions.json'
-        
-        cached_info = info_cache.get(tid, {})
-        t_memo = cached_info.get("related_info_text", "尚未抓取中心說明")
-        t_validity = cached_info.get("validity_text", "未知")
-
-        cached_data = load_cached_center_data(
-            latest_path=t_latest,
-            history_path=t_history,
-            changes_path=t_changes,
-            admissions=load_json(t_admissions, []),
-            admissions_path=t_admissions,
-            related_info_text=t_memo,
-            validity_text=t_validity,
-        )
-        if cached_data:
-            all_org_data[tid] = cached_data
-
     planned_orgs = [(batch_index, org_index, org_id) for batch_index, batch in enumerate(batches) for org_index, org_id in batch]
+    all_org_data = {}
     last_center_request_started_at = None
     active_batch_index = None
     batch_org_info_map: dict[str, dict] = {}
@@ -839,7 +807,7 @@ def _run_update_cycle(*, run_id: str, first_batch_only: bool = False) -> int:
         print(f"✅ {org_id} 高速更新完成。")
 
     if not all_org_data:
-        print("❌ 完全找不到任何中心資料（包含歷史快取），終止執行。")
+        print("沒有成功抓取任何中心資料，終止執行。")
         return 1
 
     global_map = {}
@@ -896,29 +864,17 @@ def _run_update_cycle(*, run_id: str, first_batch_only: bool = False) -> int:
 
 def main() -> int:
     """Run exactly one lock-protected, observable update cycle."""
-    # 💡 解析命令列參數
-    parser = argparse.ArgumentParser(description="NTPC Childcare Dashboard Updater")
-    parser.add_argument(
-        "--first-batch-only",
-        action="store_true",
-        help="僅更新第一批次的機構，用於測試與快速驗證"
-    )
-    args = parser.parse_args()
-
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     run_id = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}-{os.getpid()}-{time.time_ns() % 1_000_000}"
     lock_path = DATA_DIR / UPDATE_LOCK_FILE.name
     update_history_path = DATA_DIR / UPDATE_HISTORY_FILE.name
-    
     if not acquire_run_lock(lock_path, run_id=run_id):
         append_update_history(update_history_path, {'event': 'run_skipped_lock_held', 'run_id': run_id})
         print("🛑 已有更新程序執行中；本次不會發送任何 LoveBaby API 請求。")
         return 2
-        
     append_update_history(update_history_path, {'event': 'run_lock_acquired', 'run_id': run_id})
     try:
-        # 💡 將參數傳遞進 _run_update_cycle
-        result = _run_update_cycle(run_id=run_id, first_batch_only=args.first_batch_only)
+        result = _run_update_cycle(run_id=run_id)
         append_update_history(update_history_path, {'event': 'run_completed', 'run_id': run_id, 'exit_code': result})
         return result
     except Exception as error:
