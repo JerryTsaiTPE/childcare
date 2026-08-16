@@ -72,6 +72,7 @@ ORG_LIST_CACHE_TTL_SECONDS = 24 * 60 * 60
 LOCK_STALE_AFTER_SECONDS = 3 * 60 * 60
 DEFAULT_BACKOFF_SECONDS = 60 * 60
 MINIMUM_BACKOFF_SECONDS = 60 * 60
+ORG_LIST_RETRY_DELAY_SECONDS = 5.0
 
 
 def _as_utc(value: datetime | None = None) -> datetime:
@@ -356,6 +357,34 @@ def fetch_json(url: str, *, proxy_url: str | None = None) -> dict:
     with response_context as response:
         return json.load(response)
 
+def fetch_json_with_retry(
+    url: str,
+    *,
+    proxy_url: str | None = None,
+    retry_delay_seconds: float = ORG_LIST_RETRY_DELAY_SECONDS,
+    on_retry=None,
+) -> dict:
+    """Fetch JSON, retrying once on transient network errors (URLError).
+
+    LoveBaby 入口在閒置一段時間後的首個請求常會逾時/斷線；這類網路層錯誤
+    重試一次即可大幅降低整輪失敗率。HTTPError（403/429）一律不重試，由呼叫端
+    決定是否開啟融斷，遵守低頻原則。若重試仍失敗，拋回第一個錯誤供呼叫端紀錄。
+    """
+    try:
+        return fetch_json(url, proxy_url=proxy_url)
+    except HTTPError:
+        raise
+    except Exception as first_error:
+        if on_retry is not None:
+            on_retry(first_error)
+        time.sleep(retry_delay_seconds)
+        try:
+            return fetch_json(url, proxy_url=proxy_url)
+        except HTTPError:
+            raise
+        except Exception:
+            raise first_error
+
 def load_json(path: Path, default):
     if not path.exists():
         return default
@@ -540,7 +569,21 @@ def _run_update_cycle(*, run_id: str) -> int:
                     'batch_index': batch_index + 1,
                 })
                 try:
-                    orgs_payload = fetch_json(API_ORGS, proxy_url=api_proxy_url)
+                    def _log_org_list_retry(error):
+                        print(
+                            f"⚠️ 第 {batch_index + 1} 批中心清單請求失敗"
+                            f"（{type(error).__name__}: {error}），"
+                            f"{ORG_LIST_RETRY_DELAY_SECONDS} 秒後重試一次…"
+                        )
+                        append_update_history(update_history_path, {
+                            'event': 'batch_org_list_request_retrying', 'run_id': run_id,
+                            'batch_index': batch_index + 1,
+                            'error_type': type(error).__name__,
+                            'error_preview': str(error)[:200],
+                        })
+                    orgs_payload = fetch_json_with_retry(
+                        API_ORGS, proxy_url=api_proxy_url, on_retry=_log_org_list_retry,
+                    )
                     save_org_info_cache(org_list_cache_path, orgs_payload)
                     all_current_org_info = {
                         item.get('orgid'): item

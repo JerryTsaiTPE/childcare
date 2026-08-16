@@ -1,3 +1,6 @@
 data/
 index.html
 _deploy_tmp/
+logs/
+*.bak-20260816
+*.pre-redeploy
