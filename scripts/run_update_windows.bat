@@ -75,6 +75,7 @@ python scripts\update_dashboard.py
 set "EXIT_CODE=%ERRORLEVEL%"
 if not "%EXIT_CODE%"=="0" (
     echo ❌ [錯誤] Python 腳本執行失敗，已終止。
+    python scripts\telegram_notifier.py --notify-failure "Python 腳本非零退出 (Exit Code: %EXIT_CODE%)" --detail "請檢查排程日誌 %LOG_FILE% 取得詳細資訊。"
     goto :finish
 )
 

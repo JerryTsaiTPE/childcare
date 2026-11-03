@@ -25,8 +25,16 @@ if sys.platform == 'win32':
 # 定義專案路徑
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / 'src'
+SCRIPTS_DIR = ROOT / 'scripts'
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+
+try:
+    import telegram_notifier
+except ImportError:
+    telegram_notifier = None
 
 from ntpc_childcare_dashboard.render import render_dashboard
 from ntpc_childcare_dashboard.tracker import (
@@ -521,6 +529,8 @@ def _run_update_cycle(*, run_id: str) -> int:
             })
             print(f"❌ 更新已停止：{proxy_error}")
             print("   請先確認 proxy 主機已開機、Tailscale 連線正常，且 HTTP CONNECT proxy 正在監聽該連接埠。")
+            if telegram_notifier:
+                telegram_notifier.record_failure("Proxy 出口伺服器連線探針失敗", detail=str(proxy_error))
             return 1
 
     # `enroll_count` drives admission inference.  The source exposes it only
@@ -640,6 +650,16 @@ def _run_update_cycle(*, run_id: str) -> int:
                             "🛑 已開啟 API 融斷，停止本輪後續請求。"
                             f" 冷卻截止：{backoff_state['blocked_until']}"
                         )
+                        if telegram_notifier:
+                            telegram_notifier.record_failure(
+                                f"API 觸發融斷冷卻 (HTTP {error.code})",
+                                detail=f"第 {batch_index + 1} 批中心清單被阻擋，冷卻截止：{backoff_state['blocked_until']}"
+                            )
+                    elif telegram_notifier:
+                        telegram_notifier.record_failure(
+                            f"獲取第 {batch_index + 1} 批公托入托數失敗: HTTP {error.code}",
+                            detail=str(error.reason)
+                        )
                     return 1
                 except Exception as error:
                     print(f"獲取第 {batch_index + 1} 批公托入托數失敗: {error}")
@@ -649,6 +669,11 @@ def _run_update_cycle(*, run_id: str) -> int:
                         'error_type': type(error).__name__,
                         'duration_ms': round((time.monotonic() - org_list_started_at) * 1000),
                     })
+                    if telegram_notifier:
+                        telegram_notifier.record_failure(
+                            f"獲取第 {batch_index + 1} 批公托清單連線失敗 ({type(error).__name__})",
+                            detail=str(error)
+                        )
                     return 1
 
         org_dir = DATA_DIR / org_id
@@ -925,9 +950,13 @@ def main() -> int:
     try:
         result = _run_update_cycle(run_id=run_id)
         append_update_history(update_history_path, {'event': 'run_completed', 'run_id': run_id, 'exit_code': result})
+        if result == 0 and telegram_notifier:
+            telegram_notifier.record_success()
         return result
     except Exception as error:
         append_update_history(update_history_path, {'event': 'run_failed', 'run_id': run_id, 'error_type': type(error).__name__})
+        if telegram_notifier:
+            telegram_notifier.record_failure(f"更新程序發生未捕捉異常 ({type(error).__name__})", detail=str(error))
         raise
     finally:
         release_run_lock(lock_path, run_id=run_id)

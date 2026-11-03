@@ -1,4 +1,7 @@
+config/
 data/
+__pycache__/
+*.pyc
 index.html
 _deploy_tmp/
 logs/
