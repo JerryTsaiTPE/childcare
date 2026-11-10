@@ -8,6 +8,7 @@ to avoid alert fatigue during extended outages.
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import sys
@@ -151,14 +152,15 @@ def record_failure(error_reason: str, *, detail: str | None = None, log_file: st
 
     if should_notify:
         title = "🚨 <b>【新北市公托儀表板】更新異常警報</b>" if is_first_failure else f"⚠️ <b>【公托儀表板】持續異常提醒 (已連續 {fail_count} 次)</b>"
+        safe_reason = html.escape(str(error_reason))
         lines = [
             title,
             "━━━━━━━━━━━━━━━━━━━━",
             f"🕒 <b>發生時間</b>：{now_str}",
-            f"❌ <b>錯誤原因</b>：<code>{error_reason}</code>",
+            f"❌ <b>錯誤原因</b>：<code>{safe_reason}</code>",
         ]
         if detail:
-            clean_detail = detail[:300].strip()
+            clean_detail = html.escape(str(detail)[:300].strip())
             lines.append(f"📝 <b>詳細摘要</b>：\n<pre>{clean_detail}</pre>")
         if log_file:
             lines.append(f"📁 <b>日誌位置</b>：<code>{os.path.basename(log_file)}</code>")
